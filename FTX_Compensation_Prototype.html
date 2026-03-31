@@ -128,7 +128,6 @@
   .tab-pill.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
   .clickable-label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
   .clickable-label .q-icon { display: inline-flex; width: 16px; height: 16px; border-radius: 50%; background: #e8e8e8; align-items: center; justify-content: center; font-size: 10px; color: #8c8c8c; font-weight: 600; }
-  /* Redeem timeline */
   .redeem-timeline { display: flex; align-items: flex-start; margin: 16px 0; position: relative; }
   .redeem-step { flex: 1; text-align: center; position: relative; }
   .redeem-step-dot { width: 10px; height: 10px; border-radius: 50%; background: #00b578; margin: 0 auto 8px; position: relative; z-index: 2; }
@@ -137,7 +136,6 @@
   .redeem-step-date { font-size: 11px; color: #8c8c8c; }
   .redeem-line { position: absolute; top: 5px; left: 25%; right: -25%; height: 1.5px; background: #e8e8e8; z-index: 1; }
   .redeem-step:last-child .redeem-line { display: none; }
-  /* Detail link */
   .detail-link { font-size: 14px; color: #1677ff; cursor: pointer; display: inline-flex; align-items: center; gap: 2px; }
 </style>
 </head>
@@ -160,7 +158,7 @@
       <div class="nav-bar">
         <button class="back-btn">&#8249;</button>
         <div class="title">我的投资组合</div>
-        <button class="right-btn" onclick="navigateTo('screen-records')">记录</button>
+        <button class="right-btn" onclick="navigateTo('screen-trade-records')">记录</button>
       </div>
 
       <div style="background:#fff; padding:20px; text-align:center;">
@@ -378,7 +376,6 @@
         <button class="right-btn" style="font-size:18px;" onclick="showToast('更多信息')">ⓘ</button>
       </div>
 
-      <!-- Strategy Header -->
       <div style="background:#fff; padding:20px;">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
           <div style="display:flex; align-items:center; gap:10px;">
@@ -420,7 +417,6 @@
         </div>
       </div>
 
-      <!-- Key Metrics -->
       <div class="section-card animate-in delay-1">
         <div class="info-row info-row-border">
           <span class="label">持有收益</span>
@@ -444,7 +440,6 @@
         </div>
       </div>
 
-      <!-- NAV Chart -->
       <div class="section-card animate-in delay-2">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <div style="font-size:16px; font-weight:700;">NAV 曲线</div>
@@ -467,19 +462,16 @@
         </div>
       </div>
 
-      <!-- Trading Rules - Timeline Style -->
       <div class="section-card animate-in delay-3">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
           <div style="font-size:16px; font-weight:700;">交易规则</div>
           <span style="font-size:13px; color:#1677ff; cursor:pointer;" onclick="showToast('查看详细规则')">查看设置 ›</span>
         </div>
-
         <div style="display:flex; margin-bottom:4px;">
           <div style="flex:1; font-size:13px; font-weight:600; color:#1a1a1a; text-align:center;">申购</div>
           <div style="flex:1; font-size:13px; font-weight:600; color:#1a1a1a; text-align:center;">赎回</div>
         </div>
         <div class="divider" style="margin:8px 0;"></div>
-
         <div style="display:flex; margin-bottom:16px;">
           <div style="flex:1; text-align:center; padding:8px;">
             <div style="font-size:13px; color:#8c8c8c;">不支持手动申购</div>
@@ -491,8 +483,6 @@
             <div style="font-size:12px; color:#b0b0b0; margin-top:4px;">T+5 工作日内到账</div>
           </div>
         </div>
-
-        <!-- Redeem timeline visual -->
         <div style="background:#f9fafb; border-radius:12px; padding:16px 12px; margin-bottom:12px;">
           <div style="font-size:13px; font-weight:600; color:#1a1a1a; margin-bottom:14px;">赎回流程示意</div>
           <div class="redeem-timeline">
@@ -515,7 +505,6 @@
             </div>
           </div>
         </div>
-
         <div class="divider" style="margin:12px 0;"></div>
         <div style="font-size:14px; font-weight:600; margin-bottom:12px;">费用结构</div>
         <div class="info-row info-row-border">
@@ -536,7 +525,6 @@
         </div>
       </div>
 
-      <!-- 投资细则 -->
       <div class="section-card animate-in delay-4">
         <div style="font-size:16px; font-weight:700; margin-bottom:16px;">投资细则</div>
         <div class="info-row info-row-border">
@@ -572,7 +560,6 @@
         </div>
       </div>
 
-      <!-- Strategy Description -->
       <div class="section-card">
         <div style="font-size:16px; font-weight:700; margin-bottom:12px;">策略介绍</div>
         <div style="font-size:14px; color:#555; line-height:1.8;">
@@ -610,7 +597,7 @@
       <div style="height:20px;"></div>
     </div>
 
-    <!-- ========== SCREEN 3b: 策略详情（从"详情"入口进入） ========== -->
+    <!-- ========== SCREEN 3b: 策略介绍详情 ========== -->
     <div id="screen-strategy-intro" class="screen page-bg">
       <div class="nav-bar">
         <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
@@ -669,26 +656,22 @@
       </div>
     </div>
 
-    <!-- ========== SCREEN 5: 交易记录（策略申赎记录） ========== -->
+    <!-- ========== SCREEN 5: 交易记录 ========== -->
     <div id="screen-trade-records" class="screen page-bg">
       <div class="nav-bar">
         <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
         <div class="title">记录</div>
         <div></div>
       </div>
-
       <div class="tabs" style="top:52px;">
         <button class="tab active" id="tab-trade" onclick="switchRecordTab('trade')">交易</button>
         <button class="tab" id="tab-income-rec" onclick="switchRecordTab('income-rec')">收益</button>
       </div>
-
       <div id="tab-content-trade" style="padding:0 16px;">
         <div style="display:flex; justify-content:space-between; padding:16px 0 8px;">
           <span class="label-sm">全部 ▾</span>
           <span class="label-sm">全部 ▾</span>
         </div>
-
-        <!-- 赎回记录示例 -->
         <div style="background:#fff; border-radius:16px; padding:16px; margin-bottom:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div>
@@ -709,8 +692,6 @@
             <span class="timeline-note-link" onclick="showToast('查看协议')">协议 ›</span>
           </div>
         </div>
-
-        <!-- 申购记录示例 -->
         <div style="background:#fff; border-radius:16px; padding:16px; margin-bottom:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div>
@@ -732,7 +713,6 @@
           </div>
         </div>
       </div>
-
       <div id="tab-content-income-rec" style="display:none; padding:0 16px;">
         <div style="padding:16px 0;">
           <div style="background:#fff; border-radius:16px; padding:16px;">
@@ -760,7 +740,6 @@
         <div class="title">赎回</div>
         <div></div>
       </div>
-
       <div style="background:#fff; padding:20px;">
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
           <span style="font-size:20px;">🏛️</span>
@@ -769,7 +748,6 @@
             <div class="label-sm">可赎回: 15,448.82 USDC</div>
           </div>
         </div>
-
         <div class="amount-input-wrapper">
           <div class="label-sm" style="margin-bottom:8px;">赎回金额 (USDC)</div>
           <input class="amount-input" type="text" placeholder="0.00" id="redeemInput" oninput="updateRedeemBtn()">
@@ -778,7 +756,6 @@
             <span class="amount-max" onclick="document.getElementById('redeemInput').value='15,448.82'; updateRedeemBtn();">全部</span>
           </div>
         </div>
-
         <div class="divider"></div>
         <div class="info-row">
           <span class="label">赎回费率</span>
@@ -793,17 +770,14 @@
           <span class="value">USDC 至钱包</span>
         </div>
       </div>
-
       <div style="background:#fefaf3; margin:12px 16px; border-radius:12px; padding:16px;">
         <div style="font-size:14px; color:#9a7b4a; line-height:1.7;">
           🤝 温馨提示：赎回后资金将转入您的钱包，您可自由支配。如暂时无使用计划，保留在安心计划中可持续获得收益。
         </div>
       </div>
-
       <div class="disclaimer">
         赎回申请提交后，预计 T+5 个工作日内到账。赎回过程中，您的资金仍将按照策略净值享受收益。赎回期间不收取任何费用。
       </div>
-
       <div class="bottom-action">
         <button class="btn-primary" id="redeemBtn" style="opacity:0.4;" onclick="openRedeemConfirm()">确认赎回</button>
       </div>
@@ -887,7 +861,6 @@
           </div>
         </div>
       </div>
-
       <div style="padding:16px;">
         <div style="font-size:16px; font-weight:700; margin-bottom:16px;">记录</div>
         <div style="display:flex; gap:8px; margin-bottom:16px;">
@@ -896,7 +869,6 @@
           <button class="tab-pill" onclick="filterRecords(this, 'income')">收益</button>
           <button class="tab-pill" onclick="filterRecords(this, 'redeem')">赎回</button>
         </div>
-
         <div style="background:#fff; border-radius:16px; padding:4px 16px;">
           <div class="record-item">
             <div class="record-left">
@@ -939,7 +911,6 @@
             </div>
           </div>
         </div>
-
         <div style="margin-top:16px; background:#fff; border-radius:16px; padding:16px;">
           <div style="font-size:15px; font-weight:600; margin-bottom:12px;">相关协议</div>
           <div style="display:flex; flex-direction:column; gap:8px;">
@@ -958,7 +929,7 @@
       <div style="height:20px;"></div>
     </div>
 
-    <!-- ========== SCREEN 9: 首次赔付通知弹窗 ========== -->
+    <!-- ========== SCREEN 9: 首次弹窗通知 ========== -->
     <div id="screen-first-notice" class="screen" style="background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center;">
       <div style="background:#fff; border-radius:24px; margin:20px; padding:32px 24px; text-align:center; max-width:340px; animation: fadeInUp 0.4s ease;">
         <div style="font-size:40px; margin-bottom:16px;">🤝</div>
@@ -1065,9 +1036,7 @@
     setTimeout(() => { current.classList.remove('prev'); }, 350);
     currentScreen = screenId;
     if (navHistory[navHistory.length - 1] !== screenId) navHistory.push(screenId);
-    document.querySelectorAll('.flow-map-item').forEach(item => {
-      item.classList.remove('current');
-    });
+    document.querySelectorAll('.flow-map-item').forEach(item => { item.classList.remove('current'); });
     next.scrollTop = 0;
   }
 
