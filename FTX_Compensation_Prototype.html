@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FTX 赔付资管方案 - 高保真原型 v2</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif; background: #f0f0f0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 20px 0; }
+  .phone-frame { width: 390px; height: 844px; background: #fff; border-radius: 44px; box-shadow: 0 20px 60px rgba(0,0,0,0.15), inset 0 0 0 2px #d1d1d6; overflow: hidden; position: relative; }
+  .status-bar { height: 54px; display: flex; align-items: flex-end; justify-content: space-between; padding: 0 30px 6px; font-size: 15px; font-weight: 600; color: #000; background: #fff; position: relative; z-index: 100; }
+  .status-bar .time { font-weight: 700; }
+  .status-bar .icons { display: flex; gap: 5px; align-items: center; font-size: 13px; }
+  .screens-wrapper { height: 790px; overflow: hidden; position: relative; }
+  .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff; overflow-y: auto; overflow-x: hidden; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); -webkit-overflow-scrolling: touch; }
+  .screen.active { transform: translateX(0); z-index: 10; }
+  .screen.prev { transform: translateX(-30%); z-index: 5; }
+  .screen::-webkit-scrollbar { display: none; }
+  .nav-bar { height: 52px; display: flex; align-items: center; padding: 0 16px; background: #fff; position: sticky; top: 0; z-index: 50; border-bottom: 0.5px solid rgba(0,0,0,0.06); }
+  .nav-bar .back-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 22px; color: #000; background: none; border: none; }
+  .nav-bar .title { flex: 1; text-align: center; font-size: 17px; font-weight: 600; color: #000; margin-right: 32px; }
+  .nav-bar .right-btn { font-size: 15px; color: #000; cursor: pointer; background: none; border: none; position: absolute; right: 16px; }
+  .section-card { background: #fff; margin: 12px 16px; border-radius: 16px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .page-bg { background: #f5f6f8; }
+  .page-bg-warm { background: linear-gradient(180deg, #fefcf7 0%, #f5f6f8 40%); }
+  .label-sm { font-size: 13px; color: #8c8c8c; line-height: 1.5; }
+  .value-lg { font-size: 28px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.5px; }
+  .text-green { color: #00b578; }
+  .text-red { color: #e54d42; }
+  .text-orange { color: #f0883a; }
+  .text-blue { color: #1677ff; }
+  .text-gold { color: #c49b5e; }
+  .divider { height: 0.5px; background: #f0f0f0; margin: 16px 0; }
+  .btn-primary { width: 100%; height: 52px; border-radius: 26px; border: none; background: linear-gradient(135deg, #1a1a1a, #333); color: #fff; font-size: 17px; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px; }
+  .btn-primary:active { transform: scale(0.97); opacity: 0.9; }
+  .btn-primary.gold { background: linear-gradient(135deg, #c49b5e, #d4ad70); }
+  .btn-primary.disabled { background: #e0e0e0; color: #aaa; cursor: not-allowed; pointer-events: none; }
+  .btn-secondary { width: 100%; height: 52px; border-radius: 26px; border: 1.5px solid #e0e0e0; background: #fff; color: #1a1a1a; font-size: 17px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .btn-secondary:active { background: #f5f5f5; }
+  .bottom-action { position: sticky; bottom: 0; padding: 12px 16px 28px; background: linear-gradient(0deg, #fff 80%, transparent); z-index: 20; }
+  .progress-container { margin: 16px 0; }
+  .progress-bar-bg { height: 10px; background: #f0f0f0; border-radius: 5px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, #00b578, #34d399); transition: width 1s ease; }
+  .progress-labels { display: flex; justify-content: space-between; margin-top: 8px; }
+  .timeline { padding: 0 4px; }
+  .timeline-item { display: flex; gap: 16px; position: relative; padding-bottom: 24px; }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-dot-col { display: flex; flex-direction: column; align-items: center; width: 20px; flex-shrink: 0; }
+  .timeline-dot { width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid #00b578; background: #fff; flex-shrink: 0; margin-top: 4px; }
+  .timeline-dot.active { background: #00b578; }
+  .timeline-dot.pending { border-color: #d9d9d9; }
+  .timeline-dot.gold { border-color: #c49b5e; }
+  .timeline-dot.gold.active { background: #c49b5e; }
+  .timeline-line { width: 1.5px; flex: 1; background: #e8e8e8; margin-top: 6px; }
+  .timeline-item:last-child .timeline-line { display: none; }
+  .timeline-content { flex: 1; padding-top: 0; }
+  .timeline-title { font-size: 15px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+  .timeline-desc { font-size: 13px; color: #8c8c8c; line-height: 1.5; }
+  .timeline-amount { font-size: 15px; font-weight: 600; color: #00b578; margin-top: 4px; }
+  .timeline-note-link { font-size: 13px; color: #1677ff; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+  .notif-card { background: linear-gradient(135deg, #fefaf3, #fff8eb); border: 1px solid #f0dfc0; border-radius: 16px; margin: 12px 16px; padding: 20px; cursor: pointer; transition: all 0.2s; }
+  .notif-card:active { transform: scale(0.98); }
+  .notif-badge { display: inline-block; padding: 3px 10px; border-radius: 10px; background: linear-gradient(135deg, #c49b5e, #d4ad70); color: #fff; font-size: 11px; font-weight: 600; margin-bottom: 12px; }
+  .info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
+  .info-row .label { font-size: 14px; color: #8c8c8c; }
+  .info-row .value { font-size: 14px; font-weight: 500; color: #1a1a1a; text-align: right; }
+  .info-row-border { border-bottom: 0.5px solid #f0f0f0; }
+  .tabs { display: flex; padding: 0 16px; border-bottom: 0.5px solid #f0f0f0; background: #fff; position: sticky; top: 52px; z-index: 40; }
+  .tab { flex: 1; text-align: center; padding: 14px 0; font-size: 15px; font-weight: 500; color: #8c8c8c; cursor: pointer; position: relative; transition: color 0.2s; background: none; border: none; }
+  .tab.active { color: #1a1a1a; font-weight: 600; }
+  .tab.active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 24px; height: 3px; background: #1a1a1a; border-radius: 1.5px; }
+  .holding-card { margin: 12px 16px; background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); cursor: pointer; transition: all 0.2s; }
+  .holding-card:active { transform: scale(0.98); }
+  .holding-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .holding-name { font-size: 17px; font-weight: 700; color: #1a1a1a; }
+  .holding-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 500; background: #e8f8ef; color: #00b578; }
+  .nav-chart-placeholder { height: 160px; background: linear-gradient(180deg, #f0fdf4 0%, #fff 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 12px 0; position: relative; overflow: hidden; }
+  .nav-chart-placeholder svg { width: 100%; height: 100%; }
+  .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; justify-content: center; align-items: flex-end; }
+  .modal-overlay.show { display: flex; }
+  .modal-sheet { background: #fff; border-radius: 24px 24px 0 0; width: 390px; padding: 24px 20px 36px; max-height: 80vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px; }
+  .toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 12px 24px; border-radius: 24px; font-size: 14px; z-index: 2000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+  .success-icon { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #00b578, #34d399); display: flex; align-items: center; justify-content: center; margin: 40px auto 24px; }
+  .success-icon svg { width: 36px; height: 36px; }
+  .risk-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; }
+  .risk-low { background: #e8f8ef; color: #00b578; }
+  .icon-actions { display: flex; gap: 0; margin: 20px 0 8px; }
+  .icon-action { flex: 1; text-align: center; cursor: pointer; background: none; border: none; padding: 8px 0; }
+  .icon-action-circle { width: 44px; height: 44px; border-radius: 50%; background: #f5f6f8; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; transition: background 0.2s; }
+  .icon-action:active .icon-action-circle { background: #e8e8e8; }
+  .icon-action-label { font-size: 12px; color: #666; }
+  .disclaimer { font-size: 12px; color: #b0b0b0; line-height: 1.7; padding: 16px 20px; background: #fafafa; margin: 12px 16px; border-radius: 12px; }
+  .comp-header { background: linear-gradient(180deg, #fefaf3 0%, #fff 100%); padding: 24px 20px; text-align: center; }
+  .comp-round-badge { display: inline-block; padding: 4px 14px; border-radius: 12px; background: linear-gradient(135deg, #c49b5e22, #d4ad7033); border: 1px solid #d4ad7044; color: #9a7b4a; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+  .record-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 0; border-bottom: 0.5px solid #f0f0f0; }
+  .record-item:last-child { border-bottom: none; }
+  .record-left { flex: 1; }
+  .record-title { font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 4px; }
+  .record-date { font-size: 13px; color: #8c8c8c; }
+  .record-amount { font-size: 15px; font-weight: 600; text-align: right; }
+  .record-status { font-size: 12px; color: #8c8c8c; text-align: right; margin-top: 2px; }
+  .record-detail-box { background: #f9fafb; border-radius: 10px; padding: 12px 14px; margin-top: 8px; }
+  .record-detail-row { display: flex; justify-content: space-between; font-size: 13px; color: #8c8c8c; padding: 3px 0; }
+  .record-detail-row .val { color: #1a1a1a; font-weight: 500; }
+  .empty-state { text-align: center; padding: 60px 20px; }
+  .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-in { animation: fadeInUp 0.5s ease both; }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+  .flow-map { position: fixed; bottom: 20px; right: 20px; z-index: 3000; background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); max-width: 280px; font-size: 12px; display: none; }
+  .flow-map.show { display: block; }
+  .flow-map h4 { font-size: 13px; margin-bottom: 10px; color: #1a1a1a; }
+  .flow-map-item { padding: 6px 10px; margin: 3px 0; border-radius: 8px; cursor: pointer; color: #666; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .flow-map-item:hover { background: #f5f5f5; color: #1a1a1a; }
+  .flow-map-item.current { background: #1a1a1a; color: #fff; }
+  .flow-toggle { position: fixed; bottom: 20px; right: 20px; z-index: 2999; width: 48px; height: 48px; border-radius: 50%; background: #1a1a1a; color: #fff; border: none; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .amount-input-wrapper { background: #f5f6f8; border-radius: 16px; padding: 20px; margin: 16px 0; }
+  .amount-input { background: none; border: none; font-size: 32px; font-weight: 700; color: #1a1a1a; width: 100%; outline: none; }
+  .amount-input::placeholder { color: #d0d0d0; }
+  .amount-max { display: inline-block; padding: 4px 12px; border-radius: 8px; background: #e8f8ef; color: #00b578; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+  .tab-pill { padding: 6px 16px; border-radius: 20px; border: 1px solid #e0e0e0; background: #fff; font-size: 13px; color: #666; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+  .tab-pill.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .clickable-label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+  .clickable-label .q-icon { display: inline-flex; width: 16px; height: 16px; border-radius: 50%; background: #e8e8e8; align-items: center; justify-content: center; font-size: 10px; color: #8c8c8c; font-weight: 600; }
+  /* Redeem timeline */
+  .redeem-timeline { display: flex; align-items: flex-start; margin: 16px 0; position: relative; }
+  .redeem-step { flex: 1; text-align: center; position: relative; }
+  .redeem-step-dot { width: 10px; height: 10px; border-radius: 50%; background: #00b578; margin: 0 auto 8px; position: relative; z-index: 2; }
+  .redeem-step-dot.pending { background: #d9d9d9; }
+  .redeem-step-label { font-size: 12px; color: #1a1a1a; font-weight: 600; margin-bottom: 4px; }
+  .redeem-step-date { font-size: 11px; color: #8c8c8c; }
+  .redeem-line { position: absolute; top: 5px; left: 25%; right: -25%; height: 1.5px; background: #e8e8e8; z-index: 1; }
+  .redeem-step:last-child .redeem-line { display: none; }
+  /* Detail link */
+  .detail-link { font-size: 14px; color: #1677ff; cursor: pointer; display: inline-flex; align-items: center; gap: 2px; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span class="time">4:40</span>
+    <div class="icons">
+      <span>&#9679;&#9679;</span>
+      <span>&#9681;</span>
+      <svg width="25" height="13" viewBox="0 0 25 13"><rect x="0" y="1" width="21" height="11" rx="2" stroke="#000" stroke-width="1" fill="none"/><rect x="2" y="3" width="14" height="7" rx="1" fill="#000"/><path d="M23 4.5v4a1.5 1.5 0 000-4z" fill="#000"/></svg>
+    </div>
+  </div>
+
+  <div class="screens-wrapper">
+
+    <!-- ========== SCREEN 1: 投资组合首页 ========== -->
+    <div id="screen-home" class="screen active page-bg">
+      <div class="nav-bar">
+        <button class="back-btn">&#8249;</button>
+        <div class="title">我的投资组合</div>
+        <button class="right-btn" onclick="navigateTo('screen-records')">记录</button>
+      </div>
+
+      <div style="background:#fff; padding:20px; text-align:center;">
+        <div class="label-sm">预估总资产($) &nbsp;📈</div>
+        <div class="value-lg" style="margin:8px 0;">$ 15,448.82</div>
+        <div style="display:flex; justify-content:center; gap:24px; margin-top:8px;">
+          <div><span class="label-sm">持有收益(%)</span><br><span class="text-green" style="font-weight:600;">+18.62 (+0.12%)</span></div>
+          <div><span class="label-sm">累计收益(%)</span><br><span class="text-green" style="font-weight:600;">+18.62 (+0.12%)</span></div>
+        </div>
+      </div>
+
+      <!-- FTX Compensation Banner -->
+      <div class="notif-card animate-in" onclick="navigateTo('screen-compensation')">
+        <div class="notif-badge">🔔 新赔付到账</div>
+        <div style="font-size:17px; font-weight:700; color:#1a1a1a; margin-bottom:8px;">FTX 赔付款已到账</div>
+        <div style="font-size:14px; color:#8c8c8c; line-height:1.6; margin-bottom:12px;">您有一笔 FTX 债权赔付资金到账，已为您转入 FTX 赔付安心计划，其底层资产 100% 为美国短期国债和现金，您也可以选择随时赎回。</div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:15px; font-weight:600; color:#c49b5e;">+15,430.20 USDC ≈ 0.1834 BTC</span>
+          <span style="font-size:13px; color:#c49b5e;">查看详情 ›</span>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" id="tab-holding" onclick="switchTab('holding')">持有中</button>
+        <button class="tab" id="tab-reserved" onclick="switchTab('reserved')">预约中</button>
+        <button class="tab" id="tab-all" onclick="switchTab('all')">全部赎回</button>
+      </div>
+
+      <div id="tab-content-holding">
+        <div class="holding-card animate-in delay-1" onclick="navigateTo('screen-strategy-detail')">
+          <div class="holding-header">
+            <div class="holding-name">🏛️ FTX 赔付安心计划</div>
+            <div class="holding-badge">持有中</div>
+          </div>
+          <div class="info-row" style="padding:6px 0;">
+            <span class="label" style="font-size:14px; color:#8c8c8c;">持有金额</span>
+            <span class="value" style="font-size:16px; font-weight:600;">15,448.82 USDC</span>
+          </div>
+          <div class="info-row" style="padding:6px 0;">
+            <span class="label" style="font-size:14px; color:#8c8c8c;">持有收益(%)</span>
+            <span class="value text-green" style="font-size:14px; font-weight:600;">+18.62 USDC (+0.12%)</span>
+          </div>
+          <div class="info-row" style="padding:6px 0;">
+            <span class="label" style="font-size:14px; color:#8c8c8c;">累计收益(%)</span>
+            <span class="value text-green" style="font-size:14px; font-weight:600;">+18.62 USDC (+0.12%)</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-content-reserved" style="display:none;">
+        <div class="empty-state"><div class="empty-icon">📋</div><div class="label-sm">暂无预约中的产品</div></div>
+      </div>
+      <div id="tab-content-all" style="display:none;">
+        <div class="empty-state"><div class="empty-icon">📁</div><div class="label-sm">暂无已赎回的产品</div></div>
+      </div>
+      <div style="height:40px;"></div>
+    </div>
+
+    <!-- ========== SCREEN 2: 赔付详情 ========== -->
+    <div id="screen-compensation" class="screen page-bg-warm">
+      <div class="nav-bar" style="background:transparent;">
+        <button class="back-btn" onclick="navigateTo('screen-home')">‹</button>
+        <div class="title">赔付详情</div>
+        <div></div>
+      </div>
+
+      <div class="comp-header animate-in">
+        <div class="comp-round-badge">第 4 轮赔付</div>
+        <div style="font-size:14px; color:#8c8c8c; margin-bottom:8px;">本轮赔付到账金额</div>
+        <div style="font-size:34px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">15,430.20 USDC</div>
+        <div style="font-size:15px; color:#8c8c8c;">≈ 0.1834 BTC · 参考价 $84,140</div>
+      </div>
+
+      <!-- Recovery Progress -->
+      <div class="section-card animate-in delay-1">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div style="font-size:16px; font-weight:700; color:#1a1a1a;">📊 您的 BTC 回本进度</div>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width:72%;"></div>
+          </div>
+          <div class="progress-labels">
+            <span class="label-sm">已回本</span>
+            <span style="font-size:15px; font-weight:700; color:#00b578;">72.3%</span>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="info-row info-row-border">
+          <span class="label clickable-label" onclick="toggleBtcBreakdown()">FTX 受影响 BTC 总额 <span class="q-icon" id="btcExpandIcon">▸</span></span>
+          <span class="value">1.8888 BTC</span>
+        </div>
+        <div id="btcBreakdown" style="display:none; padding:0 0 8px 16px; border-bottom:0.5px solid #f0f0f0;">
+          <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:13px;">
+            <span style="color:#8c8c8c;">固收</span>
+            <span style="color:#1a1a1a; font-weight:500;">1.0000 BTC</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:13px;">
+            <span style="color:#8c8c8c;">基金</span>
+            <span style="color:#1a1a1a; font-weight:500;">0.8888 BTC</span>
+          </div>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label clickable-label" onclick="openCalcModal()">累计已回本 <span class="q-icon">?</span></span>
+          <span class="value text-green">1.3658 BTC</span>
+        </div>
+        <div class="info-row">
+          <span class="label clickable-label" onclick="openCalcModal()">待回本金额 <span class="q-icon">?</span></span>
+          <span class="value text-orange">0.5230 BTC</span>
+        </div>
+        <div style="background:#f9fafb; border-radius:12px; padding:14px; margin-top:12px;">
+          <div style="font-size:13px; color:#8c8c8c; line-height:1.7;">
+            💡 根据 FTX 破产清算进度，后续仍有赔付批次预计将陆续到账。我们将持续跟踪并第一时间为您处理。
+          </div>
+        </div>
+      </div>
+
+      <!-- Recovery Timeline -->
+      <div class="section-card animate-in delay-2">
+        <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;">📋 回款记录</div>
+        <div class="timeline">
+          <!-- Round 4 -->
+          <div class="timeline-item">
+            <div class="timeline-dot-col">
+              <div class="timeline-dot gold active"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-title">第 4 轮赔付 <span style="font-size:12px; color:#c49b5e; font-weight:500; background:#c49b5e15; padding:2px 8px; border-radius:6px; margin-left:6px;">最新</span></div>
+              <div class="timeline-desc">2026-03-28 · 已转入安心计划</div>
+              <div class="timeline-amount" style="color:#c49b5e;">+15,430.20 USDC</div>
+              <div class="timeline-desc">≈ 0.1834 BTC · 参考价 $84,140</div>
+              <div style="margin-top:6px;">
+                <span class="timeline-note-link" onclick="showToast('查看备注详情')">备注 ∨</span>
+                <span class="timeline-note-link" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span>
+              </div>
+            </div>
+          </div>
+          <!-- Round 3 -->
+          <div class="timeline-item">
+            <div class="timeline-dot-col">
+              <div class="timeline-dot active"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-title">第 3 轮救助</div>
+              <div class="timeline-desc">2023-05-02 · 已结算至钱包</div>
+              <div class="timeline-amount">+18,560.00 USDC</div>
+              <div class="timeline-desc">≈ 0.2703 BTC · 参考价 $68,669.86</div>
+              <div style="margin-top:6px;">
+                <span class="timeline-note-link" onclick="showToast('查看备注详情')">备注 ∨</span>
+                <span class="timeline-note-link" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span>
+              </div>
+            </div>
+          </div>
+          <!-- Round 2 -->
+          <div class="timeline-item">
+            <div class="timeline-dot-col">
+              <div class="timeline-dot active"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-title">第 2 轮救助</div>
+              <div class="timeline-desc">2022-12-02 · 已结算至钱包</div>
+              <div class="timeline-amount">+22,200.00 USDC</div>
+              <div class="timeline-desc">≈ 1.2988 BTC · 参考价 $17,092.74</div>
+              <div style="margin-top:6px;">
+                <span class="timeline-note-link" onclick="showToast('查看备注详情')">备注 ∨</span>
+                <span class="timeline-note-link" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span>
+              </div>
+            </div>
+          </div>
+          <!-- Round 1 -->
+          <div class="timeline-item">
+            <div class="timeline-dot-col">
+              <div class="timeline-dot active"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-title">第 1 轮救助</div>
+              <div class="timeline-desc">2022-11-22 · 已结算至钱包</div>
+              <div class="timeline-amount">+1.0000 BTC</div>
+              <div class="timeline-desc">≈ 16,092.74 USDC · 参考价 $16,092.74</div>
+              <div style="margin-top:6px;">
+                <span class="timeline-note-link" onclick="showToast('查看备注详情')">备注 ∨</span>
+                <span class="timeline-note-link" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fund Allocation Notice -->
+      <div class="section-card animate-in delay-3">
+        <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:12px;">💼 资金配置说明</div>
+        <div style="font-size:14px; color:#555; line-height:1.8;">
+          为保障您的赔付资金安全，本轮到账资金已默认转入<strong style="color:#1a1a1a;">「FTX 赔付安心计划」</strong>，其底层资产 100% 为美国短期国债和现金。您可以随时发起赎回。
+        </div>
+      </div>
+
+      <div class="bottom-action">
+        <div style="display:flex; gap:12px;">
+          <button class="btn-secondary" style="flex:1;" onclick="navigateTo('screen-strategy-detail')">查看策略详情</button>
+          <button class="btn-primary gold" style="flex:1;" onclick="navigateTo('screen-strategy-detail')">管理资产</button>
+        </div>
+      </div>
+      <div style="height:20px;"></div>
+    </div>
+
+    <!-- ========== SCREEN 3: 策略产品详情 ========== -->
+    <div id="screen-strategy-detail" class="screen page-bg">
+      <div class="nav-bar">
+        <button class="back-btn" onclick="navigateTo('screen-compensation')">‹</button>
+        <div class="title">在持策略详情</div>
+        <button class="right-btn" style="font-size:18px;" onclick="showToast('更多信息')">ⓘ</button>
+      </div>
+
+      <!-- Strategy Header -->
+      <div style="background:#fff; padding:20px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:22px;">🏛️</span>
+            <div>
+              <div style="font-size:18px; font-weight:700; color:#1a1a1a;">FTX 赔付安心计划</div>
+              <div style="display:flex; gap:8px; margin-top:4px;">
+                <span class="risk-tag risk-low">低风险</span>
+              </div>
+            </div>
+          </div>
+          <span class="detail-link" onclick="navigateTo('screen-strategy-intro')">详情 ›</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <div>
+            <div class="label-sm">持有金额 (USDC)</div>
+            <div style="font-size:28px; font-weight:700; color:#1a1a1a; margin-top:4px;">15,448.82</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="label-sm">累计收益(%)</div>
+            <div style="font-size:17px; font-weight:600; color:#00b578; margin-top:8px;">+18.62 USDC (+0.12%)</div>
+          </div>
+        </div>
+
+        <div class="icon-actions">
+          <button class="icon-action" onclick="navigateTo('screen-income')">
+            <div class="icon-action-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M12 2v20M2 12l10-10 10 10"/></svg></div>
+            <div class="icon-action-label">收益</div>
+          </button>
+          <button class="icon-action" onclick="showToast('暂无预约')">
+            <div class="icon-action-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+            <div class="icon-action-label">预约</div>
+          </button>
+          <button class="icon-action" onclick="navigateTo('screen-trade-records')">
+            <div class="icon-action-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div>
+            <div class="icon-action-label">记录</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Key Metrics -->
+      <div class="section-card animate-in delay-1">
+        <div class="info-row info-row-border">
+          <span class="label">持有收益</span>
+          <span class="value text-green">+18.62 USDC</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">持有收益率</span>
+          <span class="value text-green">+0.12%</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">持有份额</span>
+          <span class="value">15,430.20 份</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">持有成本</span>
+          <span class="value">1.0000</span>
+        </div>
+        <div class="info-row">
+          <span class="label">浮动盈亏</span>
+          <span class="value text-green">+0.12%</span>
+        </div>
+      </div>
+
+      <!-- NAV Chart -->
+      <div class="section-card animate-in delay-2">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div style="font-size:16px; font-weight:700;">NAV 曲线</div>
+          <div style="font-size:13px; color:#8c8c8c;">所有时间</div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;">
+          <span class="label-sm">最新费后NAV (03-31 08:00)</span>
+          <span style="font-size:20px; font-weight:700; color:#00b578;">1.0012</span>
+        </div>
+        <div class="nav-chart-placeholder">
+          <svg viewBox="0 0 340 120" preserveAspectRatio="none">
+            <defs><linearGradient id="navGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00b578" stop-opacity="0.15"/><stop offset="100%" stop-color="#00b578" stop-opacity="0.01"/></linearGradient></defs>
+            <path d="M0,100 Q40,95 80,90 T160,70 T240,40 T340,25 V120 H0 Z" fill="url(#navGrad)"/>
+            <path d="M0,100 Q40,95 80,90 T160,70 T240,40 T340,25" fill="none" stroke="#00b578" stroke-width="2"/>
+            <circle cx="340" cy="25" r="4" fill="#00b578"/>
+          </svg>
+        </div>
+        <div style="text-align:center; margin-top:8px;">
+          <span style="font-size:13px; color:#1677ff; cursor:pointer;" onclick="showToast('查看更多指标')">查看更多指标 ›</span>
+        </div>
+      </div>
+
+      <!-- Trading Rules - Timeline Style -->
+      <div class="section-card animate-in delay-3">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div style="font-size:16px; font-weight:700;">交易规则</div>
+          <span style="font-size:13px; color:#1677ff; cursor:pointer;" onclick="showToast('查看详细规则')">查看设置 ›</span>
+        </div>
+
+        <div style="display:flex; margin-bottom:4px;">
+          <div style="flex:1; font-size:13px; font-weight:600; color:#1a1a1a; text-align:center;">申购</div>
+          <div style="flex:1; font-size:13px; font-weight:600; color:#1a1a1a; text-align:center;">赎回</div>
+        </div>
+        <div class="divider" style="margin:8px 0;"></div>
+
+        <div style="display:flex; margin-bottom:16px;">
+          <div style="flex:1; text-align:center; padding:8px;">
+            <div style="font-size:13px; color:#8c8c8c;">不支持手动申购</div>
+            <div style="font-size:12px; color:#b0b0b0; margin-top:4px;">仅接收赔付资金自动配置</div>
+          </div>
+          <div style="width:0.5px; background:#f0f0f0;"></div>
+          <div style="flex:1; text-align:center; padding:8px;">
+            <div style="font-size:13px; color:#1a1a1a; font-weight:500;">支持随时赎回</div>
+            <div style="font-size:12px; color:#b0b0b0; margin-top:4px;">T+5 工作日内到账</div>
+          </div>
+        </div>
+
+        <!-- Redeem timeline visual -->
+        <div style="background:#f9fafb; border-radius:12px; padding:16px 12px; margin-bottom:12px;">
+          <div style="font-size:13px; font-weight:600; color:#1a1a1a; margin-bottom:14px;">赎回流程示意</div>
+          <div class="redeem-timeline">
+            <div class="redeem-step">
+              <div class="redeem-step-dot"></div>
+              <div class="redeem-line"></div>
+              <div class="redeem-step-label">预约赎回</div>
+              <div class="redeem-step-date">04-06 08:00 前</div>
+            </div>
+            <div class="redeem-step">
+              <div class="redeem-step-dot pending"></div>
+              <div class="redeem-line"></div>
+              <div class="redeem-step-label">确认净值</div>
+              <div class="redeem-step-date">预计 04-06</div>
+            </div>
+            <div class="redeem-step">
+              <div class="redeem-step-dot pending"></div>
+              <div class="redeem-step-label">赎回到账</div>
+              <div class="redeem-step-date">预计 04-13 前</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider" style="margin:12px 0;"></div>
+        <div style="font-size:14px; font-weight:600; margin-bottom:12px;">费用结构</div>
+        <div class="info-row info-row-border">
+          <span class="label">申购费</span>
+          <span class="value">0.00%</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">赎回费</span>
+          <span class="value">0.00%</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">管理费</span>
+          <span class="value">0.00%</span>
+        </div>
+        <div class="info-row">
+          <span class="label">业绩报酬</span>
+          <span class="value">0.00%</span>
+        </div>
+      </div>
+
+      <!-- 投资细则 -->
+      <div class="section-card animate-in delay-4">
+        <div style="font-size:16px; font-weight:700; margin-bottom:16px;">投资细则</div>
+        <div class="info-row info-row-border">
+          <span class="label">产品类型</span>
+          <span class="value">FTX 赔付专属计划</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">计价货币</span>
+          <span class="value">USDC</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">锁定期</span>
+          <span class="value">无锁定期</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">净值计算日</span>
+          <span class="value">每日 08:00 (UTC+8)</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">申购方式</span>
+          <span class="value">仅限赔付资金自动配置</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">赎回方式</span>
+          <span class="value">随时申请，T+5 工作日到账</span>
+        </div>
+        <div class="info-row">
+          <span class="label">赎回到账币种</span>
+          <span class="value">USDC</span>
+        </div>
+        <div style="font-size:13px; color:#8c8c8c; line-height:1.7; margin-top:12px; padding-top:12px; border-top:0.5px solid #f0f0f0;">
+          初始赔付资金转入后按认购日净值确认份额。赎回时，将按照赎回确认日的资产净值计算赎回金额，赎回金额 = 赎回份额 × 赎回确认日净值。
+        </div>
+      </div>
+
+      <!-- Strategy Description -->
+      <div class="section-card">
+        <div style="font-size:16px; font-weight:700; margin-bottom:12px;">策略介绍</div>
+        <div style="font-size:14px; color:#555; line-height:1.8;">
+          <strong>「FTX 赔付安心计划」</strong>是平台专为 FTX 受影响客户定制的资管方案，旨在为赔付资金提供安全、稳健的保值渠道。
+        </div>
+        <div style="font-size:14px; color:#555; line-height:1.8; margin-top:12px;">
+          <strong>底层资产：</strong>100% 美国短期国债和现金，由合规托管机构管理，底层对应期限在 6 个月以内的美国国债。
+        </div>
+        <div style="font-size:14px; color:#555; line-height:1.8; margin-top:12px;">
+          <strong>产品特点：</strong>
+        </div>
+        <div style="font-size:14px; color:#555; line-height:1.8; padding-left:8px; margin-top:4px;">
+          · 底层资产为全球最安全的主权债务工具<br>
+          · 无锁定期，随时可发起赎回<br>
+          · 全部零费率，不收取任何费用
+        </div>
+        <div style="font-size:14px; color:#555; line-height:1.8; margin-top:12px;">
+          <strong>我们的承诺：</strong>您的赔付资金安全是我们的首要关注。本计划仅为帮助您的资金在此期间不被闲置。如您希望立即取回资金，可随时赎回，我们绝不设置任何障碍。
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        ⚠️ 风险提示：本产品不保证本金及收益。过往业绩不代表未来表现。投资有风险，请根据自身情况审慎决策。如需帮助，请联系您的专属客户经理。
+      </div>
+
+      <div class="bottom-action">
+        <div style="display:flex; gap:12px;">
+          <button class="btn-secondary" style="flex:1;" onclick="navigateTo('screen-redeem')">赎回</button>
+          <button class="btn-primary disabled" style="flex:1;">申购</button>
+        </div>
+        <div style="text-align:center; margin-top:8px;">
+          <span class="label-sm">UID 88888</span>
+        </div>
+      </div>
+      <div style="height:20px;"></div>
+    </div>
+
+    <!-- ========== SCREEN 3b: 策略详情（从"详情"入口进入） ========== -->
+    <div id="screen-strategy-intro" class="screen page-bg">
+      <div class="nav-bar">
+        <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
+        <div class="title">策略详情</div>
+        <div></div>
+      </div>
+      <div style="background:#fff; padding:24px 20px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+          <span style="font-size:28px;">🏛️</span>
+          <div>
+            <div style="font-size:20px; font-weight:700;">FTX 赔付安心计划</div>
+            <div style="display:flex; gap:8px; margin-top:6px;">
+              <span class="risk-tag risk-low">低风险</span>
+              <span style="font-size:12px; color:#8c8c8c; padding:4px 0;">美国短期国债和现金</span>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:15px; color:#555; line-height:2;">
+          本计划专为 FTX 事件受影响的客户设立。赔付资金到账后自动转入本计划，底层资产 100% 为美国短期国债和现金，由合规托管机构管理。<br><br>
+          客户可随时发起赎回，赎回后 T+5 个工作日内到账，赎回过程中资金仍享受策略净值变动。本策略不支持手动申购，仅限赔付资金自动配置。<br><br>
+          本策略不收取申购费、赎回费、管理费及业绩报酬。<br><br>
+          如您有任何疑问，请随时联系您的专属客户经理。
+        </div>
+      </div>
+      <div class="disclaimer">
+        ⚠️ 风险提示：本产品不保证本金及收益。过往业绩不代表未来表现。投资有风险，请根据自身情况审慎决策。
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 4: 收益详情 ========== -->
+    <div id="screen-income" class="screen page-bg">
+      <div class="nav-bar">
+        <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
+        <div class="title">收益明细</div>
+        <div></div>
+      </div>
+      <div style="background:#fff; padding:24px 20px; text-align:center;">
+        <div class="label-sm">累计收益 (USDC)</div>
+        <div style="font-size:32px; font-weight:700; color:#00b578; margin:8px 0;">+18.62</div>
+        <div class="label-sm">持有 3 天 · 日均收益 +6.21 USDC</div>
+      </div>
+      <div class="section-card">
+        <div style="font-size:15px; font-weight:600; margin-bottom:16px;">每日收益</div>
+        <div class="record-item">
+          <div class="record-left"><div class="record-title">2026-03-31</div><div class="record-date">NAV: 1.0012</div></div>
+          <div><div class="record-amount text-green">+6.48 USDC</div></div>
+        </div>
+        <div class="record-item">
+          <div class="record-left"><div class="record-title">2026-03-30</div><div class="record-date">NAV: 1.0008</div></div>
+          <div><div class="record-amount text-green">+6.17 USDC</div></div>
+        </div>
+        <div class="record-item">
+          <div class="record-left"><div class="record-title">2026-03-29</div><div class="record-date">NAV: 1.0004</div></div>
+          <div><div class="record-amount text-green">+5.97 USDC</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 5: 交易记录（策略申赎记录） ========== -->
+    <div id="screen-trade-records" class="screen page-bg">
+      <div class="nav-bar">
+        <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
+        <div class="title">记录</div>
+        <div></div>
+      </div>
+
+      <div class="tabs" style="top:52px;">
+        <button class="tab active" id="tab-trade" onclick="switchRecordTab('trade')">交易</button>
+        <button class="tab" id="tab-income-rec" onclick="switchRecordTab('income-rec')">收益</button>
+      </div>
+
+      <div id="tab-content-trade" style="padding:0 16px;">
+        <div style="display:flex; justify-content:space-between; padding:16px 0 8px;">
+          <span class="label-sm">全部 ▾</span>
+          <span class="label-sm">全部 ▾</span>
+        </div>
+
+        <!-- 赎回记录示例 -->
+        <div style="background:#fff; border-radius:16px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:15px; font-weight:600; color:#1a1a1a;">赎回</div>
+              <div class="label-sm">2026-04-13 10:00:00</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:16px; font-weight:600; color:#00b578;">5,000.00 USDC</div>
+              <div class="label-sm">已赎回</div>
+            </div>
+          </div>
+          <div class="record-detail-box">
+            <div class="record-detail-row"><span>确认净值</span><span class="val">1.0050</span></div>
+            <div class="record-detail-row"><span>已确认份额</span><span class="val">4,975.12</span></div>
+            <div class="record-detail-row"><span>赎回费</span><span class="val">0.00 USDC (0.00%)</span></div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:10px;">
+            <span class="timeline-note-link" onclick="showToast('查看协议')">协议 ›</span>
+          </div>
+        </div>
+
+        <!-- 申购记录示例 -->
+        <div style="background:#fff; border-radius:16px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:15px; font-weight:600; color:#1a1a1a;">申购</div>
+              <div class="label-sm">2026-03-28 00:00:12</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:16px; font-weight:600; color:#00b578;">15,430.20 USDC</div>
+              <div class="label-sm">已确认</div>
+            </div>
+          </div>
+          <div class="record-detail-box">
+            <div class="record-detail-row"><span>确认净值</span><span class="val">1.0000</span></div>
+            <div class="record-detail-row"><span>已确认份额</span><span class="val">15,430.20</span></div>
+            <div class="record-detail-row"><span>支付金额</span><span class="val">15,430.20 USDC</span></div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:10px;">
+            <span class="timeline-note-link" onclick="showToast('查看协议')">协议 ›</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-content-income-rec" style="display:none; padding:0 16px;">
+        <div style="padding:16px 0;">
+          <div style="background:#fff; border-radius:16px; padding:16px;">
+            <div class="record-item">
+              <div class="record-left"><div class="record-title">2026-03-31</div><div class="record-date">NAV: 1.0012</div></div>
+              <div><div class="record-amount text-green">+6.48 USDC</div></div>
+            </div>
+            <div class="record-item">
+              <div class="record-left"><div class="record-title">2026-03-30</div><div class="record-date">NAV: 1.0008</div></div>
+              <div><div class="record-amount text-green">+6.17 USDC</div></div>
+            </div>
+            <div class="record-item">
+              <div class="record-left"><div class="record-title">2026-03-29</div><div class="record-date">NAV: 1.0004</div></div>
+              <div><div class="record-amount text-green">+5.97 USDC</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 6: 赎回流程 ========== -->
+    <div id="screen-redeem" class="screen page-bg">
+      <div class="nav-bar">
+        <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
+        <div class="title">赎回</div>
+        <div></div>
+      </div>
+
+      <div style="background:#fff; padding:20px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+          <span style="font-size:20px;">🏛️</span>
+          <div>
+            <div style="font-size:16px; font-weight:600;">FTX 赔付安心计划</div>
+            <div class="label-sm">可赎回: 15,448.82 USDC</div>
+          </div>
+        </div>
+
+        <div class="amount-input-wrapper">
+          <div class="label-sm" style="margin-bottom:8px;">赎回金额 (USDC)</div>
+          <input class="amount-input" type="text" placeholder="0.00" id="redeemInput" oninput="updateRedeemBtn()">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+            <span class="label-sm">可用: 15,448.82 USDC</span>
+            <span class="amount-max" onclick="document.getElementById('redeemInput').value='15,448.82'; updateRedeemBtn();">全部</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="info-row">
+          <span class="label">赎回费率</span>
+          <span class="value">0.00%</span>
+        </div>
+        <div class="info-row">
+          <span class="label">预计到账</span>
+          <span class="value">T+5 工作日</span>
+        </div>
+        <div class="info-row">
+          <span class="label">到账方式</span>
+          <span class="value">USDC 至钱包</span>
+        </div>
+      </div>
+
+      <div style="background:#fefaf3; margin:12px 16px; border-radius:12px; padding:16px;">
+        <div style="font-size:14px; color:#9a7b4a; line-height:1.7;">
+          🤝 温馨提示：赎回后资金将转入您的钱包，您可自由支配。如暂时无使用计划，保留在安心计划中可持续获得收益。
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        赎回申请提交后，预计 T+5 个工作日内到账。赎回过程中，您的资金仍将按照策略净值享受收益。赎回期间不收取任何费用。
+      </div>
+
+      <div class="bottom-action">
+        <button class="btn-primary" id="redeemBtn" style="opacity:0.4;" onclick="openRedeemConfirm()">确认赎回</button>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 7: 赎回成功 ========== -->
+    <div id="screen-redeem-success" class="screen" style="background:#fff;">
+      <div class="nav-bar">
+        <button class="back-btn" onclick="navigateTo('screen-home')">‹</button>
+        <div class="title"></div>
+        <div></div>
+      </div>
+      <div style="text-align:center; padding:20px;">
+        <div class="success-icon animate-in">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <div class="animate-in delay-1" style="font-size:22px; font-weight:700; color:#1a1a1a;">赎回申请已提交</div>
+        <div class="animate-in delay-2" style="font-size:15px; color:#8c8c8c; margin-top:8px; line-height:1.6;">预计 5 个工作日内到账您的钱包</div>
+      </div>
+      <div class="section-card animate-in delay-2">
+        <div class="info-row info-row-border">
+          <span class="label">赎回产品</span>
+          <span class="value">FTX 赔付安心计划</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">赎回金额</span>
+          <span class="value" style="font-weight:600;">15,448.82 USDC</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">赎回费用</span>
+          <span class="value">0.00 USDC</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">预计到账</span>
+          <span class="value">2026-04-07</span>
+        </div>
+        <div class="info-row">
+          <span class="label">到账方式</span>
+          <span class="value">USDC → 钱包</span>
+        </div>
+      </div>
+      <div style="background:#f0fdf4; margin:12px 16px; border-radius:12px; padding:16px;">
+        <div style="font-size:14px; color:#15803d; line-height:1.7;">✅ 赎回期间您的资金仍按策略净值享受收益。到账后将自动转入您的钱包。</div>
+      </div>
+      <div style="padding:24px 16px;">
+        <button class="btn-primary" onclick="navigateTo('screen-home')">返回投资组合</button>
+        <div style="height:12px;"></div>
+        <button class="btn-secondary" onclick="navigateTo('screen-trade-records')">查看交易记录</button>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 8: 历史赔付记录 ========== -->
+    <div id="screen-records" class="screen page-bg">
+      <div class="nav-bar">
+        <button class="back-btn" onclick="navigateTo('screen-home')">‹</button>
+        <div class="title">历史赔付信息</div>
+        <div></div>
+      </div>
+      <div style="background:#fff; padding:20px;">
+        <div class="info-row info-row-border">
+          <span class="label">受影响金额</span>
+          <span class="value" style="font-weight:600;">1.8888 BTC</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label clickable-label" onclick="openCalcModal()">累计已回本 <span class="q-icon">?</span></span>
+          <span class="value text-green">1.3658 BTC</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">策略收益</span>
+          <span class="value text-green">+18.62 USDC</span>
+        </div>
+        <div class="info-row info-row-border">
+          <span class="label">客户经理</span>
+          <span class="value text-blue" style="cursor:pointer;">Kevin W. ›</span>
+        </div>
+        <div class="info-row">
+          <span class="label">累计收到</span>
+          <div style="text-align:right;">
+            <div class="value" style="font-weight:600;">1.0000 BTC + 56,190.20 USDC</div>
+            <div class="label-sm">(≈ 1.3658 BTC)</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:16px;">
+        <div style="font-size:16px; font-weight:700; margin-bottom:16px;">记录</div>
+        <div style="display:flex; gap:8px; margin-bottom:16px;">
+          <button class="tab-pill active" onclick="filterRecords(this, 'all')">全部</button>
+          <button class="tab-pill" onclick="filterRecords(this, 'comp')">赔付</button>
+          <button class="tab-pill" onclick="filterRecords(this, 'income')">收益</button>
+          <button class="tab-pill" onclick="filterRecords(this, 'redeem')">赎回</button>
+        </div>
+
+        <div style="background:#fff; border-radius:16px; padding:4px 16px;">
+          <div class="record-item">
+            <div class="record-left">
+              <div class="record-title">第 4 轮赔付</div>
+              <div class="record-date">2026-03-28 · 已转入安心计划</div>
+            </div>
+            <div>
+              <div class="record-amount text-green">+15,430.20 USDC</div>
+              <div class="record-status">≈ 0.1834 BTC</div>
+            </div>
+          </div>
+          <div class="record-item">
+            <div class="record-left">
+              <div class="record-title">第 3 轮救助</div>
+              <div class="record-date">2023-05-02 · 已结算至钱包</div>
+            </div>
+            <div>
+              <div class="record-amount text-green">+18,560.00 USDC</div>
+              <div class="record-status">≈ 0.2703 BTC</div>
+            </div>
+          </div>
+          <div class="record-item">
+            <div class="record-left">
+              <div class="record-title">第 2 轮救助</div>
+              <div class="record-date">2022-12-02 · 已结算至钱包</div>
+            </div>
+            <div>
+              <div class="record-amount text-green">+22,200.00 USDC</div>
+              <div class="record-status">≈ 1.2988 BTC</div>
+            </div>
+          </div>
+          <div class="record-item">
+            <div class="record-left">
+              <div class="record-title">第 1 轮救助</div>
+              <div class="record-date">2022-11-22 · 已结算至钱包</div>
+            </div>
+            <div>
+              <div class="record-amount text-green">+1.0000 BTC</div>
+              <div class="record-status">≈ 16,092.74 USDC</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px; background:#fff; border-radius:16px; padding:16px;">
+          <div style="font-size:15px; font-weight:600; margin-bottom:12px;">相关协议</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; cursor:pointer;" onclick="showToast('查看赔付协议')">
+              <span style="font-size:14px; color:#1677ff;">FTX 赔付说明及客户权益书</span><span style="color:#ccc;">›</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; cursor:pointer;" onclick="showToast('查看策略协议')">
+              <span style="font-size:14px; color:#1677ff;">安心计划投资协议</span><span style="color:#ccc;">›</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:16px;">
+        <button class="btn-secondary" onclick="navigateTo('screen-home')">返回</button>
+      </div>
+      <div style="height:20px;"></div>
+    </div>
+
+    <!-- ========== SCREEN 9: 首次赔付通知弹窗 ========== -->
+    <div id="screen-first-notice" class="screen" style="background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center;">
+      <div style="background:#fff; border-radius:24px; margin:20px; padding:32px 24px; text-align:center; max-width:340px; animation: fadeInUp 0.4s ease;">
+        <div style="font-size:40px; margin-bottom:16px;">🤝</div>
+        <div style="font-size:20px; font-weight:700; color:#1a1a1a; margin-bottom:12px; line-height:1.4;">
+          您的 FTX 赔付款<br>已安全到账
+        </div>
+        <div style="font-size:14px; color:#666; line-height:1.8; text-align:left; margin-bottom:20px;">
+          尊敬的客户，感谢您一路以来的信任与耐心。FTX 本轮赔付资金已到账，我们已将收到的资金配置至「FTX 赔付安心计划」中，其底层资产 100% 为美国短期国债和现金，您也可以选择随时赎回。
+        </div>
+        <div style="background:#f0fdf4; border-radius:12px; padding:14px; margin-bottom:20px; text-align:left;">
+          <div style="font-size:13px; color:#15803d; line-height:1.7;">
+            ✓ 资金安全 · 底层 100% 美国国债和现金<br>
+            ✓ 随时赎回 · 无锁定期 · 零费率
+          </div>
+        </div>
+        <button class="btn-primary gold" onclick="navigateTo('screen-compensation')" style="margin-bottom:12px;">查看赔付详情</button>
+        <div style="font-size:13px; color:#8c8c8c; cursor:pointer;" onclick="navigateTo('screen-home')">稍后查看</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Redeem Confirm Modal -->
+<div id="redeemConfirmModal" class="modal-overlay">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="text-align:center; margin-bottom:20px;">
+      <div style="font-size:18px; font-weight:700;">确认赎回</div>
+    </div>
+    <div class="info-row info-row-border">
+      <span class="label">赎回产品</span>
+      <span class="value">FTX 赔付安心计划</span>
+    </div>
+    <div class="info-row info-row-border">
+      <span class="label">赎回金额</span>
+      <span class="value" id="confirmAmount" style="font-size:18px; font-weight:700;">--</span>
+    </div>
+    <div class="info-row info-row-border">
+      <span class="label">赎回费用</span>
+      <span class="value">0.00 USDC</span>
+    </div>
+    <div class="info-row">
+      <span class="label">预计到账时间</span>
+      <span class="value">T+5 工作日</span>
+    </div>
+    <div style="margin-top:20px;">
+      <button class="btn-primary" onclick="confirmRedeem()">确认赎回</button>
+      <div style="height:12px;"></div>
+      <button class="btn-secondary" onclick="closeRedeemConfirm()">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- Calculation Modal -->
+<div id="calcModal" class="modal-overlay">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="font-size:18px; font-weight:700; text-align:center; margin-bottom:16px;">计算口径说明</div>
+    <div style="font-size:14px; color:#555; line-height:1.9; margin-bottom:16px;">
+      <strong>FTX 受影响 BTC 总额：</strong>以 FTX 破产清算时认定的 BTC 债权数量为准，包含固收和基金两部分。<br><br>
+      <strong>累计已回本 (折合 BTC)：</strong><br>
+      · 第 1 轮救助为 BTC 直接发放，按实际到账 BTC 数量计入<br>
+      · 第 2~3 轮救助及第 4 轮赔付为 USDC 发放，按到账日的 BTC 市场价格折合为 BTC 数量计入<br><br>
+      <strong>折合示例：</strong><br>
+      第 4 轮到账 15,430.20 USDC，到账日 BTC 价格为 $84,140，折合 15,430.20 ÷ 84,140 ≈ 0.1834 BTC<br><br>
+      <strong>待回本金额：</strong>FTX 受影响 BTC 总额 - 累计已回本
+    </div>
+    <button class="btn-secondary" onclick="closeCalcModal()">我知道了</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- Flow Navigator -->
+<button class="flow-toggle" onclick="toggleFlowMap()" title="页面导航">☰</button>
+<div id="flowMap" class="flow-map">
+  <h4>📱 页面导航 (点击跳转)</h4>
+  <div class="flow-map-item" onclick="navigateTo('screen-first-notice')">① 首次弹窗通知</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-home')">② 投资组合首页</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-compensation')">③ 赔付详情</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-strategy-detail')">④ 在持策略详情</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-strategy-intro')">⑤ 策略介绍详情</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-income')">⑥ 收益明细</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-trade-records')">⑦ 交易记录</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-redeem')">⑧ 赎回流程</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-redeem-success')">⑨ 赎回成功</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-records')">⑩ 历史赔付记录</div>
+</div>
+
+<script>
+  let currentScreen = 'screen-first-notice';
+  let navHistory = ['screen-first-notice'];
+
+  function navigateTo(screenId) {
+    closeFlowMap();
+    const current = document.getElementById(currentScreen);
+    const next = document.getElementById(screenId);
+    if (!next || screenId === currentScreen) return;
+    current.classList.remove('active');
+    current.classList.add('prev');
+    next.classList.add('active');
+    setTimeout(() => { current.classList.remove('prev'); }, 350);
+    currentScreen = screenId;
+    if (navHistory[navHistory.length - 1] !== screenId) navHistory.push(screenId);
+    document.querySelectorAll('.flow-map-item').forEach(item => {
+      item.classList.remove('current');
+    });
+    next.scrollTop = 0;
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('#screen-home .tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('tab-content-holding').style.display = tab === 'holding' ? 'block' : 'none';
+    document.getElementById('tab-content-reserved').style.display = tab === 'reserved' ? 'block' : 'none';
+    document.getElementById('tab-content-all').style.display = tab === 'all' ? 'block' : 'none';
+  }
+
+  function switchRecordTab(tab) {
+    document.querySelectorAll('#screen-trade-records .tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('tab-content-trade').style.display = tab === 'trade' ? 'block' : 'none';
+    document.getElementById('tab-content-income-rec').style.display = tab === 'income-rec' ? 'block' : 'none';
+  }
+
+  function filterRecords(el, type) {
+    document.querySelectorAll('.tab-pill').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function updateRedeemBtn() {
+    const val = document.getElementById('redeemInput').value;
+    document.getElementById('redeemBtn').style.opacity = val.length > 0 ? '1' : '0.4';
+  }
+
+  function openRedeemConfirm() {
+    const val = document.getElementById('redeemInput').value || '0.00';
+    if (!val || val === '0' || val === '0.00') { showToast('请输入赎回金额'); return; }
+    document.getElementById('confirmAmount').textContent = val + ' USDC';
+    document.getElementById('redeemConfirmModal').classList.add('show');
+  }
+  function closeRedeemConfirm() { document.getElementById('redeemConfirmModal').classList.remove('show'); }
+  function confirmRedeem() { closeRedeemConfirm(); navigateTo('screen-redeem-success'); }
+
+  function toggleBtcBreakdown() {
+    const el = document.getElementById('btcBreakdown');
+    const icon = document.getElementById('btcExpandIcon');
+    if (el.style.display === 'none') { el.style.display = 'block'; icon.textContent = '▾'; }
+    else { el.style.display = 'none'; icon.textContent = '▸'; }
+  }
+
+  function openCalcModal() { document.getElementById('calcModal').classList.add('show'); }
+  function closeCalcModal() { document.getElementById('calcModal').classList.remove('show'); }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  function toggleFlowMap() { document.getElementById('flowMap').classList.toggle('show'); }
+  function closeFlowMap() { document.getElementById('flowMap').classList.remove('show'); }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('screen-first-notice').classList.add('active');
+  });
+</script>
+</body>
+</html>
