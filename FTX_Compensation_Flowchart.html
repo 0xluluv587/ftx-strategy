@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FTX 回款赔付执行计划 · 流程图</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Noto Sans SC','Inter',-apple-system,sans-serif;background:#f5f6fa;min-height:100vh;padding:48px 20px;}
+  .container{max-width:960px;margin:0 auto;}
+  .header{text-align:center;margin-bottom:44px;}
+  .header h1{font-size:24px;font-weight:700;color:#1a1a2e;letter-spacing:1px;}
+  .header .sub{font-size:13px;color:#9ca3af;margin-top:8px;}
+  .status-bar{display:inline-block;margin-top:12px;padding:5px 16px;background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;border-radius:16px;font-size:12px;font-weight:600;}
+  .legend{display:flex;justify-content:center;gap:20px;margin-bottom:36px;flex-wrap:wrap;}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#9ca3af;}
+  .leg-dot{width:10px;height:10px;border-radius:50%;}
+  .leg-dot.c1{background:#f59e0b;} .leg-dot.c2{background:#8b5cf6;} .leg-dot.c3{background:#94a3b8;}
+  svg{display:block;margin:0 auto;}
+  .phase-label{font-size:13px;font-weight:700;fill:#fff;letter-spacing:.5px;}
+  .phase-rect-1{fill:url(#grad1);} .phase-rect-2{fill:url(#grad2);} .phase-rect-3{fill:url(#grad3);}
+  .node{cursor:default;transition:filter .2s;}
+  .node:hover{filter:drop-shadow(0 4px 12px rgba(0,0,0,.12));}
+  .node-box{rx:12;ry:12;stroke-width:1.5;}
+  .node-box.clearing{fill:#fffbeb;stroke:#f59e0b;}
+  .node-box.todo{fill:#f8fafc;stroke:#cbd5e1;}
+  .node-box.design{fill:#f5f3ff;stroke:#8b5cf6;}
+  .node-title{font-size:12.5px;font-weight:600;fill:#1a1a2e;}
+  .node-role{font-size:10px;fill:#9ca3af;font-weight:400;}
+  .node-ddl{font-size:10px;fill:#dc2626;font-weight:600;}
+  .node-ddl-normal{font-size:10px;fill:#9ca3af;font-weight:500;}
+  .status-dot{r:4;}
+  .status-dot.clearing{fill:#f59e0b;} .status-dot.todo{fill:#94a3b8;} .status-dot.design{fill:#8b5cf6;}
+  .arrow-line{stroke:#cbd5e1;stroke-width:1.6;fill:none;}
+  .arrow-line.dep{stroke:#94a3b8;stroke-dasharray:6 3;}
+  .arrow-head{fill:#94a3b8;}
+  .arrow-head.solid{fill:#cbd5e1;}
+  .phase-arrow{stroke:#94a3b8;stroke-width:2;fill:none;}
+  .tl-line{stroke:url(#tlGrad);stroke-width:3;stroke-linecap:round;}
+  .tl-dot{stroke:#fff;stroke-width:2.5;}
+  .tl-label{font-size:11px;font-weight:600;fill:#1a1a2e;}
+  .tl-sub{font-size:10px;fill:#9ca3af;}
+  .footer{text-align:center;margin-top:32px;font-size:11px;color:#bfc5d0;}
+  @media print{body{background:#fff;padding:20px;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>FTX 回款赔付执行计划</h1>
+    <div class="sub">流程与依赖关系示意 · 3 阶段 / 7 核心动作</div>
+    <div class="status-bar">当前：已拿回第 1 笔回款 (96.3%)，资金在 Bitgo 等待解冻</div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="leg-dot c1"></div>Clearing 进行中</div>
+    <div class="legend-item"><div class="leg-dot c2"></div>Design 设计中</div>
+    <div class="legend-item"><div class="leg-dot c3"></div>Todo 待启动</div>
+  </div>
+  <svg viewBox="0 0 880 720" xmlns="http://www.w3.org/2000/svg" style="max-width:880px;width:100%;">
+    <defs>
+      <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1e3a5f"/><stop offset="100%" stop-color="#2563eb"/></linearGradient>
+      <linearGradient id="grad2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+      <linearGradient id="grad3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#047857"/><stop offset="100%" stop-color="#10b981"/></linearGradient>
+      <linearGradient id="tlGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="50%" stop-color="#a855f7"/><stop offset="100%" stop-color="#10b981"/></linearGradient>
+      <marker id="arrowG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+      <marker id="arrowS" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#cbd5e1"/></marker>
+    </defs>
+    <rect class="phase-rect-1" x="20" y="10" width="840" height="180" rx="14"/>
+    <text class="phase-label" x="52" y="38">① 清账沟通</text>
+    <g class="node" transform="translate(40, 54)">
+      <rect class="node-box clearing" width="240" height="68"/>
+      <circle class="status-dot clearing" cx="18" cy="22"/>
+      <text class="node-title" x="30" y="26">清算客户赔偿金额与回本价格</text>
+      <text class="node-role" x="18" y="48">Lockie Lu · Andy Ren</text>
+      <text class="node-ddl" x="180" y="48">DDL 04-02</text>
+    </g>
+    <g class="node">
+      <rect class="node-box todo" x="320" y="54" width="240" height="68" rx="12" ry="12"/>
+      <circle class="status-dot todo" cx="338" cy="76" r="4"/>
+      <text class="node-title" x="350" y="80">创建 FoF 策略「专项回款管理计划」</text>
+      <text class="node-role" x="338" y="102">Hannah Zhang · Tingyew · Shirley</text>
+      <text class="node-ddl" x="498" y="102">~04-10</text>
+    </g>
+    <g class="node">
+      <rect class="node-box todo" x="600" y="54" width="240" height="68" rx="12" ry="12"/>
+      <circle class="status-dot todo" cx="618" cy="76" r="4"/>
+      <text class="node-title" x="630" y="80">销售与客户沟通回款安排</text>
+      <text class="node-role" x="618" y="102">Andy Ren · Sam Mu</text>
+      <text class="node-ddl-normal" x="778" y="102">TBD</text>
+    </g>
+    <line class="arrow-line" x1="280" y1="88" x2="318" y2="88" marker-end="url(#arrowS)"/>
+    <path class="arrow-line dep" d="M 280 92 Q 295 110, 280 130 Q 265 148, 600 88" marker-end="url(#arrowG)"/>
+    <line x1="562" y1="82" x2="598" y2="82" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 2"/>
+    <text x="568" y="78" font-size="9" fill="#cbd5e1">并行</text>
+    <text x="52" y="165" font-size="11" fill="rgba(255,255,255,.55)">清算完成后，同步启动策略搭建 &amp; 客户沟通</text>
+    <line class="phase-arrow" x1="440" y1="192" x2="440" y2="228" marker-end="url(#arrowG)"/>
+    <rect class="phase-rect-2" x="20" y="230" width="840" height="170" rx="14"/>
+    <text class="phase-label" x="52" y="258">② 首轮赔付</text>
+    <g class="node">
+      <rect class="node-box design" x="40" y="274" width="380" height="68" rx="12" ry="12"/>
+      <circle class="status-dot design" cx="58" cy="296" r="4"/>
+      <text class="node-title" x="70" y="300">设计 / 开发 / 上线「回款计划详情」页面</text>
+      <text class="node-role" x="58" y="322">Lockie Lu</text>
+      <text class="node-ddl-normal" x="358" y="322">TBD</text>
+    </g>
+    <g class="node">
+      <rect class="node-box todo" x="460" y="274" width="380" height="68" rx="12" ry="12"/>
+      <circle class="status-dot todo" cx="478" cy="296" r="4"/>
+      <text class="node-title" x="490" y="300">第 1 批回款资金入池 + STBT 配置</text>
+      <text class="node-role" x="478" y="322">Hannah Zhang · Tingyew · Shirley</text>
+      <text class="node-ddl-normal" x="778" y="322">TBD</text>
+    </g>
+    <line x1="422" y1="308" x2="458" y2="308" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3 2"/>
+    <text x="428" y="302" font-size="9" fill="rgba(255,255,255,.45)">并行</text>
+    <text x="52" y="383" font-size="11" fill="rgba(255,255,255,.55)">页面上线 &amp; 资金入池同步推进，首轮赔付启动</text>
+    <line class="phase-arrow" x1="440" y1="402" x2="440" y2="438" marker-end="url(#arrowG)"/>
+    <rect class="phase-rect-3" x="20" y="440" width="840" height="170" rx="14"/>
+    <text class="phase-label" x="52" y="468">③ 后续赔付 &amp; 策略运营</text>
+    <g class="node">
+      <rect class="node-box todo" x="40" y="484" width="380" height="68" rx="12" ry="12"/>
+      <circle class="status-dot todo" cx="58" cy="506" r="4"/>
+      <text class="node-title" x="70" y="510">第 2/3 批回款资金到账 → 入池配置</text>
+      <text class="node-role" x="58" y="532">Mo Zhou · Lockie Lu · Tingyew · Shirley</text>
+      <text class="node-ddl-normal" x="348" y="532">间隔 30D+</text>
+    </g>
+    <g class="node">
+      <rect class="node-box todo" x="460" y="484" width="380" height="68" rx="12" ry="12"/>
+      <circle class="status-dot todo" cx="478" cy="506" r="4"/>
+      <text class="node-title" x="490" y="510">每月 Review 赎回记录 &amp; 结清管理</text>
+      <text class="node-role" x="478" y="532">Hannah Zhang · Tingyew Ng</text>
+      <text class="node-ddl-normal" x="778" y="532">持续</text>
+    </g>
+    <line class="arrow-line" x1="422" y1="518" x2="458" y2="518" marker-end="url(#arrowS)"/>
+    <path d="M 60 554 Q 60 574, 120 574 Q 180 574, 180 554" stroke="#94a3b8" stroke-width="1.2" fill="none" stroke-dasharray="4 2" marker-end="url(#arrowG)"/>
+    <text x="82" y="586" font-size="9" fill="#6b7280">循环：每批次重复</text>
+    <path d="M 480 554 Q 480 574, 540 574 Q 600 574, 600 554" stroke="#94a3b8" stroke-width="1.2" fill="none" stroke-dasharray="4 2" marker-end="url(#arrowG)"/>
+    <text x="502" y="586" font-size="9" fill="#6b7280">循环：每月执行</text>
+    <text x="52" y="600" font-size="11" fill="rgba(255,255,255,.55)">后续批次持续入池，月度赎回 Review 直至全部结清</text>
+    <line class="tl-line" x1="80" y1="665" x2="800" y2="665"/>
+    <circle cx="120" cy="665" r="7" fill="#f59e0b" class="tl-dot"/>
+    <text class="tl-label" x="120" y="695" text-anchor="middle">04-02</text>
+    <text class="tl-sub" x="120" y="710" text-anchor="middle">清算完成</text>
+    <circle cx="280" cy="665" r="7" fill="#2563eb" class="tl-dot"/>
+    <text class="tl-label" x="280" y="695" text-anchor="middle">~04-10</text>
+    <text class="tl-sub" x="280" y="710" text-anchor="middle">策略上线</text>
+    <circle cx="440" cy="665" r="7" fill="#a855f7" class="tl-dot"/>
+    <text class="tl-label" x="440" y="695" text-anchor="middle">TBD</text>
+    <text class="tl-sub" x="440" y="710" text-anchor="middle">首轮赔付上线</text>
+    <circle cx="600" cy="665" r="7" fill="#7c3aed" class="tl-dot"/>
+    <text class="tl-label" x="600" y="695" text-anchor="middle">+30D</text>
+    <text class="tl-sub" x="600" y="710" text-anchor="middle">后续批次入池</text>
+    <circle cx="760" cy="665" r="7" fill="#10b981" class="tl-dot"/>
+    <text class="tl-label" x="760" y="695" text-anchor="middle">持续</text>
+    <text class="tl-sub" x="760" y="710" text-anchor="middle">月度结清</text>
+  </svg>
+  <div class="footer">FTX 回款赔付执行计划 · 流程图 &nbsp;|&nbsp; 2026-04-01 &nbsp;|&nbsp; Confidential</div>
+</div>
+</body>
+</html>
