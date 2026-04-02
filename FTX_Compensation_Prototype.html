@@ -1,7 +1,967 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Loading...</title></head><body>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>专项回款管理计划 - 产品原型 v4</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif; background: #f0f0f0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 20px 0; }
+  .phone-frame { width: 390px; height: 844px; background: #fff; border-radius: 44px; box-shadow: 0 20px 60px rgba(0,0,0,0.15), inset 0 0 0 2px #d1d1d6; overflow: hidden; position: relative; }
+  .status-bar { height: 54px; display: flex; align-items: flex-end; justify-content: space-between; padding: 0 30px 6px; font-size: 15px; font-weight: 600; color: #000; background: #fff; position: relative; z-index: 100; }
+  .status-bar .time { font-weight: 700; }
+  .status-bar .icons { display: flex; gap: 5px; align-items: center; font-size: 13px; }
+  .screens-wrapper { height: 790px; overflow: hidden; position: relative; }
+  .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff; overflow-y: auto; overflow-x: hidden; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); -webkit-overflow-scrolling: touch; }
+  .screen.active { transform: translateX(0); z-index: 10; }
+  .screen.prev { transform: translateX(-30%); z-index: 5; }
+  .screen::-webkit-scrollbar { display: none; }
+  .nav-bar { height: 52px; display: flex; align-items: center; padding: 0 16px; background: #fff; position: sticky; top: 0; z-index: 50; border-bottom: 0.5px solid rgba(0,0,0,0.06); }
+  .nav-bar .back-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 22px; color: #000; background: none; border: none; }
+  .nav-bar .title { flex: 1; text-align: center; font-size: 17px; font-weight: 600; color: #000; margin-right: 32px; }
+  .nav-bar .right-btn { font-size: 15px; color: #000; cursor: pointer; background: none; border: none; position: absolute; right: 16px; }
+  .section-card { background: #fff; margin: 12px 16px; border-radius: 16px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .page-bg { background: #f5f6f8; }
+  .page-bg-warm { background: linear-gradient(180deg, #fefcf7 0%, #f5f6f8 40%); }
+  .label-sm { font-size: 13px; color: #8c8c8c; line-height: 1.5; }
+  .value-lg { font-size: 28px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.5px; }
+  .text-green { color: #00b578; }
+  .text-red { color: #e54d42; }
+  .text-orange { color: #f0883a; }
+  .text-blue { color: #1677ff; }
+  .text-gold { color: #c49b5e; }
+  .divider { height: 0.5px; background: #f0f0f0; margin: 16px 0; }
+  .btn-primary { width: 100%; height: 52px; border-radius: 26px; border: none; background: linear-gradient(135deg, #1a1a1a, #333); color: #fff; font-size: 17px; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px; }
+  .btn-primary:active { transform: scale(0.97); opacity: 0.9; }
+  .btn-primary.gold { background: linear-gradient(135deg, #c49b5e, #d4ad70); }
+  .btn-primary.disabled { background: #e0e0e0; color: #aaa; cursor: not-allowed; pointer-events: none; }
+  .btn-secondary { width: 100%; height: 52px; border-radius: 26px; border: 1.5px solid #e0e0e0; background: #fff; color: #1a1a1a; font-size: 17px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .btn-secondary:active { background: #f5f5f5; }
+  .bottom-action { position: sticky; bottom: 0; padding: 12px 16px 28px; background: linear-gradient(0deg, #fff 80%, transparent); z-index: 20; }
+  .timeline { padding: 0 4px; }
+  .timeline-item { display: flex; gap: 16px; position: relative; padding-bottom: 24px; }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-dot-col { display: flex; flex-direction: column; align-items: center; width: 20px; flex-shrink: 0; }
+  .timeline-dot { width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid #00b578; background: #fff; flex-shrink: 0; margin-top: 4px; }
+  .timeline-dot.active { background: #00b578; }
+  .timeline-dot.gold { border-color: #c49b5e; }
+  .timeline-dot.gold.active { background: #c49b5e; }
+  .timeline-line { width: 1.5px; flex: 1; background: #e8e8e8; margin-top: 6px; }
+  .timeline-item:last-child .timeline-line { display: none; }
+  .timeline-content { flex: 1; }
+  .timeline-title { font-size: 15px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+  .timeline-desc { font-size: 13px; color: #8c8c8c; line-height: 1.5; }
+  .timeline-amount { font-size: 15px; font-weight: 600; color: #00b578; margin-top: 4px; }
+  .timeline-note-link { font-size: 13px; color: #1677ff; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+  .timeline-note-link.muted { color: #b0b0b0; }
+  .info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
+  .info-row .label { font-size: 14px; color: #8c8c8c; }
+  .info-row .value { font-size: 14px; font-weight: 500; color: #1a1a1a; text-align: right; }
+  .info-row-border { border-bottom: 0.5px solid #f0f0f0; }
+  .tabs { display: flex; padding: 0 16px; border-bottom: 0.5px solid #f0f0f0; background: #fff; position: sticky; top: 52px; z-index: 40; }
+  .tab { flex: 1; text-align: center; padding: 14px 0; font-size: 15px; font-weight: 500; color: #8c8c8c; cursor: pointer; position: relative; transition: color 0.2s; background: none; border: none; }
+  .tab.active { color: #1a1a1a; font-weight: 600; }
+  .tab.active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 24px; height: 3px; background: #1a1a1a; border-radius: 1.5px; }
+  .holding-card { margin: 12px 16px; background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); cursor: pointer; transition: all 0.2s; }
+  .holding-card:active { transform: scale(0.98); }
+  .holding-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .holding-name { font-size: 17px; font-weight: 700; color: #1a1a1a; }
+  .holding-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 500; background: #e8f8ef; color: #00b578; }
+  .nav-chart-placeholder { height: 160px; background: linear-gradient(180deg, #f0fdf4 0%, #fff 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 12px 0; position: relative; overflow: hidden; }
+  .nav-chart-placeholder svg { width: 100%; height: 100%; }
+  .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; justify-content: center; align-items: flex-end; }
+  .modal-overlay.show { display: flex; }
+  .modal-sheet { background: #fff; border-radius: 24px 24px 0 0; width: 390px; padding: 24px 20px 36px; max-height: 80vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px; }
+  .toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 12px 24px; border-radius: 24px; font-size: 14px; z-index: 2000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+  .success-icon { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #00b578, #34d399); display: flex; align-items: center; justify-content: center; margin: 40px auto 24px; }
+  .success-icon svg { width: 36px; height: 36px; }
+  .risk-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; }
+  .risk-low { background: #e8f8ef; color: #00b578; }
+  .vip-tag { background: linear-gradient(135deg, #c49b5e, #d4ad70); color: #fff; padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; }
+  .icon-actions { display: flex; gap: 0; margin: 20px 0 8px; }
+  .icon-action { flex: 1; text-align: center; cursor: pointer; background: none; border: none; padding: 8px 0; }
+  .icon-action-circle { width: 44px; height: 44px; border-radius: 50%; background: #f5f6f8; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; transition: background 0.2s; }
+  .icon-action:active .icon-action-circle { background: #e8e8e8; }
+  .icon-action-label { font-size: 12px; color: #666; }
+  .disclaimer { font-size: 12px; color: #b0b0b0; line-height: 1.7; padding: 16px 20px; background: #fafafa; margin: 12px 16px; border-radius: 12px; }
+  .comp-header { background: linear-gradient(180deg, #fefaf3 0%, #fff 100%); padding: 24px 20px; text-align: center; }
+  .comp-round-badge { display: inline-block; padding: 4px 14px; border-radius: 12px; background: linear-gradient(135deg, #c49b5e22, #d4ad7033); border: 1px solid #d4ad7044; color: #9a7b4a; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+  .record-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 0; border-bottom: 0.5px solid #f0f0f0; }
+  .record-item:last-child { border-bottom: none; }
+  .record-left { flex: 1; }
+  .record-title { font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 4px; }
+  .record-date { font-size: 13px; color: #8c8c8c; }
+  .record-amount { font-size: 15px; font-weight: 600; text-align: right; }
+  .record-status { font-size: 12px; color: #8c8c8c; text-align: right; margin-top: 2px; }
+  .record-detail-box { background: #f9fafb; border-radius: 10px; padding: 12px 14px; margin-top: 8px; }
+  .record-detail-row { display: flex; justify-content: space-between; font-size: 13px; color: #8c8c8c; padding: 3px 0; }
+  .record-detail-row .val { color: #1a1a1a; font-weight: 500; }
+  .empty-state { text-align: center; padding: 60px 20px; }
+  .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-in { animation: fadeInUp 0.5s ease both; }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+  .flow-map { position: fixed; bottom: 20px; right: 20px; z-index: 3000; background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); max-width: 280px; font-size: 12px; display: none; }
+  .flow-map.show { display: block; }
+  .flow-map h4 { font-size: 13px; margin-bottom: 10px; color: #1a1a1a; }
+  .flow-map-item { padding: 6px 10px; margin: 3px 0; border-radius: 8px; cursor: pointer; color: #666; transition: all 0.2s; }
+  .flow-map-item:hover { background: #f5f5f5; color: #1a1a1a; }
+  .flow-toggle { position: fixed; bottom: 20px; right: 20px; z-index: 2999; width: 48px; height: 48px; border-radius: 50%; background: #1a1a1a; color: #fff; border: none; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .amount-input-wrapper { background: #f5f6f8; border-radius: 16px; padding: 20px; margin: 16px 0; }
+  .amount-input { background: none; border: none; font-size: 32px; font-weight: 700; color: #1a1a1a; width: 100%; outline: none; }
+  .amount-input::placeholder { color: #d0d0d0; }
+  .amount-max { display: inline-block; padding: 4px 12px; border-radius: 8px; background: #e8f8ef; color: #00b578; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+  .tab-pill { padding: 6px 16px; border-radius: 20px; border: 1px solid #e0e0e0; background: #fff; font-size: 13px; color: #666; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+  .tab-pill.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .clickable-label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+  .clickable-label .q-icon { display: inline-flex; width: 16px; height: 16px; border-radius: 50%; background: #e8e8e8; align-items: center; justify-content: center; font-size: 10px; color: #8c8c8c; font-weight: 600; }
+  .redeem-timeline { display: flex; align-items: flex-start; margin: 16px 0; position: relative; }
+  .redeem-step { flex: 1; text-align: center; position: relative; }
+  .redeem-step-dot { width: 10px; height: 10px; border-radius: 50%; background: #00b578; margin: 0 auto 8px; position: relative; z-index: 2; }
+  .redeem-step-dot.pending { background: #d9d9d9; }
+  .redeem-step-label { font-size: 12px; color: #1a1a1a; font-weight: 600; margin-bottom: 4px; }
+  .redeem-step-date { font-size: 11px; color: #8c8c8c; }
+  .redeem-line { position: absolute; top: 5px; left: 25%; right: -25%; height: 1.5px; background: #e8e8e8; z-index: 1; }
+  .redeem-step:last-child .redeem-line { display: none; }
+  .detail-link { font-size: 14px; color: #1677ff; cursor: pointer; display: inline-flex; align-items: center; gap: 2px; }
+  /* Notice banner inside strategy detail */
+  .inline-notice { background: linear-gradient(135deg, #fefaf3, #fff8eb); border: 1px solid #f0dfc0; border-radius: 12px; padding: 14px 16px; margin-top: 16px; }
+  /* Scenario selector */
+  .scenario-bar { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; background: transparent; }
+  .scenario-pill { padding: 7px 14px; border-radius: 20px; border: 1px solid #e0e0e0; background: #fff; font-size: 12px; color: #666; cursor: pointer; white-space: nowrap; transition: all 0.2s; flex-shrink: 0; }
+  .scenario-pill.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .scenario-pill.scenario-green.active { background: #00b578; border-color: #00b578; }
+  .scenario-content { display: none; }
+  .scenario-content.active { display: block; }
+
+  /* ── Password lock screen ── */
+  #lockScreen {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: #f0f0f0;
+    z-index: 99999;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #lockScreen.hidden { display: none; }
+  .lock-box {
+    background: #fff; border-radius: 24px; padding: 40px 36px; box-shadow: 0 12px 48px rgba(0,0,0,.1);
+    text-align: center; width: 340px;
+  }
+  .lock-icon { font-size: 40px; margin-bottom: 12px; }
+  .lock-title { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+  .lock-sub { font-size: 13px; color: #9ca3af; margin-bottom: 24px; }
+  .lock-input {
+    width: 100%; height: 52px; border-radius: 14px; border: 1.5px solid #e0e0e0;
+    font-size: 24px; font-weight: 600; text-align: center; letter-spacing: 12px;
+    outline: none; color: #1a1a1a; transition: border-color .2s;
+    -webkit-text-security: disc;
+  }
+  .lock-input:focus { border-color: #1a1a1a; }
+  .lock-input.error { border-color: #e54d42; animation: shake .4s ease; }
+  .lock-btn {
+    width: 100%; height: 48px; border-radius: 24px; border: none;
+    background: linear-gradient(135deg, #1a1a1a, #333); color: #fff;
+    font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 16px;
+    transition: opacity .2s;
+  }
+  .lock-btn:active { opacity: .85; }
+  .lock-error-msg { font-size: 13px; color: #e54d42; margin-top: 10px; min-height: 20px; }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-8px)} 40%,80%{transform:translateX(8px)}
+  }
+
+  /* ── Outer wrapper for phone + side link ── */
+  .prototype-wrapper {
+    display: flex; align-items: flex-start; gap: 24px; justify-content: center;
+  }
+  .side-links {
+    padding-top: 380px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .side-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 12px;
+    background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    font-size: 13px; font-weight: 600; color: #1a1a1a;
+    text-decoration: none; cursor: pointer; transition: all .2s;
+    border: 1px solid #e5e7eb; white-space: nowrap;
+  }
+  .side-link:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .side-link .link-icon { font-size: 16px; }
+  @media (max-width: 560px) {
+    .prototype-wrapper { flex-direction: column; align-items: center; }
+    .side-links { padding-top: 0; flex-direction: row; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ Password Lock Screen ═══ -->
+<div id="lockScreen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">原型访问验证</div>
+    <div class="lock-sub">请输入访问密码以查看产品原型</div>
+    <input class="lock-input" id="pwdInput" type="password" maxlength="10" placeholder="····" autofocus
+      onkeydown="if(event.key==='Enter')unlockPage()">
+    <button class="lock-btn" onclick="unlockPage()">进 入</button>
+    <div class="lock-error-msg" id="lockErr"></div>
+  </div>
+</div>
+
+<!-- ═══ Prototype Wrapper ═══ -->
+<div class="prototype-wrapper" id="mainContent" style="display:none;">
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span class="time">4:40</span>
+    <div class="icons">
+      <span>&#9679;&#9679;</span>
+      <span>&#9681;</span>
+      <svg width="25" height="13" viewBox="0 0 25 13"><rect x="0" y="1" width="21" height="11" rx="2" stroke="#000" stroke-width="1" fill="none"/><rect x="2" y="3" width="14" height="7" rx="1" fill="#000"/><path d="M23 4.5v4a1.5 1.5 0 000-4z" fill="#000"/></svg>
+    </div>
+  </div>
+
+  <div class="screens-wrapper">
+
+    <!-- ===== SCREEN 1: 投资组合首页 ===== -->
+    <div id="screen-home" class="screen active page-bg">
+      <div class="nav-bar">
+        <button class="back-btn">&#8249;</button>
+        <div class="title">我的投资组合</div>
+        <button class="right-btn" onclick="navigateTo('screen-trade-records')">记录</button>
+      </div>
+      <div style="background:#fff; padding:20px; text-align:center;">
+        <div class="label-sm">预估总资产($) &nbsp;📈</div>
+        <div class="value-lg" style="margin:8px 0;">$ 15,448.82</div>
+        <div style="display:flex; justify-content:center; gap:24px; margin-top:8px;">
+          <div><span class="label-sm">持有收益(%)</span><br><span class="text-green" style="font-weight:600;">+18.62 (+0.12%)</span></div>
+          <div><span class="label-sm">累计收益(%)</span><br><span class="text-green" style="font-weight:600;">+18.62 (+0.12%)</span></div>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="tab active" id="tab-holding" onclick="switchTab('holding')">持有中</button>
+        <button class="tab" id="tab-reserved" onclick="switchTab('reserved')">预约中</button>
+        <button class="tab" id="tab-all" onclick="switchTab('all')">全部赎回</button>
+      </div>
+      <div id="tab-content-holding">
+        <div class="holding-card animate-in delay-1" onclick="navigateTo('screen-strategy-detail')">
+          <div class="holding-header">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="holding-name">🏛️ 专项回款管理计划</div>
+              <span class="vip-tag">VIP 优享</span>
+            </div>
+            <div class="holding-badge">持有中</div>
+          </div>
+          <div class="info-row" style="padding:6px 0;">
+            <span class="label" style="font-size:14px; color:#8c8c8c;">持有金额</span>
+            <span class="value" style="font-size:16px; font-weight:600;">15,448.82 USDC</span>
+          </div>
+          <div class="info-row" style="padding:6px 0;">
+            <span class="label" style="font-size:14px; color:#8c8c8c;">持有收益(%)</span>
+            <span class="value text-green" style="font-size:14px; font-weight:600;">+18.62 USDC (+0.12%)</span>
+          </div>
+          <div class="info-row" style="padding:6px 0;">
+            <span class="label" style="font-size:14px; color:#8c8c8c;">累计收益(%)</span>
+            <span class="value text-green" style="font-size:14px; font-weight:600;">+18.62 USDC (+0.12%)</span>
+          </div>
+        </div>
+      </div>
+      <div id="tab-content-reserved" style="display:none;"><div class="empty-state"><div class="empty-icon">📋</div><div class="label-sm">暂无预约中的产品</div></div></div>
+      <div id="tab-content-all" style="display:none;"><div class="empty-state"><div class="empty-icon">📁</div><div class="label-sm">暂无已赎回的产品</div></div></div>
+      <div style="height:40px;"></div>
+    </div>
+
+    <!-- ===== SCREEN 2: 在持策略详情 ===== -->
+    <div id="screen-strategy-detail" class="screen page-bg">
+      <div class="nav-bar">
+        <button class="back-btn" onclick="navigateTo('screen-home')">‹</button>
+        <div class="title">在持策略详情</div>
+        <button class="right-btn" style="font-size:18px;" onclick="window.open('https://docs.matrixport.vip/fund-docs-cn/tong-yong-wen-ti','_blank')">ⓘ</button>
+      </div>
+      <div style="background:#fff; padding:20px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:22px;">🏛️</span>
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:18px; font-weight:700; color:#1a1a1a;">专项回款管理计划</span>
+                <span class="vip-tag">VIP 优享</span>
+              </div>
+              <div style="display:flex; gap:8px; margin-top:4px;">
+                <span class="risk-tag risk-low">低风险</span>
+              </div>
+            </div>
+          </div>
+          <span class="detail-link" onclick="showToast('跳转本策略的策略详情页...')">详情 ›</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <div>
+            <div class="label-sm">持有金额 (USDC)</div>
+            <div style="font-size:28px; font-weight:700; color:#1a1a1a; margin-top:4px;">15,448.82</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="label-sm">累计收益(%)</div>
+            <div style="font-size:17px; font-weight:600; color:#00b578; margin-top:8px;">+18.62 USDC (+0.12%)</div>
+          </div>
+        </div>
+        <div class="icon-actions">
+          <button class="icon-action" onclick="navigateTo('screen-trade-records'); setTimeout(()=>switchRecordTab('income-rec'),100);">
+            <div class="icon-action-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M12 2v20M2 12l10-10 10 10"/></svg></div>
+            <div class="icon-action-label">收益</div>
+          </button>
+          <button class="icon-action" onclick="showToast('暂无预约')">
+            <div class="icon-action-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+            <div class="icon-action-label">预约</div>
+          </button>
+          <button class="icon-action" onclick="navigateTo('screen-trade-records')">
+            <div class="icon-action-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div>
+            <div class="icon-action-label">记录</div>
+          </button>
+        </div>
+        <!-- Inline notice -->
+        <div class="inline-notice" onclick="navigateTo('screen-compensation')">
+          <div style="font-size:14px; font-weight:600; color:#1a1a1a; margin-bottom:6px;">回款资金已入账</div>
+          <div style="font-size:13px; color:#8c8c8c; line-height:1.6;">您有一笔新回款资金到账，已转入专项回款管理计划，其底层资产 100% 为美国短期国债和现金，您也可以选择随时赎回（最晚 T+5 工作日到账），一旦赎回后续无法再重新买入。</div>
+          <div style="text-align:right; margin-top:6px;"><span style="font-size:13px; color:#c49b5e;">查看回款详情 ›</span></div>
+        </div>
+      </div>
+
+      <div class="section-card animate-in delay-1">
+        <div class="info-row info-row-border"><span class="label">持有收益</span><span class="value text-green">+18.62 USDC</span></div>
+        <div class="info-row info-row-border"><span class="label">持有收益率</span><span class="value text-green">+0.12%</span></div>
+        <div class="info-row info-row-border"><span class="label">持有份额</span><span class="value">15,430.20 份</span></div>
+        <div class="info-row info-row-border"><span class="label">持有成本</span><span class="value">1.0000</span></div>
+        <div class="info-row"><span class="label">浮动盈亏</span><span class="value text-green">+0.12%</span></div>
+      </div>
+
+      <!-- NAV Chart -->
+      <div class="section-card animate-in delay-2">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div style="font-size:16px; font-weight:700;">NAV 曲线</div>
+          <div style="font-size:13px; color:#8c8c8c;">所有时间</div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;">
+          <span class="label-sm">最新费后NAV (03-07 公布)</span>
+          <span style="font-size:20px; font-weight:700; color:#00b578;">1.0012</span>
+        </div>
+        <div class="nav-chart-placeholder">
+          <svg viewBox="0 0 340 120" preserveAspectRatio="none">
+            <defs><linearGradient id="navGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00b578" stop-opacity="0.15"/><stop offset="100%" stop-color="#00b578" stop-opacity="0.01"/></linearGradient></defs>
+            <path d="M0,100 Q40,95 80,90 T160,70 T240,40 T340,25 V120 H0 Z" fill="url(#navGrad)"/>
+            <path d="M0,100 Q40,95 80,90 T160,70 T240,40 T340,25" fill="none" stroke="#00b578" stroke-width="2"/>
+            <circle cx="340" cy="25" r="4" fill="#00b578"/>
+          </svg>
+        </div>
+        <div style="text-align:center; margin-top:8px;">
+          <span style="font-size:13px; color:#1677ff; cursor:pointer;" onclick="showToast('查看更多指标')">查看更多指标 ›</span>
+        </div>
+      </div>
+
+      <!-- Trading Rules -->
+      <div class="section-card animate-in delay-3">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div style="font-size:16px; font-weight:700;">交易规则</div>
+          <span style="font-size:13px; color:#1677ff; cursor:pointer;" onclick="showToast('查看详细规则')">查看设置 ›</span>
+        </div>
+        <div style="display:flex; margin-bottom:4px;">
+          <div style="flex:1; font-size:13px; font-weight:600; color:#1a1a1a; text-align:center;">申购</div>
+          <div style="flex:1; font-size:13px; font-weight:600; color:#1a1a1a; text-align:center;">赎回</div>
+        </div>
+        <div class="divider" style="margin:8px 0;"></div>
+        <div style="display:flex; margin-bottom:16px;">
+          <div style="flex:1; text-align:center; padding:8px;">
+            <div style="font-size:13px; color:#8c8c8c;">不支持手动申购</div>
+            <div style="font-size:12px; color:#b0b0b0; margin-top:4px;">仅接收回款资金自动配置</div>
+          </div>
+          <div style="width:0.5px; background:#f0f0f0;"></div>
+          <div style="flex:1; text-align:center; padding:8px;">
+            <div style="font-size:13px; color:#1a1a1a; font-weight:500;">支持随时赎回</div>
+            <div style="font-size:12px; color:#b0b0b0; margin-top:4px;">T+5 工作日内到账</div>
+          </div>
+        </div>
+        <div style="background:#f9fafb; border-radius:12px; padding:16px 12px; margin-bottom:12px;">
+          <div style="font-size:13px; font-weight:600; color:#1a1a1a; margin-bottom:14px;">赎回流程示意</div>
+          <div class="redeem-timeline">
+            <div class="redeem-step"><div class="redeem-step-dot"></div><div class="redeem-line"></div><div class="redeem-step-label">预约赎回</div><div class="redeem-step-date">04-06 08:00 前</div></div>
+            <div class="redeem-step"><div class="redeem-step-dot pending"></div><div class="redeem-line"></div><div class="redeem-step-label">确认净值</div><div class="redeem-step-date">预计 04-06</div></div>
+            <div class="redeem-step"><div class="redeem-step-dot pending"></div><div class="redeem-step-label">赎回到账</div><div class="redeem-step-date">预计 04-13 前</div></div>
+          </div>
+        </div>
+        <div class="divider" style="margin:12px 0;"></div>
+        <div style="font-size:14px; font-weight:600; margin-bottom:12px;">费用结构</div>
+        <div class="info-row info-row-border"><span class="label">申购费</span><span class="value">0.00%</span></div>
+        <div class="info-row info-row-border"><span class="label">赎回费</span><span class="value">0.00%</span></div>
+        <div class="info-row info-row-border"><span class="label">管理费</span><span class="value">0.00%</span></div>
+        <div class="info-row"><span class="label">业绩报酬</span><span class="value">0.00%</span></div>
+      </div>
+
+      <!-- 投资细则 -->
+      <div class="section-card animate-in delay-4">
+        <div style="font-size:16px; font-weight:700; margin-bottom:16px;">投资细则</div>
+        <div class="info-row info-row-border"><span class="label">产品类型</span><span class="value">VIP 专属计划</span></div>
+        <div class="info-row info-row-border"><span class="label">计价货币</span><span class="value">USDC</span></div>
+        <div class="info-row info-row-border"><span class="label">锁定期</span><span class="value">无锁定期</span></div>
+        <div class="info-row info-row-border"><span class="label">净值公布日</span><span class="value">每月 10 号前最后一个工作日</span></div>
+        <div class="info-row info-row-border"><span class="label">派息方式</span><span class="value">按月派息，自动复投</span></div>
+        <div class="info-row info-row-border"><span class="label">申购方式</span><span class="value">仅限回款资金自动配置</span></div>
+        <div class="info-row info-row-border"><span class="label">赎回方式</span><span class="value">随时申请，T+5 工作日到账</span></div>
+        <div class="info-row info-row-border"><span class="label">最低赎回金额</span><span class="value">1,000,000 USDC</span></div>
+        <div class="info-row"><span class="label">赎回到账币种</span><span class="value">USDC</span></div>
+        <div style="font-size:12px; color:#b0b0b0; line-height:1.6; margin-top:8px; padding-top:8px; border-top:0.5px solid #f0f0f0;">
+          * 单笔赎回不足 1,000,000 USDC 需一次性全部赎回
+        </div>
+        <div style="font-size:13px; color:#8c8c8c; line-height:1.7; margin-top:12px; padding-top:12px; border-top:0.5px solid #f0f0f0;">
+          有新资金转入后按认购日净值确认份额。赎回时，将按照赎回确认日的资产净值计算赎回金额，赎回金额 = 赎回份额 × 赎回确认日净值。
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        ⚠️ 风险提示：本产品不保证本金及收益。过往业绩不代表未来表现。投资有风险，请根据自身情况审慎决策。如需帮助，请联系您的专属客户经理。
+      </div>
+
+      <div class="bottom-action">
+        <div style="display:flex; gap:12px;">
+          <button class="btn-secondary" style="flex:1;" onclick="navigateTo('screen-redeem')">赎回</button>
+          <button class="btn-primary disabled" style="flex:1;">申购</button>
+        </div>
+        <div style="text-align:center; margin-top:8px;"><span class="label-sm">UID 88888</span></div>
+      </div>
+      <div style="height:20px;"></div>
+    </div>
+
+    <!-- ===== SCREEN 3: 回款详情 ===== -->
+    <div id="screen-compensation" class="screen page-bg-warm">
+      <div class="nav-bar" style="background:transparent;">
+        <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
+        <div class="title">回款详情</div>
+        <div></div>
+      </div>
+      <div class="comp-header animate-in">
+        <div class="comp-round-badge">第 4 轮回款</div>
+        <div style="font-size:14px; color:#8c8c8c; margin-bottom:8px;">本轮回款金额</div>
+        <div style="font-size:34px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">15,430.20 USDC</div>
+        <div style="font-size:15px; color:#8c8c8c;">≈ 0.1834 BTC · 参考价 $84,140</div>
+      </div>
+
+      <div class="section-card animate-in delay-1">
+        <div class="info-row info-row-border">
+          <span class="label clickable-label" onclick="toggleBtcBreakdown()">受影响 BTC 总额 <span class="q-icon" id="btcExpandIcon">▸</span></span>
+          <span class="value">1.8888 BTC</span>
+        </div>
+        <div id="btcBreakdown" style="display:none; padding:0 0 8px 16px; border-bottom:0.5px solid #f0f0f0;">
+          <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:13px;"><span style="color:#8c8c8c;">固收</span><span style="color:#1a1a1a; font-weight:500;">1.0000 BTC</span></div>
+          <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:13px;"><span style="color:#8c8c8c;">基金</span><span style="color:#1a1a1a; font-weight:500;">0.8888 BTC</span></div>
+        </div>
+        <div class="info-row">
+          <span class="label clickable-label" onclick="openCalcModal()">累计回款金额 <span class="q-icon">?</span></span>
+          <span class="value text-green">1.3658 BTC</span>
+        </div>
+      </div>
+
+      <!-- 场景选择器 -->
+      <div class="scenario-bar">
+        <div class="scenario-pill active" onclick="switchScenario('default')">默认状态</div>
+        <div class="scenario-pill" onclick="switchScenario('partial')">部分提前赎回</div>
+        <div class="scenario-pill" onclick="switchScenario('full')">全部提前赎回</div>
+        <div class="scenario-pill scenario-green" onclick="switchScenario('btc')">买回 BTC 兑付</div>
+      </div>
+
+      <!-- ===== 场景 A: 默认状态 ===== -->
+      <div id="scenario-default" class="scenario-content active">
+        <div class="section-card animate-in delay-2">
+          <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;">📋 回款记录</div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot gold active"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 4 轮 <span style="font-size:12px; color:#c49b5e; font-weight:500; background:#c49b5e15; padding:2px 8px; border-radius:6px; margin-left:6px;">最新</span></div>
+                <div class="timeline-desc">2026-03-28 · 已转入管理计划</div>
+                <div class="timeline-amount" style="color:#c49b5e;">+15,430.20 USDC</div>
+                <div class="timeline-desc">≈ 0.1834 BTC · 参考价 $84,140</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link" onclick="showToast('查看备注详情')">备注 ∨</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 3 轮</div>
+                <div class="timeline-desc">2023-05-02 · 已结算至钱包</div>
+                <div class="timeline-amount">+18,560.00 USDC</div>
+                <div class="timeline-desc">≈ 0.2703 BTC · 参考价 $68,669.86</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 2 轮</div>
+                <div class="timeline-desc">2022-12-02 · 已结算至钱包</div>
+                <div class="timeline-amount">+22,200.00 USDC</div>
+                <div class="timeline-desc">≈ 1.2988 BTC · 参考价 $17,092.74</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot active"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 1 轮</div>
+                <div class="timeline-desc">2022-11-22 · 已结算至钱包</div>
+                <div class="timeline-amount">+1.0000 BTC</div>
+                <div class="timeline-desc">≈ 16,092.74 USDC · 参考价 $16,092.74</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 场景 B: 部分提前赎回 ===== -->
+      <div id="scenario-partial" class="scenario-content">
+        <div class="section-card">
+          <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;">📋 回款记录</div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot" style="border-color:#1677ff; background:#1677ff;"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">部分赎回结算 <span style="font-size:12px; color:#1677ff; font-weight:500; background:#1677ff15; padding:2px 8px; border-radius:6px; margin-left:6px;">最新</span></div>
+                <div class="timeline-desc">2026-04-18 · 已从管理计划结算至钱包</div>
+                <div class="timeline-amount" style="color:#1677ff;">+5,000.00 USDC</div>
+                <div class="timeline-desc">≈ 0.0588 BTC · 参考价 $85,034</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link" onclick="showToast('用户主动赎回部分持仓，已结算到账')">备注 ∨</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot gold active"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 4 轮</div>
+                <div class="timeline-desc">2026-03-28 · 已转入管理计划</div>
+                <div class="timeline-amount" style="color:#c49b5e;">+15,430.20 USDC</div>
+                <div class="timeline-desc">≈ 0.1834 BTC · 参考价 $84,140</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 3 轮</div>
+                <div class="timeline-desc">2023-05-02 · 已结算至钱包</div>
+                <div class="timeline-amount">+18,560.00 USDC</div>
+                <div class="timeline-desc">≈ 0.2703 BTC · 参考价 $68,669.86</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 2 轮</div>
+                <div class="timeline-desc">2022-12-02 · 已结算至钱包</div>
+                <div class="timeline-amount">+22,200.00 USDC</div>
+                <div class="timeline-desc">≈ 1.2988 BTC · 参考价 $17,092.74</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot active"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 1 轮</div>
+                <div class="timeline-desc">2022-11-22 · 已结算至钱包</div>
+                <div class="timeline-amount">+1.0000 BTC</div>
+                <div class="timeline-desc">≈ 16,092.74 USDC · 参考价 $16,092.74</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 场景 C: 全部提前赎回 ===== -->
+      <div id="scenario-full" class="scenario-content">
+        <div class="section-card">
+          <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;">📋 回款记录</div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot" style="border-color:#f0883a; background:#f0883a;"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">全部赎回结算 <span style="font-size:12px; color:#f0883a; font-weight:500; background:#f0883a15; padding:2px 8px; border-radius:6px; margin-left:6px;">最新</span></div>
+                <div class="timeline-desc">2026-04-18 · 已从管理计划结算至钱包</div>
+                <div class="timeline-amount" style="color:#f0883a;">+15,486.50 USDC</div>
+                <div class="timeline-desc">≈ 0.1821 BTC · 参考价 $85,034</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link" onclick="showToast('用户全部赎回持仓，已结算到账，管理计划已清零')">备注 ∨</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot gold active"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 4 轮</div>
+                <div class="timeline-desc">2026-03-28 · 已转入管理计划</div>
+                <div class="timeline-amount" style="color:#c49b5e;">+15,430.20 USDC</div>
+                <div class="timeline-desc">≈ 0.1834 BTC · 参考价 $84,140</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 3 轮</div>
+                <div class="timeline-desc">2023-05-02 · 已结算至钱包</div>
+                <div class="timeline-amount">+18,560.00 USDC</div>
+                <div class="timeline-desc">≈ 0.2703 BTC · 参考价 $68,669.86</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 2 轮</div>
+                <div class="timeline-desc">2022-12-02 · 已结算至钱包</div>
+                <div class="timeline-amount">+22,200.00 USDC</div>
+                <div class="timeline-desc">≈ 1.2988 BTC · 参考价 $17,092.74</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot active"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 1 轮</div>
+                <div class="timeline-desc">2022-11-22 · 已结算至钱包</div>
+                <div class="timeline-amount">+1.0000 BTC</div>
+                <div class="timeline-desc">≈ 16,092.74 USDC · 参考价 $16,092.74</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 场景 D: 买回 BTC 兑付 ===== -->
+      <div id="scenario-btc" class="scenario-content">
+        <div class="section-card">
+          <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;">📋 回款记录</div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot" style="border-color:#00b578; background:#00b578;"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">回款结清 <span style="font-size:12px; color:#00b578; font-weight:500; background:#00b57815; padding:2px 8px; border-radius:6px; margin-left:6px;">已结清</span></div>
+                <div class="timeline-desc">2026-06-15 · 已完成全部回款</div>
+                <div class="timeline-amount" style="color:#00b578;">+0.5230 BTC</div>
+                <div class="timeline-desc">≈ 39,225.00 USDC · 参考价 $75,000</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link" onclick="showToast('公司以市场价购回 BTC 并完成全部剩余回款，回款事项已全部结清')">备注 ∨</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot gold active"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 4 轮</div>
+                <div class="timeline-desc">2026-03-28 · 已转入管理计划</div>
+                <div class="timeline-amount" style="color:#c49b5e;">+15,430.20 USDC</div>
+                <div class="timeline-desc">≈ 0.1834 BTC · 参考价 $84,140</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 3 轮</div>
+                <div class="timeline-desc">2023-05-02 · 已结算至钱包</div>
+                <div class="timeline-amount">+18,560.00 USDC</div>
+                <div class="timeline-desc">≈ 0.2703 BTC · 参考价 $68,669.86</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 2 轮</div>
+                <div class="timeline-desc">2022-12-02 · 已结算至钱包</div>
+                <div class="timeline-amount">+22,200.00 USDC</div>
+                <div class="timeline-desc">≈ 1.2988 BTC · 参考价 $17,092.74</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot-col"><div class="timeline-dot active"></div></div>
+              <div class="timeline-content">
+                <div class="timeline-title">第 1 轮</div>
+                <div class="timeline-desc">2022-11-22 · 已结算至钱包</div>
+                <div class="timeline-amount">+1.0000 BTC</div>
+                <div class="timeline-desc">≈ 16,092.74 USDC · 参考价 $16,092.74</div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-action">
+        <button class="btn-primary gold" onclick="navigateTo('screen-strategy-detail')">查看资产</button>
+      </div>
+      <div style="height:20px;"></div>
+    </div>
+
+    <!-- ===== SCREEN 4: 交易记录 ===== -->
+    <div id="screen-trade-records" class="screen page-bg">
+      <div class="nav-bar">
+        <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
+        <div class="title">记录</div>
+        <div></div>
+      </div>
+      <div class="tabs" style="top:52px;">
+        <button class="tab active" id="tab-trade" onclick="switchRecordTab('trade')">交易</button>
+        <button class="tab" id="tab-income-rec" onclick="switchRecordTab('income-rec')">收益</button>
+      </div>
+      <div id="tab-content-trade" style="padding:0 16px;">
+        <div style="display:flex; justify-content:space-between; padding:16px 0 8px;">
+          <span class="label-sm">全部 ▾</span><span class="label-sm">全部 ▾</span>
+        </div>
+        <div style="background:#fff; border-radius:16px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div><div style="font-size:15px; font-weight:600;">赎回</div><div class="label-sm">2026-04-13 10:00:00</div></div>
+            <div style="text-align:right;"><div style="font-size:16px; font-weight:600; color:#00b578;">5,000.00 USDC</div><div class="label-sm">已赎回</div></div>
+          </div>
+          <div class="record-detail-box">
+            <div class="record-detail-row"><span>确认净值</span><span class="val">1.0050</span></div>
+            <div class="record-detail-row"><span>已确认份额</span><span class="val">4,975.12</span></div>
+            <div class="record-detail-row"><span>赎回费</span><span class="val">0.00 USDC (0.00%)</span></div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; margin-top:10px;"><span class="timeline-note-link" onclick="showToast('查看协议')">协议 ›</span></div>
+        </div>
+        <div style="background:#fff; border-radius:16px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div><div style="font-size:15px; font-weight:600;">申购</div><div class="label-sm">2026-03-28 00:00:12</div></div>
+            <div style="text-align:right;"><div style="font-size:16px; font-weight:600; color:#00b578;">15,430.20 USDC</div><div class="label-sm">已确认</div></div>
+          </div>
+          <div class="record-detail-box">
+            <div class="record-detail-row"><span>确认净值</span><span class="val">1.0000</span></div>
+            <div class="record-detail-row"><span>已确认份额</span><span class="val">15,430.20</span></div>
+            <div class="record-detail-row"><span>支付金额</span><span class="val">15,430.20 USDC</span></div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; margin-top:10px;"><span class="timeline-note-link" onclick="showToast('查看协议')">协议 ›</span></div>
+        </div>
+      </div>
+      <div id="tab-content-income-rec" style="display:none; padding:0 16px;">
+        <div style="padding:16px 0;">
+          <div style="background:#fff; border-radius:16px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:16px;">
+              <div><div class="label-sm">累计收益 (USDC)</div><div style="font-size:24px; font-weight:700; color:#00b578; margin-top:4px;">+18.62</div></div>
+              <div style="text-align:right;"><div class="label-sm">持有天数</div><div style="font-size:16px; font-weight:600; margin-top:4px;">3 天</div></div>
+            </div>
+            <div class="record-item"><div class="record-left"><div class="record-title">2026-03-31</div><div class="record-date">NAV: 1.0012</div></div><div><div class="record-amount text-green">+6.48 USDC</div></div></div>
+            <div class="record-item"><div class="record-left"><div class="record-title">2026-03-30</div><div class="record-date">NAV: 1.0008</div></div><div><div class="record-amount text-green">+6.17 USDC</div></div></div>
+            <div class="record-item"><div class="record-left"><div class="record-title">2026-03-29</div><div class="record-date">NAV: 1.0004</div></div><div><div class="record-amount text-green">+5.97 USDC</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SCREEN 5: 赎回流程 ===== -->
+    <div id="screen-redeem" class="screen page-bg">
+      <div class="nav-bar">
+        <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
+        <div class="title">赎回</div>
+        <div></div>
+      </div>
+      <div style="background:#fff; padding:20px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+          <span style="font-size:20px;">🏛️</span>
+          <div><div style="font-size:16px; font-weight:600;">专项回款管理计划</div><div class="label-sm">可赎回: 15,448.82 USDC</div></div>
+        </div>
+        <div class="amount-input-wrapper">
+          <div class="label-sm" style="margin-bottom:8px;">赎回金额 (USDC)</div>
+          <input class="amount-input" type="text" placeholder="0.00" id="redeemInput" oninput="updateRedeemBtn()">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+            <span class="label-sm">可用: 15,448.82 USDC</span>
+            <span class="amount-max" onclick="document.getElementById('redeemInput').value='15,448.82'; updateRedeemBtn();">全部</span>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="info-row"><span class="label">赎回费率</span><span class="value">0.00%</span></div>
+        <div class="info-row"><span class="label">最低赎回金额</span><span class="value">1,000,000 USDC</span></div>
+        <div class="info-row"><span class="label">预计到账</span><span class="value">T+5 工作日</span></div>
+        <div class="info-row"><span class="label">到账方式</span><span class="value">USDC 至钱包</span></div>
+      </div>
+      <div style="background:#fff4e6; margin:12px 16px; border-radius:12px; padding:14px 16px;">
+        <div style="font-size:13px; color:#9a7b4a; line-height:1.6;">📌 单笔赎回不足 1,000,000 USDC 需一次性全部赎回</div>
+      </div>
+      <div style="background:#fefaf3; margin:12px 16px; border-radius:12px; padding:16px;">
+        <div style="font-size:14px; color:#9a7b4a; line-height:1.7;">🤝 温馨提示：赎回后资金将转入您的钱包，您可自由支配。如暂时无使用计划，保留在管理计划中可持续获得收益。一旦赎回，后续无法再重新买入。</div>
+      </div>
+      <div class="disclaimer">赎回申请提交后，预计 T+5 个工作日内到账。赎回过程中，您的资金仍将按照策略净值享受收益。赎回期间不收取任何费用。</div>
+      <div class="bottom-action">
+        <button class="btn-primary" id="redeemBtn" style="opacity:0.4;" onclick="openRedeemConfirm()">确认赎回</button>
+      </div>
+    </div>
+
+    <!-- ===== SCREEN 6: 赎回成功 ===== -->
+    <div id="screen-redeem-success" class="screen" style="background:#fff;">
+      <div class="nav-bar">
+        <button class="back-btn" onclick="navigateTo('screen-home')">‹</button>
+        <div class="title"></div><div></div>
+      </div>
+      <div style="text-align:center; padding:20px;">
+        <div class="success-icon animate-in"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="animate-in delay-1" style="font-size:22px; font-weight:700; color:#1a1a1a;">赎回申请已提交</div>
+        <div class="animate-in delay-2" style="font-size:15px; color:#8c8c8c; margin-top:8px;">预计 5 个工作日内到账您的钱包</div>
+      </div>
+      <div class="section-card animate-in delay-2">
+        <div class="info-row info-row-border"><span class="label">赎回产品</span><span class="value">专项回款管理计划</span></div>
+        <div class="info-row info-row-border"><span class="label">赎回金额</span><span class="value" style="font-weight:600;">15,448.82 USDC</span></div>
+        <div class="info-row info-row-border"><span class="label">赎回费用</span><span class="value">0.00 USDC</span></div>
+        <div class="info-row info-row-border"><span class="label">预计到账</span><span class="value">2026-04-07</span></div>
+        <div class="info-row"><span class="label">到账方式</span><span class="value">USDC → 钱包</span></div>
+      </div>
+      <div style="background:#f0fdf4; margin:12px 16px; border-radius:12px; padding:16px;">
+        <div style="font-size:14px; color:#15803d; line-height:1.7;">✅ 赎回期间您的资金仍按策略净值享受收益。到账后将自动转入您的钱包。</div>
+      </div>
+      <div style="padding:24px 16px;">
+        <button class="btn-primary" onclick="navigateTo('screen-home')">返回投资组合</button>
+        <div style="height:12px;"></div>
+        <button class="btn-secondary" onclick="navigateTo('screen-trade-records')">查看交易记录</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Side links (outside phone frame) -->
+<div class="side-links">
+  <a class="side-link" href="FTX_Compensation_Flowchart.html" target="_blank">
+    <span class="link-icon">📋</span> 查看执行流程
+  </a>
+</div>
+
+</div><!-- /prototype-wrapper -->
+
+<!-- Redeem Confirm Modal -->
+<div id="redeemConfirmModal" class="modal-overlay">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="text-align:center; margin-bottom:20px;"><div style="font-size:18px; font-weight:700;">确认赎回</div></div>
+    <div class="info-row info-row-border"><span class="label">赎回产品</span><span class="value">专项回款管理计划</span></div>
+    <div class="info-row info-row-border"><span class="label">赎回金额</span><span class="value" id="confirmAmount" style="font-size:18px; font-weight:700;">--</span></div>
+    <div class="info-row info-row-border"><span class="label">赎回费用</span><span class="value">0.00 USDC</span></div>
+    <div class="info-row"><span class="label">预计到账时间</span><span class="value">T+5 工作日</span></div>
+    <div style="margin-top:20px;">
+      <button class="btn-primary" onclick="confirmRedeem()">确认赎回</button>
+      <div style="height:12px;"></div>
+      <button class="btn-secondary" onclick="closeRedeemConfirm()">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- Calculation Modal -->
+<div id="calcModal" class="modal-overlay">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="font-size:18px; font-weight:700; text-align:center; margin-bottom:16px;">计算口径说明</div>
+    <div style="font-size:14px; color:#555; line-height:1.9; margin-bottom:16px;">
+      <strong>受影响 BTC 总额：</strong>以清算时认定的 BTC 债权数量为准，包含固收和基金两部分。<br><br>
+      <strong>累计回款金额 (折合 BTC)：</strong><br>
+      · 第 1 轮为 BTC 直接发放，按实际到账 BTC 数量计入<br>
+      · 第 2~4 轮为 USDC 发放，按到账日的 BTC 市场价格折合为 BTC 数量计入<br><br>
+      <strong>折合示例：</strong><br>
+      第 4 轮到账 15,430.20 USDC，到账日 BTC 价格为 $84,140，折合 15,430.20 ÷ 84,140 ≈ 0.1834 BTC
+    </div>
+    <button class="btn-secondary" onclick="closeCalcModal()">我知道了</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<button class="flow-toggle" onclick="toggleFlowMap()" title="页面导航">☰</button>
+<div id="flowMap" class="flow-map">
+  <h4>📱 页面导航</h4>
+  <div class="flow-map-item" onclick="navigateTo('screen-home')">① 投资组合首页</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-strategy-detail')">② 在持策略详情</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-compensation')">③ 回款详情</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-trade-records')">④ 交易/收益记录</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-redeem')">⑤ 赎回流程</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-redeem-success')">⑥ 赎回成功</div>
+</div>
+
 <script>
-var d="7X37dxtFmujv/BU1YljZYMmt1sOyHXuXhHDJOQPLhQx39+7ZM6cttSzdyGpty2rHzLLHgTgPSOJAXpAEQmYSCEywwxISYyfhnNl/JKuH/RPzJ+xXj+6u6q5utWwnmItxsKXuenz11feun6r2/Oalf9x38J9f34/K1lR1/Jk9+A+qarXJsdjb5cS+12L4ma4V4c+UbmmoUNbMhm6NxX5/8OVEPmY/rmlT+lhspqLP1g3TiqGCUbP0GhSbrRSt8lhRn6kU9AT5MoAqtYpV0aqJRkGr6mOppDKAprTDlanpKf7RdEM3yXdtAh7VDNyXVbGq+nhz5dzG9R9aVz5r337UWbrdOXtsfem660RHKIGaq1+2zh1pnbnW+uwDNJPZM0hrPLOnYc3hvwg9j/4IvZmTldoIUkZRXSsWK7VJ8nnCOJxoVN4mXycMswj9w6NR9A5UmzCKc1CzBONKlLSpSnVuBCW0er2qJxpzDUufGkB7q5XaoVe1wpvk+8tQcgDF33wZvW4a6KVKo17V5uLw5BW9OqNblYKGXtOndXjyognIGEANrdZIwJgrJYBEKxyaNI3pWnEEPVtS8M8oKtI2RlCpqgNU/2+6YVVK8wYG6hFUgN+6OYq0amWylqgADA1aNtGwNNMaRVOVWqKsVybLUDilKDNlbviqUj+McYDHmqyXjZqeKJkwqTBmMmsjKD0MRUaR3UA+k8FfRUhLGHaKOVMrVqYBAFYMo7asLY1ZwDTtLId/mZMTWp8yQH6SqWw/Jg4gLyiDf1Qo8WwxBT+5UWTpKGapihsoV4pFvQbAGw0gJAMm0tSrmlWZ0Rn8MF5rupGY0EwA3wY4SwDxINGPK71WlOC2UdeAfid0a1YnPTtUg9JkLLhpQhtAPzpgN+s8mGXd5xTAbsGoGiYgSsFf/KiTDejuRKVW1A+TGfMPL2lVyBwJXQ1JS1ZgMA0o6sHApFYH3NS9uLCJiR9Uun7YbrdgAh4aiVkTWEDnsTxEqaSXySJtQRNuCW2iYVSnLShhGXXCmlW9ZJEPjBgBGc+5tEi/+fFpQ5GA0WrTlsE9OexCZpnAeSXDnBqhHwE6/Z/6cJv97CUDyymIlGQ620CF6YlKAYji7Ypud inLzAACsaUk1QGUgpowHROHKlbC6RIGalSrhGwsY7pQFsaf1AoYJ4AGOThKv0AKYt26qc8E1kykwUCcylmh7siIDScFj/KMQyM1EASsfE2b8XKU2o2jbCri+CWVk4sNd/aB9QqH5ty5dyFXRl25bFkGjFNJAukilJZKUZQlSq7fA3cS95mYsGqcSFN5iZaOPJxA0VuYNhuYwetGxcc+Kmk+UAJQTNP hSfGeJKoM83qV0AAgSD9sJQiAcn4diCCEqCpMmDwKxG7JK4Yx34gT2vKNvtv4ZBzPIKFkQglVL+BCiYJmFgEGP+nY6jyF9QWjL1EJ0YeCs vPqpBTUzXg1kpKxqaiu TYL8n/T1ny3lSnmxTGJWAxEhFgS21zUzMYkBgpnqS+WVoj45AA3opUJpCCnPDdiNoQzhV9Ii2D462ElTHtSnedTnC/hnlHThnXenTeYzWnVaT1QnxSbUvI82hnjaSGn4B8tdy8JmGKg/grkEYTjWNKG/SSa9XUqYyA7l+RKmXuTe69lMMaPy7w2QVZM6V6Sk5PNpjS8yAWPgCqRyQ0N44jkojCrfSSEzPJG1GahYmakUBSXFBiG1shxiynEGEVB/om5W4N2cKz1EHUSFoYfuVI4YHRYII4t0lpIFxT98SKfT/e60EHLP wuJeTuTVmFatYi3V8M8uP7nckEdkuolY6qD1hocAPgO3YM3hFob99ZNsdiKNnE4dfChmtOKQ0i9pDkQ09gl8wkBX8I+LLU3TXFTUDCwrQQ/rxVEbLwl9BvpuCOIWdwQSx6gVtzbZKU4zOZD5ZZeX4bZvcv2jcefRK8Pgx65AFGtCIyJXMMpsteyoXk6gOpKXCZawmbYFX6mE8ljsEejrmgnveD NFtXkPW7i4DQyMa0ZkXCnE3hMlHWDfMvkvMUFZk45BoQY0PFLVGlaiUK4QSvbW8sKaKAK1wdT6wSE+RrFiUp02gud/eqoWYGcw2qPqinpyZROcTHmHHLEKdk1KRqxZYjEzWlV5WrUFuJ9WvRAw24HYaRK0AUhJOcWJOoIvb0sKCqxUnPvKB3Qir8QoyUYUFXiORSWKkzz+EYeZ604dvr5kxrRThpmQvFknFnCsvuDepS1LGOAzdVFXGBG2YFs47WhTgDOrNyhtIuhCRSC3CSYPhcFpGwS+thzcV2qktRCjnggKUsknYAMgSk6BxcqbHRMK/mHlK7WSkTCNWb8M6BZdCHehiKz1dUJNRQ+OMrK59NQj9qGsnjBzWRl98f4HMds9jScoG7v8LPPaHMOLIhkcAT/C/O5jhPYiu5hUmTuKJ8PB0s3bciclQyclnP4FLNrz4aM2mZriVTxpgCn5SB4kDMSVkVKDQ2BQT52REa1kkVl06DUel/tunDqkARuiZQLCElni5tgqLiN44j7r3IbW69dxBmsZVAHWycxNlDmF3WKVW3ITezHLeFjDret8v6cKDsbr5jYJFY+G4Jxuu7uaNuWVDn6zVOo6Cs1MaMVJwYJL41lRZK664o2lqnI+8ujqUl4v+ZWLE8rA6xZWAhBW0DFMgjuYyindjFbXX1dKxVKG+etgwrIwoXcQWw8lCfSryKWCP8oaMt7GzGSQO0O/kbpTRlGrkpglQC7Y/6XKYew6+SKyLGCjCOzP41JglawYx1T4dQ0qsnpY1yCxej/YyUZZpna5go2yrlvSWJLXp8O8Tn4pXPSZLYW4goKUwgsBacJBU9phx1rKk3UWfyRaq4Ezy7QR6C3993UcVW4gXWswuf0Ph/Q5sgbTcEoAI5rGVECo95/tmPU7MEmBZYhHzeOirNWKVc4mzgjLPP5FHseX9WCKDpwtrJFBMgFK9YkBFnIgPeVJwag6I5C48t5QiWg0qRmZ157xypuMYA6ohEbdAIco19lzMnWhYQUyfpswndZsa78xXSjojUYCr9G4MzEkuHFDwW5clLgKlYg4opQppoeH+7dJPGFqYZPtGu/CcAS5Q/nD0fOuvjErjUMJS5vk2bYXm92Z6UyQYslH1CsuOFUyWdH1zEylzoawyUiXnHYDVaVvRCm5x0WNcpgLFtYJWgXkop90OZj24K3ezSjufRnAHmme92zcDhOFilkQRJRgLWZkbO1jDCdUvy1kzwQcwQ8vD9weeXOPG4tt7cnHJ40/+NAhc/WExaVcLufEvhuFqgaeqxlW3vZbPW7+EC9Ac0zFebGq4Z9IazDu2lLBmKq7hmzUdRKtlPbZXX4VLKdJt1vSkWOPemXNRNUoHPJKExl9saBadD5XVYfTSUjfiRO7nit9m8m4EzOsDU1kPFHhtJzJg015Uy9AXwHh0Z7cBj6ZRKSM8JVZ0cfn4BGjqp4WOO3JqmADwRcpY++ixcmkcYzAOBlrugjGR5QoGV+nl4hYUByFNUWTOML41wZA0hAfEVN9A9MtrVLFSU4+W3gY2G0iwDnzhP0zruVH+8kH9LOpYFhXrAt6UgnsGAe6uoU/XP2vT9WtOYJ54piHhX5IHhNn6dKqzJLjoM/kOTyJbMotn6V9tn8JxOSBGm/8+4xRvyMAzbqOAG9udnUKqF+ig/kLNTknxQEDGJt6Kdjfs5NYiuCTziVSfJUEeYbHlGoIpVR5KVUslZaXSoulMvJSGbsU8bmmtLrM83CWfMjcMTeWfnGs/3RAplZ44MjWf3zgyHERvSlv1F2042B5efhDtoZgj83n7jIlJiKgnJGJMC85KkJUnY/k2A3ZesSlf8c8tW2AtKAQBGvVZxsKJktIxEzofqSM/emgdcxg8C1jcpIoiU3Rgjo8POyEACg3OyZoPpIJakMk2PmiLRyaQaRsOarkp0kiwwWaVO2QI9VhMPz6tMWl+kmt6iiRVGlqBd+Jp3GZr8ChI+134KSBSCHkZUxb2FATGIkHYWREjBHajRUV/CNWAL6NakLKfHffSnmgdxnB/PPRjVwhW9pEol6pVn0MLLPYVc7pFAzV4HSGQG1N+NsH5GwZCJfkn5AZwTQWKgVs8AOWfEP4KyGVCoVqpXAI55I4PtU2Lhh6G0/+m20VyDux6VQIkUgnxi9ZbF+xN2nAz5Yis60CYgmmXtT1qQSXmdE1rdpOQfeIgMCsYNZFw9LrXRfhIrThyY8QQpzS2IofxeJ6tRgCCE3cVuXgJOt6DTOgl4iLw/hHUqer2x+8pBfi4XAw+d2cVIibQyraiTlBqdtZN66rZp9zNGuCfOESCiSikBK0u1bgh1jIuhABktlLzBmQ5BII6+R2LoGPqXsVDY67Nfg8es2wKgWwmLVaDdRKBeRbUUcNkHSWPjmHKGTo+UG6em5nGeAaEWOJNDxCYyN5fUIeXygpxVLBb5hRIhKXslM5r1PnBhRgOG/CQDWzYqCGXtULlmEy2BvsecKTRs4FGfMSD5I6QVxqPl0iiZBBzyOHSyRzUtwZOF6VNxQU1tmiyvNH4bai8qQZX8KYtksPio063ybFnQlScehpVgiIOw25WU4yxvQWc3v0uzSU/h6fn4d/6HWt0ZiF/hF+i9hGEvaOEOSz+MWbbIMJfEebXM8kVWXpwuSFI6OG8X/02VasdGjgHRH4JF3fDcAfLkeDOBI4AxY1eQPVXbj05Dpg5sSuDe8fJFP9dIQyVWyv8pA1RDYMCp4kHsL5BK4D6saoSDVZVC9i6rqn5ZzYcGN6IiykN1zQ0lrJ1wi3xkVHRb0Wgo/oicK85JEnCpMGec/Pn5Hlixzac+BN6iYoJQ16fB9fOhe/jsFxNcLCiDRgC2TSbUMH2UbCSniRwTPbxJUqGQUStwyTPG7xpG6ahukvbm8Y4BfMy9ohHSUz/Go54wKrFjYdUj9dFaaD4MbHR5tJ1PdOYionn8RQ141UovwmWXZmMyOM380ncuJ+yXyWRxJBdGKqMRnGATbaBWAoy3LbSN24J5+tQKaHToPy3ACegj+6cUdhU9s70MJzA7mgAgmYLyiTgTL5oDKkCEGCoBv+cRonrdlRC6iEyK5W9AIithexAnlVkaybhmVYc3XdDXV0leS8a0NtPkJLXQR7EkNA7NCGrZVYPjnBcjovi/MEJY7T/HaVk7dO694BRLRb8zbFuVYa1hApGe+4wkWmdYQ9v5JYU1LJ9/vZJCjCIYoPVwcVcayfSYaAIJrXvnIkmszSy+pD+oTcUPOhWB6J7N3+cqYsiX9LtKVrfv/DlF6saKiPixpn8RpEP5tuGSH3tu3gHdoOT6UihSp+cjSNWVrxnWf2DLLN9nsG2ckBePP8+DPP7PlNIoEeXzhL/7nW2++w9casNPd1IgE1i5UZVCmOxVxTKIY38ZPnBXD/GvQVtn7IC8krjMvY+N+unf9ozyC8CyhFDI3YOD05YH3px41LSxtfn1pfPhJWCYyI2Pj68v31R+daCzdprdbysc7nR5prN9vXbnaufsAfSMA3RS0HAU78JEZGW58tHqDf8DTCd4apGF4qqOq1Sas8FkspMcTFKsdif71Pf2LEfSLKl/QFir8Gwhn4sDYWq5T6SHZSEp6MjY3F9+Mpj/dP1zAMr2uTel+/jciJaTB6aiKarVoMWiORrbGYWGn9xysIsLBnkNYLQJmje2LOvO43zdi4gxv2gf3x0YxN2+j/MNqWEAzrz8cHtMsprVLbRwVzDBFKHYvZIpKIjxjulm/HPQ3BR3zuBnsbayAwHJzhAFlsPDOSUYAn4LkfJ2RTPqvKKo//3bPDuaHhUfaHr8mXyKd8r2YmqdUzFlOzMWbzAJ2kYwgfzLHXODwWI6cqZEHGAsYx7yL8LIbmoFjMqZziKsNnE8qoGFWmcQhwhff62t8SrAqUKoHnOBbDCIwNum2rpO2003Yq47Y9RJt26pKGoW5ds8oIJupVNY0yyexMRgMTGZvJOAdTURKZt701BmHoDLceMvJOl3huQYwUgCKYyMbwf+jNfW/s3/8aSo2g9vsX1r8/2lk72jp7YuOLixvXv2dFMJ0584gpiraaKBsw22JPiNlibGewO9EcTGyjtfPOx3n2vvUYzHtezWCS4FnM2x6TZO0TH3YuH+UHwYkfSS/ONm+OwQG0yiQYWQeNvjgbJGhS0Ap0eb0Rx2y/dKf18IIXJKEvAh3jNE5Pimluvtwdpo1i8lHaO6Nj4xt/Otp8cKc9vwYDBWnb99t+9He1iUZ99G/XzvnGzLVgb4x2hAAL7NIktNj4b1EqO5DJ5JN5VdaKR3LIkxl4u0r15klge4obHW13XBAg7ijbp460r55sn7/XufJ+33P9jPX3TJhiBXdLtjMs3pLChlRs/IVUPplTUd8LSjKlum2JgwwHp3N3eX3p+lMERyQoH3XZ/WkTjWBGwht6KENSTYBXk9gGBY7oG7MVq1A+qE30xdlLTOYU/82VbyTM5+vFbd7UG7o5oxfl7dtvcQdAxp3VL3ruAKxZedvwAjfbWri18d6t9e/PtK581p1J7VYZ/TrYkXOQsOOGyxthySDhgsQOfrMcnXi/jxW83dCEQaFYGC/ypi3Phz62C+qvRhT+364tXvlpZREFHTrlYxvSHM8ELC04Nv7WgddR88HHzdW/iJpbMhvBUJHMRYEevWwr42PH3mBb8xx2tMVvjkk9sX8f84tsTFwTfvXEXiOy4ds4/uHGnz6VjlbAEBbFsqZ9ERMqMRzBjH7/5kv7/M3vJBR4ZWQXLKAgkcl1FChCMTa8cnTHoUWuOnYOWrpoGq+IdCW83JfgccxlFcpe2J7qOeYpyu2d9uV325c+d9QFGHnUx2R1uN9hYBO9sX0QH+kOcev+f1I1FBFiBhyLNJLVghhfzLXwZQa8OoJaV28BC3a+udi5cHN9+Yv2ewtdDHiPSvLa8ttjxIcqRexCYE34eP6HSEa+f4iRjXw/ExHF6II3W6kVjdmkUddrYAlZVr0xMjhYNAqNJOh5s3IYH/SIt7wMlnBCPX6RKNQGobPJxBz+NYu9hUp8IP6HiapWO0SGde7jbXIUvBZJZAvAa6F7so3F9R6if/x2SU/mRkrx2xtUvvlmgJwQ5lgcUsEoszW2xwIKhMq/3sYtt9lhzFjgoZyyYbi99WYiSY2kMAzYo+XdrkzY6B0+YbvR7H1gML6HZzb+fGbjk68iAxbBMuP75NJTeIu+bMwexHsH++Lr979bf3i7ffU25XcQozzjb1z/PplMEo+cyrrH86teUDftx4ZyidyPDTRkvT4ttRFRH9bS/UFGsJ9XolClf9qDXPog44j1y4Ul6L4KmRfS3UmOODb/DntuAUR2bgqdAbm1Ez7MkPgIv2FQnF5Rp3DlegodjaKGbh2sTOnGtNXX1z82Tp3XN8h74sJWagXQh7hGvB+vIvaHod2/nw6sBT4kqriRR/xZDIlm4J8Qw3TDnZSWvBFPNcYFKlMqUmdU5VUVpdRqSkmkFET+ObHJLr6db3Mf8AahGsn0ea2CiPPByRHegPS43T87Su24cZrEjTNu3DjPxaTzdkyaDxancjAHmVfz5HcakF+GcpvHP0XP9uE/Sih1J02Ei1eo/kpOAwon4fcEJvWU+x3+llOq+zWhvpV/W5wYaGAmV87hGUqlX8mTv0P4r4KGX9nKHNmh565z5JVy2Fs4QBbDEUuztF0CX698Mmb4dOLdpXqtQRaiZdGsiF5rgApjupYapNTKWv/+KOhOcKvw2uNdCa3Ke037nXJh428qmcPBi3dvkfjSfOf2+fbFO0KPJ+5Adz89OIU9uoe3ofcg2w+XWbjXWr3Q+vZdGp0n+TioubLaeQSu4MPOtW/aV6/Bh9b8auujU50zd6B9qAW9N3+41lpcbq7d3Jg/2f7gq43Li+1L96gD+dODE+2r8+1PLqODL2RR6/7N5sOr7Us3bbhOQgMAePvSF7R46+yZzto3IPLa311oHTu9cfw0DKj5wx0A/L/n3+1N7/Wal85FkNXMo5kdRQdYJWvCDJleMy1CHELieQqn40qCsEF0zc7/8pzVFZME/MVIlg1saIiGt0UCRrctwHTOHI8IDzGHngwozbWHbpBTEtckRmdaSaoKgqJPCB0nzoJjEAZDUoH/once0Nn3S633b3WunGiuLm4V8R6SxjL5tRffQvvwwUWcPI5O62qkoEAX10bmM3uCAmpYUCAseD1EgpJ4kO0r/9lZ/XELEhum4uQ8nvdL9zYu3Y1g1G8VFxNag+z16e78BaxfgsC+CPL5B5DGGAN9SjqhDKHWwu3WynuyoGxAiEQJc/uYa0SpPaVGcX+5+J3vyCzPuMDeEgyrdAanSOMsHBYDfrFRBwJ9A1sAzNLymjN6qTG+h+aS/i+WSkoCkNA9/h5Dh1M0H4P+OazSbyrOkgBOA62DjFKJ3L+iPIfNNqNOE8pILgQePHvIUj+hWDKVxSaWUBcr4Yi1lRQx0ESYMSPjoYijcyw+BTtr6H9nlIHhLMrDbwUdTOWUgSH4q8JTwNtBQN6AmkVvAQLRKwr6v7aBOm1W+55l6OiHrrfcRYDl645XtHy9PbKjWQrYJ8nAXBTmaHaNSbwTJw2FNDYoWqFOUkoXnvTnPIRnCUQwODx7mOw8yAB/kBgl7St3Wzcut08db39+nCx4+552jShJJPpBTDG1SfTGdFVvbEqqp5+SVA8N9XaX6s3VG+2Pz61/ebR14pOAON+2TxlYkJ21Y7RPd8rWlx51Hi5tKfwnosYXMBUwg3dmpvhdUP78XZlbI0v06Zz/bv2uZEH7CXVnJ0VEDYgV6T0CQflCm8RuF8Jj45XICHs9RBLN78WOaK6cbp9fxlbkyQ+wbSefg8A2uR1vzjFSvqhrc22hfeYmmOy8G7l+/Gvob2PhNFBrb9FYmvXsv8TB3pTlm4unhFPZ/tsskQ4Uw7wPu80YFh3hYwvUF95M9Fe2/CY9DEjcNko2dKe4QyB7Npcj8bGnbTp4itH290c6tz7o3FhtH10MzXTw7F4Pibtxe43F1W/PVm6b4CRFaA+Br92N3XbIkSePwC7JcrySSSg5pORHwBJqnTwtWUff/IgQ25y+PSPrXF9aX7rROj7fmn8QZWSAifWl64gM8GkPi4ebxY84XooKdyodMiVbVjnsTOBQndM1zihlU3DQOudvddbOtT87um0hCqpToOmQ+AR4Gsq2x2fo/P0MHbMg6HZ2LO+ouXK5s/ZV+/2bGwth0Z/AviQmu50yfgysyk1Z7JkAi72bES03jHhwtm1+aP5R59s1sisnEG0kG2HlXOvbz4Rchu2jz6XrzbX763e/bK0cCQHjSURRN84faS1dbl+9FtIvXiX0Ftuu/qkyoOEfMFnCoFhebF89gRdUW4v3Qai2r863zp5prsw3V752TJ5tj6refdQ+sty++EPrQXCgEwdfTwJstPBPD05Rk7Z14zQQ7baLFCJEu0IEpvbGJ2eD7ewnIWC7AkUNXzyC5fuAJsmqzbbP39X55sMzFDwhCVkaGx9QFAX/3+N6RRhO6LCArztfnt48a0fzBryrd97wkbB5k9/Fi7/LzmkVTOLnUev0hc7t83Rc4C6u3/sOiShDG4Dulfn27evt+S/5HQdRPI2eliaHhMEJLgj3pJfh4SD6xTuMVchqJkgX4GswWDG/AYESSUVNWLrU89/z7zLCv3QPL3HeOQblOwtfsvRWUhIqdi4fpYuetAUQ9p2lSzxJYonBfUVjiOGY9IL+6xLytEgbgu57XSR0j4Hmxv748ud4YwPNamsvngXX6acHIOtvU+0IM9388dP15SPwBK/6Lr5P19zw6H883no0T20PXGztz+vXb7Wvft3+9CZ86Jy5A2Wo3sb5XaR9PNbl++3Pf2ifXgKJtL76l/Z7C61j37eWrrcXzrSOfdf55iLUan3xLtBSa2Wp9T6rsn7kfOe7tfa7t3DaMNHFraU/tU/c76wtgonl4iJ48MKVdpGiiSRv0++3ejJ6+av1Yp7gQniqAPUcSK6edGNOQG/2DZT2/Ye+Tp0IWrcEiB6jzwFrOr8/8BLK4/9CLEt/h4yX1R4TutMjSFg3D0/l5pMxAvK4yTWtocncklgIf8bUVpO9JTugIud9c5iQzG23mWCN8cewu1Z8QMaA9/B0ILbbt1EGrT9cotD04It6RLxsRRGEjtOyrcAjtJ/2+bohaaFCfNtdpKc6OcpgsrKA6uOTJ/CZx/l0Bu09uA/99T7Yre+uz78Hlj76bT4zkMK7wSNJ7e1O7QhdpUWe4yo52qXH5u61CntNXTuEzxHA+/1bi5daD79tnTtNhtmeX8M6S2iXnndJ9ypOWIX9h+Fd8QDZMvL44oojNORLv970BSxncE9RFjVYhw648p0uTuxSoTddSO+W62o/bHpNStxf5V3R8CQWeYmsdWUVtLFgWIolg2PRNBOEQ2VosPwpDunaKjD6poakeKmjhyxnx5bfLHfgDTL7tGrhVXybEmYMmvbNiy4pW4z/fQ8cIOTUpJLpXLY7M0hiO62rq+1PlmlGXeuTW0HhHe4UxwAhI56saG+q9uxDtk+J7IsX9ZI2XbXIPue1j8GY7bx/rz1/JGRehA5CWgZdbFU0ojzB62idOAaGbOvkafna3ibaL03z+6g30zgSj1MM6QtEFu4KpyZe+YxI1dbCh821j7vNKjWF6NyiF0cQj2KPnSRYSgwsNjkxH/T2qY1segPGGjknq8doYKjOZtYj3itpm4UBycCC8dR1xUe41Td0l7j3qmdx3UG4l5lcamwj0b+OINwX7BQI3OjkrcVmSbalSVacWZCO8RaYnMBHGuy7lL2iV1h9pYVSWW6rHugByalh/Nmy5NhNFuklKWJBSilsBvRGITauKmouoaQTap7YXHZucte9+gGN0jPeYx4d5GTyvhBqL0YAt1czUc5FAenI3i6dK4vD0klaN463v7tFnQoi8sh39PjErbA5ibLx7Snw2A5krzRmr03RcTqhZBOKyui4s3YOB46Of7fx0betU15/LwoR43TsgWwOrwJtiVrVISUtodZcfiCXG07mc0+AYBG5Y7s72coJNlrbImhEItHoT1ivpxfXl5ZIr+TTLotshkXUTbOImkip28siqjqgKltkkVRSHaaOiIdFUkMDyrCaHMrsssgviEWeAgektsIBqYS6rUqCiwxsivpzjMjpopCHA3K7HLBVDggLa3TzC/eCX+hzkCN4h8zBDvQOI7iFuz6g60cIpwA7Sd+8G8We7Rg9TamGrUQSKRPJZbSHFuoy0kI/s8uYSaRsl7G5dob3F7cuVL0hTHtuX8jixfOt2uNKVmps5KHx9JOQs3JZ1zl/q33ifnNlrfU+W/ZngubUkebaObpPmGKSJkX84nzLHR2/2Q2UPJFAydZMih1MzDuQjncDJT87wf5ybOBfJ4vsBkp2WWQHs8huoKQ36t8NlOzcQMm+EeRf7I8QKMGZArtRklAG2GSUpKTk82nNu9WXPNsxSprPeu8hSmIPLTRKQgv9eqIkztwS3zGfS2a36juqqZ0SJuHpJChAAk94/MLb9srCxpV7vzhfczdw0jvx7wZOdigx70A63g2c/OwE+8uxiX+dLLIbONllkR3MIruBk96ofzdwsnMDJy+NIN/WhQhxkwmrsBs2CSX/TYZN7Isi+FCCc0LqDlHR7MzwtXPg4UYKmNiDCg2Y0EKbD5hQaQcgbTFmkkukskx6tpZOtU+cpd6/dL9saKNyV9GZzBeUZFZNb0GupocHVDVrWyYeuTpEclWeWpwEnwmzuNJcu9laeRckCzkg5xtHqvxwT8Dkya+aDz+h+MRxFPKhufoBPo0en4uPy9CZ/MW5m7uxk94ZYjd2skOJeQfS8W7s5Gcn2F+OWfzrZJHd2Mkui+xgFtmNnfRG/buxkx0TO+FmKvB0suDzv7Br0PPRUuxyAHIgXeRLeDd5VldmBDXpfQgkZtLlrC7hHryf4dLlLZzDJY0J7fFJJz9+7Wa0iYZDvJihsp5T5zwDgvLOYSv2jd4Efb5TRbhrNEkBcrAImRPJwHyduK27d3CGdcHf1OneXdmNyLx3krOReO6fV5D3igSeQjd1PhE5rJ6c+RTp7iIaR0CPLz6SCaWQcnJZIA7Ad8+155T9nPeU/d4O2N/qNSmSUOZ4QJQ1KztmXLxmg6d9F29OghG+tnNEwf8CVTzft+RW3qgBYMmFurFxyZ4sOcDOVfYBYIYGiamgY8IGJvFw6AUEfFn3yFnPifrS42XpSV/ZgDvfIveErRfu7NPAzjIDw0PZpHPp1ma763ZkOz3LnF1yTI417w/qUT4LkfgCP03otaJ42qyy5RNWPBZHxMsff2UCg7+CJkxgkGAikRYjKfVnERiyKGOgxKBctPMlRtAtkdsuMRzsbbG/9vnl5trHoad8+6fq/3OR0d3Y4g27LqdjhtlfokkVLFZ6l1oh9y/1JKO6XbclSikf59LTHKlJi/ow8fRzjO6/oDL0AFp79dJ3fxO9L7dbYKOLGPPBTu+Gbd34qn3hThjQAeLOB2UaQVvBkjYS/9KAkOQFdtqlL5ivZQv9dMovaG3ZQG7hee3Ft0aQfQOoC6tvjlklGmARL63NJTN5XqaHKpftHp8SdXxKfvPjSw39XONThyOPL7PZ8WWTwxHGF1GAhsc6siOIv3+sS6yDnvz+CwtyBB13GvHAd5/od5IylKh+vez+TnJIv+I3b72totC7hHGKz+KVn1YWvS57uOkqFZj4OqZzOPWAJrX4lrYDTMPFZYphIHowUjL5ZF710W6oY8CapIwAir0+DWCZWr3uPfRb1r8ndCocwi7cTsHrPr5R0p8Mhhiy5upMXcUQd68yuVdYoTEmyhAHaHmjRiqOxabrWBS8Qd7ttchx40/IXQm9ajc4IrS43Dl/yz9hXhLyNMCwM6Ud5pi1aBSmpwCY5KRu7a/q+OPeuQPFvjiHmnh/khwDPRZ3eoyPIh+WRu0YlISYI5NRkd05t9UbcPBVcmeOP+kL0H7Gi37obX/i/UWSToXbjrbaJ+2t64VLJDzCLTf5O40qrTO6c58QvXZQOCRffhVoxi7W/SI4/safYW1oIqP5rzMiWZintnAL0SYGrpe0UrrngUcbc6brmIfImG98itorX218ccu5m4ddLXX2DL2uqHXnGM2iorfj0Mn+6cEp+IqVyvGvO+e/Bed4Y+E0vVmnffnd9qV77UufNx/+COKLqiYo3/zx086FT1pXb/Eqq7nyDTQCHkRn7Zv1M/dbjy451/9gJF9iF5XirLuzZ6AMNNv+7kLr2OmN46fbF+/gTOCFm1A42kIIf0ER20RLbguDoTdXb0AP0A+7XRPzE3/1m3PbrXMt0/qPx8ESgwFQXNB7mABfzbXTzl1NnW8udi6wC5Waq39pLbrDY+bc1Wsbl+6S25HvtRYvNtfWmg8v0OsxfaPiBtL7ch6vB/da7l0VBuiuijU3oiQz/DImvm6Aivx9Rq1UMafIlQMk3iK/TCiyJZtzLNkTZ1vvX4tkySYa04WC3vAu28muzeG235M0ccvGlN6LXcu7FZEkRMiF0VJT1kYJRRG59UG4Z2dPY2YSzVT02b3GYbCJkILUDPyLoVKlWoUhGjWyGmYah6BzjD77W4LcgD0WS0Mbdc0qI5iWV1UF5X43jFJD1UQ2kY0N4nslZibDVI3kShmJlaxGSJ4XmRZvWCZ820vfqqRv2QU7foONyYUAqcDLxmiyKPqNBjK93cvFifSitbDbHAP9iahmRC/gdLOfhAkS/B6pHbzN0FHZ28WefCL9RzT07GVMZehpWnmPj32EtmrmKaViKfMUrJ1UNq+kizJr5/HVBcTrXY/axjo7WGGzuzbPnsEGEbnt1G8WdbdEPAFtVWrFhmjxKKpp/cfzeIjsSuOjrbMnAjSVmH/DVuy89BR6H2EYOELGjZscxOfsRLIi2Cf7ATEp3gTnEU/woQbqM6atBv5aL4MqQyVTm9L7iUEhiFsoQZZBGgTRezTfixgqm3ppLPbywX/6wz7uYr8/vFw1ZgtlzbSSZWuqGkMWELBujcX+MFHVoBoDV2AwaI5dv4S3djGWQXT87ZNfrl8/ReN4ZHQaNzZqLOARDtZNwzJwbMOOspAx0eFT0wwx2wyRS6HcIbuWHitA3jvG0xT+ljBmdBM0DcUGhyj6tlHWdTuV0f+2rNWKrm3zjJeegi97FINnAbycl5kCXuvTY0/tIB35xPUjnt4CndgXxQ0q3ZGYSGw/wFtRmZuLg4B/CdJ789GQgDxT0byOJIXZPFB+7OojRZO5ESVuoWo0dJ+PBk5k+55H3jutyyQpvlRuukoknUyOFOw7556e+OhGxairfGEKld6F3Fr8c+vR0fXlu+2Pz3TvkTckstms14oYDl/p3YM9p9qk9NbKnx5cBkqk75trN9srCwAcUDLOl1i6DCYE3Xo4v9r+9L32hTsbxxebK6ut48dw7OPUQuvsX+htjK2PTtE7DJsrN+gJ2NjomDDH8f8eMCR3BPa13/8YDALcVz8PEVf7r/eRk5UOIBCwOlfuts/cbC1+2D6Pt0CCpdRa+mzjE+b90FESmHF/Czf9ran/kbHbIwal0BRj6psOEuw9me3PH1B4bTi8nUgGTSt0bqw2H30QMEL3TlkKvpi2gRFuQ0Q6pYBgENimPAw2RaNb87/uI/oSibv6RA7sjbuFCx/bJz7sXLu5ceRcc/UYz99eprY518IJHg7X0m/jTikRihKYOAl6AavvRlZs/ryq1QEEREIaY7GN699vfPqn1vKD9RNfg1H98R0XHKf3Eq0VE3qYggcE5HIGG0bfIr6lPYPw1CNN7Fp0PThaXObDzxFv+m58cRF6cUXg5lqXLWx+eB21rt7CsUviNHjuSd5kR/yV0rSXPwk3Um+1fZ9R/vjDP7M0+kHq6niyzTfZj3v5+OMPbwhr19vTsh0SpD3cFGKKXo6AipW6hbus6hYqTJv4Yu036aL4GBIIaJQVgn5fqTQsw5yDEv8iFPlXXKY0XSPhG8QBSAsdKPajPxJOJyzscM8ofWbUGg4I0HTQspwApFC3BsovpKIDBK1TKaG+35Aq//7vyH6HY64iGvqRqVvTZo11RF8lydz8DtCQNPUpUPh9cborIN4/KikDHm1fvG7qM3HWN+7W+95pgJRo6NbBypQODlxfXz8aG0d/DOmbNY3eGUDprNIvgOpMpj1Ed/TuTP6L+zFZ1WuTVhklUOpf0W/G3Hr93Mwn69ONshehZFDwzKhWDxp16FHBz9/hSYLuW8A7FixtwiYGZ77+bVo3597Uq3oB+nixWu2LP8tRF0pCnXh/smSY+7VCuc/CWAmbCQZW4PIuTsaLoxcQBiV8MkKbsPP58NJ6pTYJEBLTKckWxgEPeNMIpqu4XQT9PYpPVI3CoTgaQXEcZo730JGpN3RzRi+G9eSU2VpXGr57N7gX/DqgA8m0u9tVept8QS7vdCpge32CcUYLbG1a+N0+wT1xpaJMki+ZwZbVRLaC9xgiWmWpEl3G46y3OUNg623QDdS3xdA4UjDwKQK4ksz44Zasx20RcqwQ4tgzj3OaAjcDz0lrGLtKXPyKi0PHiEsgXl++v/7oHJjjfPQCy2mmUcg4QlAkRDIAOOzc7WNXQhMkAdnGiV3ejXj8Ia+4j9gx4JTUBfTKfGkY5ma7stmT9ebpSwwZYJ0n6X0URTB9PC1Te32vVdhr6tqhojHrpW89lEgmuIpxweYga4rhNfcfroNXf6BgOFUxQelVL+diMiKsiQfuf21z8Cjp00MM8ccXH8VtgtKrDT2gCcr6AS2ssBZ87MU5W2FT7wREAolLQlpbajuUmlxOnGpMirMdZibGiT9oT5XlQRM0NYp8tpvLOxLLTaadaIUBpCqK4uc5z730lWIEbZkU7rznNGQdw1DvQUOGtc00ENd8ATdf6N68PoPbpgsEm9SzDhRYXwNSwpqRcL/jb4TRGXPOBSqj1cOIeNNN+wkY2h58Hj0+Pw//0OtQbhbMHoRXPOiquP3q+UFBedewbHhdm9Q9co0mh4ZQe322yJQfL9Z00wyrhDvbb5q8PCMdMf1JRFluKDcUt4EJmVXcFnVS/GKjXCkWdUdshjQypVVq+xza9Ik9ph/fYaKRtUZB9nQJIzdMt0f46hWUreVjnc+PbJz/ZH15+acHp0DLbxw/vb58IW7Xkfhu3q7sebd7w65bVlGcbgVsOvDbz0uAhobtN9sSe3AQvThtGYi8RHWbcigBAIlUDa0IxWYrNdBieKz7MUdiaPSabuJ50IrxAWRDHIFgHDjQOwDLnkE7mLBncMIozuG/eFVw/H8Am1FSFg==";
-function b64d(s){s=s.replace(/[\s]/g,"");var b=atob(s),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a;}
-function inflate(d){var ds=new DecompressionStream("deflate-raw");var w=ds.writable.getWriter();var r=ds.readable.getReader();var c=[];r.read().then(function p(v){if(v.done){var t="";for(var i=0;i<c.length;i++)t+=new TextDecoder().decode(c[i]);document.open();document.write(t);document.close();return;}c.push(v.value);return r.read().then(p);});w.write(d);w.close();}
-inflate(b64d(d));
-</script></body></html>
+  let currentScreen = 'screen-home';
+  let navHistory = ['screen-home'];
+  function navigateTo(screenId) {
+    closeFlowMap();
+    const current = document.getElementById(currentScreen);
+    const next = document.getElementById(screenId);
+    if (!next || screenId === currentScreen) return;
+    current.classList.remove('active'); current.classList.add('prev');
+    next.classList.add('active');
+    setTimeout(() => { current.classList.remove('prev'); }, 350);
+    currentScreen = screenId;
+    if (navHistory[navHistory.length - 1] !== screenId) navHistory.push(screenId);
+    next.scrollTop = 0;
+  }
+  function switchTab(tab) {
+    document.querySelectorAll('#screen-home .tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('tab-content-holding').style.display = tab === 'holding' ? 'block' : 'none';
+    document.getElementById('tab-content-reserved').style.display = tab === 'reserved' ? 'block' : 'none';
+    document.getElementById('tab-content-all').style.display = tab === 'all' ? 'block' : 'none';
+  }
+  function switchRecordTab(tab) {
+    document.querySelectorAll('#screen-trade-records .tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('tab-content-trade').style.display = tab === 'trade' ? 'block' : 'none';
+    document.getElementById('tab-content-income-rec').style.display = tab === 'income-rec' ? 'block' : 'none';
+  }
+  function updateRedeemBtn() {
+    const val = document.getElementById('redeemInput').value;
+    document.getElementById('redeemBtn').style.opacity = val.length > 0 ? '1' : '0.4';
+  }
+  function openRedeemConfirm() {
+    const val = document.getElementById('redeemInput').value || '0.00';
+    if (!val || val === '0' || val === '0.00') { showToast('请输入赎回金额'); return; }
+    document.getElementById('confirmAmount').textContent = val + ' USDC';
+    document.getElementById('redeemConfirmModal').classList.add('show');
+  }
+  function closeRedeemConfirm() { document.getElementById('redeemConfirmModal').classList.remove('show'); }
+  function confirmRedeem() { closeRedeemConfirm(); navigateTo('screen-redeem-success'); }
+  function toggleBtcBreakdown() {
+    const el = document.getElementById('btcBreakdown');
+    const icon = document.getElementById('btcExpandIcon');
+    if (el.style.display === 'none') { el.style.display = 'block'; icon.textContent = '▾'; }
+    else { el.style.display = 'none'; icon.textContent = '▸'; }
+  }
+  function openCalcModal() { document.getElementById('calcModal').classList.add('show'); }
+  function closeCalcModal() { document.getElementById('calcModal').classList.remove('show'); }
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }
+  function switchScenario(id) {
+    document.querySelectorAll('.scenario-pill').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.scenario-content').forEach(c => c.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('scenario-' + id).classList.add('active');
+  }
+  function toggleFlowMap() { document.getElementById('flowMap').classList.toggle('show'); }
+  function closeFlowMap() { document.getElementById('flowMap').classList.remove('show'); }
+
+  /* ── Password protection ── */
+  function unlockPage() {
+    const input = document.getElementById('pwdInput');
+    const err = document.getElementById('lockErr');
+    if (input.value === '6767') {
+      document.getElementById('lockScreen').classList.add('hidden');
+      document.getElementById('mainContent').style.display = '';
+    } else {
+      input.classList.add('error');
+      err.textContent = '密码错误，请重试';
+      setTimeout(() => { input.classList.remove('error'); }, 500);
+      input.value = '';
+      input.focus();
+    }
+  }
+  // Auto focus password input on load
+  window.addEventListener('load', () => { document.getElementById('pwdInput').focus(); });
+</script>
+</body>
+</html>
