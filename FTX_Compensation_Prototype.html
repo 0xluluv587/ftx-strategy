@@ -204,11 +204,11 @@
 <div id="lockScreen">
   <div class="lock-box">
     <div class="lock-icon">🔒</div>
-    <div class="lock-title">原型访问验证</div>
-    <div class="lock-sub">请输入访问密码以查看产品原型</div>
+    <div class="lock-title" data-i18n="lock_title">原型访问验证</div>
+    <div class="lock-sub" data-i18n="lock_sub">请输入访问密码以查看产品原型</div>
     <input class="lock-input" id="pwdInput" type="password" maxlength="10" placeholder="····" autofocus
       onkeydown="if(event.key==='Enter')unlockPage()">
-    <button class="lock-btn" onclick="unlockPage()">进 入</button>
+    <button class="lock-btn" onclick="unlockPage()" data-i18n="lock_btn">进 入</button>
     <div class="lock-error-msg" id="lockErr"></div>
   </div>
 </div>
@@ -232,47 +232,47 @@
     <div id="screen-home" class="screen active page-bg">
       <div class="nav-bar">
         <button class="back-btn">&#8249;</button>
-        <div class="title">我的投资组合</div>
-        <button class="right-btn" onclick="navigateTo('screen-trade-records')">记录</button>
+        <div class="title" data-i18n="nav_portfolio">我的投资组合</div>
+        <button class="right-btn" onclick="navigateTo('screen-trade-records')" data-i18n="nav_records">记录</button>
       </div>
       <div style="background:#fff; padding:20px; text-align:center;">
-        <div class="label-sm">预估总资产($) &nbsp;📈</div>
+        <div class="label-sm"><span data-i18n="home_total_assets">预估总资产($)</span> &nbsp;📈</div>
         <div class="value-lg" style="margin:8px 0;">$ 15,448.82</div>
         <div style="display:flex; justify-content:center; gap:24px; margin-top:8px;">
-          <div><span class="label-sm">持有收益(%)</span><br><span class="text-green" style="font-weight:600;">+18.62 (+0.12%)</span></div>
-          <div><span class="label-sm">累计收益(%)</span><br><span class="text-green" style="font-weight:600;">+18.62 (+0.12%)</span></div>
+          <div><span class="label-sm" data-i18n="home_holding_pnl">持有收益(%)</span><br><span class="text-green" style="font-weight:600;">+18.62 (+0.12%)</span></div>
+          <div><span class="label-sm" data-i18n="home_total_pnl">累计收益(%)</span><br><span class="text-green" style="font-weight:600;">+18.62 (+0.12%)</span></div>
         </div>
       </div>
       <div class="tabs">
-        <button class="tab active" id="tab-holding" onclick="switchTab('holding')">持有中</button>
-        <button class="tab" id="tab-reserved" onclick="switchTab('reserved')">预约中</button>
-        <button class="tab" id="tab-all" onclick="switchTab('all')">全部赎回</button>
+        <button class="tab active" id="tab-holding" onclick="switchTab('holding')" data-i18n="tab_holding">持有中</button>
+        <button class="tab" id="tab-reserved" onclick="switchTab('reserved')" data-i18n="tab_reserved">预约中</button>
+        <button class="tab" id="tab-all" onclick="switchTab('all')" data-i18n="tab_all_redeemed">全部赎回</button>
       </div>
       <div id="tab-content-holding">
         <div class="holding-card animate-in delay-1" onclick="navigateTo('screen-strategy-detail')">
           <div class="holding-header">
             <div style="display:flex; align-items:center; gap:8px;">
-              <div class="holding-name">🏛️ 专项回款管理计划</div>
+              <div class="holding-name" data-i18n="product_name_icon">🏛️ 专项回款管理计划</div>
               <span class="vip-tag">VIP 优享</span>
             </div>
-            <div class="holding-badge">持有中</div>
+            <div class="holding-badge" data-i18n="badge_holding">持有中</div>
           </div>
           <div class="info-row" style="padding:6px 0;">
-            <span class="label" style="font-size:14px; color:#8c8c8c;">持有金额</span>
+            <span class="label" style="font-size:14px; color:#8c8c8c;" data-i18n="label_holding_amount">持有金额</span>
             <span class="value" style="font-size:16px; font-weight:600;">15,448.82 USDC</span>
           </div>
           <div class="info-row" style="padding:6px 0;">
-            <span class="label" style="font-size:14px; color:#8c8c8c;">持有收益(%)</span>
+            <span class="label" style="font-size:14px; color:#8c8c8c;" data-i18n="label_holding_pnl">持有收益(%)</span>
             <span class="value text-green" style="font-size:14px; font-weight:600;">+18.62 USDC (+0.12%)</span>
           </div>
           <div class="info-row" style="padding:6px 0;">
-            <span class="label" style="font-size:14px; color:#8c8c8c;">累计收益(%)</span>
+            <span class="label" style="font-size:14px; color:#8c8c8c;" data-i18n="label_total_pnl">累计收益(%)</span>
             <span class="value text-green" style="font-size:14px; font-weight:600;">+18.62 USDC (+0.12%)</span>
           </div>
         </div>
       </div>
-      <div id="tab-content-reserved" style="display:none;"><div class="empty-state"><div class="empty-icon">📋</div><div class="label-sm">暂无预约中的产品</div></div></div>
-      <div id="tab-content-all" style="display:none;"><div class="empty-state"><div class="empty-icon">📁</div><div class="label-sm">暂无已赎回的产品</div></div></div>
+      <div id="tab-content-reserved" style="display:none;"><div class="empty-state"><div class="empty-icon">📋</div><div class="label-sm" data-i18n="empty_reserved">暂无预约中的产品</div></div></div>
+      <div id="tab-content-all" style="display:none;"><div class="empty-state"><div class="empty-icon">📁</div><div class="label-sm" data-i18n="empty_redeemed">暂无已赎回的产品</div></div></div>
       <div style="height:40px;"></div>
     </div>
 
@@ -280,7 +280,7 @@
     <div id="screen-strategy-detail" class="screen page-bg">
       <div class="nav-bar">
         <button class="back-btn" onclick="navigateTo('screen-home')">‹</button>
-        <div class="title">在持策略详情</div>
+        <div class="title" data-i18n="nav_strategy_detail">在持策略详情</div>
         <button class="right-btn" style="font-size:18px;" onclick="window.open('https://docs.matrixport.vip/fund-docs-cn/tong-yong-wen-ti','_blank')">ⓘ</button>
       </div>
       <div style="background:#fff; padding:20px;">
@@ -289,64 +289,64 @@
             <span style="font-size:22px;">🏛️</span>
             <div>
               <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-size:18px; font-weight:700; color:#1a1a1a;">专项回款管理计划</span>
+                <span style="font-size:18px; font-weight:700; color:#1a1a1a;" data-i18n="product_name">专项回款管理计划</span>
                 <span class="vip-tag">VIP 优享</span>
               </div>
               <div style="display:flex; gap:8px; margin-top:4px;">
-                <span class="risk-tag risk-low">低风险</span>
+                <span class="risk-tag risk-low" data-i18n="risk_low">低风险</span>
               </div>
             </div>
           </div>
-          <span class="detail-link" onclick="showToast('跳转本策略的策略详情页...')">详情 ›</span>
+          <span class="detail-link" onclick="showToast('跳转本策略的策略详情页...')" data-i18n="detail_link">详情 ›</span>
         </div>
         <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
           <div>
-            <div class="label-sm">持有金额 (USDC)</div>
+            <div class="label-sm" data-i18n="label_holding_usdc">持有金额 (USDC)</div>
             <div style="font-size:28px; font-weight:700; color:#1a1a1a; margin-top:4px;">15,448.82</div>
           </div>
           <div style="text-align:right;">
-            <div class="label-sm">累计收益(%)</div>
+            <div class="label-sm" data-i18n="label_total_pnl_pct">累计收益(%)</div>
             <div style="font-size:17px; font-weight:600; color:#00b578; margin-top:8px;">+18.62 USDC (+0.12%)</div>
           </div>
         </div>
         <div class="icon-actions">
           <button class="icon-action" onclick="navigateTo('screen-trade-records'); setTimeout(()=>switchRecordTab('income-rec'),100);">
             <div class="icon-action-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M12 2v20M2 12l10-10 10 10"/></svg></div>
-            <div class="icon-action-label">收益</div>
+            <div class="icon-action-label" data-i18n="action_income">收益</div>
           </button>
           <button class="icon-action" onclick="showToast('暂无预约')">
             <div class="icon-action-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-            <div class="icon-action-label">预约</div>
+            <div class="icon-action-label" data-i18n="action_reserve">预约</div>
           </button>
           <button class="icon-action" onclick="navigateTo('screen-trade-records')">
             <div class="icon-action-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div>
-            <div class="icon-action-label">记录</div>
+            <div class="icon-action-label" data-i18n="action_records">记录</div>
           </button>
         </div>
         <!-- Inline notice -->
         <div class="inline-notice" onclick="navigateTo('screen-compensation')">
-          <div style="font-size:14px; font-weight:600; color:#1a1a1a; margin-bottom:6px;">专项回款管理计划说明</div>
-          <div style="font-size:13px; color:#8c8c8c; line-height:1.6;">本专项回款管理计划仅支持以接收回款现金流的方式认购份额，并持续产生有吸引力的收益，底层资产是安全稳健的美国短期国债，份额确认后可以随时赎回（最晚 T+5 工作日到账），赎回后无法再重新买入。</div>
-          <div style="text-align:right; margin-top:6px;"><span style="font-size:13px; color:#c49b5e;">查看回款详情 ›</span></div>
+          <div style="font-size:14px; font-weight:600; color:#1a1a1a; margin-bottom:6px;" data-i18n="notice_title">专项回款管理计划说明</div>
+          <div style="font-size:13px; color:#8c8c8c; line-height:1.6;" data-i18n="notice_body">本专项回款管理计划仅支持以接收回款现金流的方式认购份额，并持续产生有吸引力的收益，底层资产目前是安全稳健的美国短期国债，未来在您同意的情况下也可能配置固收资产以提升收益。份额确认后可以随时赎回（最晚 T+5 工作日到账），赎回后无法再重新买入。</div>
+          <div style="text-align:right; margin-top:6px;"><span style="font-size:13px; color:#c49b5e;" data-i18n="notice_link">查看回款详情 ›</span></div>
         </div>
       </div>
 
       <div class="section-card animate-in delay-1">
-        <div class="info-row info-row-border"><span class="label">持有收益</span><span class="value text-green">+18.62 USDC</span></div>
-        <div class="info-row info-row-border"><span class="label">持有收益率</span><span class="value text-green">+0.12%</span></div>
-        <div class="info-row info-row-border"><span class="label">持有份额</span><span class="value">15,430.20 份</span></div>
-        <div class="info-row info-row-border"><span class="label">持有成本</span><span class="value">1.0000</span></div>
-        <div class="info-row"><span class="label">浮动盈亏</span><span class="value text-green">+0.12%</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="label_holding_profit">持有收益</span><span class="value text-green">+18.62 USDC</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="label_holding_return">持有收益率</span><span class="value text-green">+0.12%</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="label_holding_shares">持有份额</span><span class="value">15,430.20 <span data-i18n="unit_shares">份</span></span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="label_holding_cost">持有成本</span><span class="value">1.0000</span></div>
+        <div class="info-row"><span class="label" data-i18n="label_unrealized_pnl">浮动盈亏</span><span class="value text-green">+0.12%</span></div>
       </div>
 
       <!-- NAV Chart -->
       <div class="section-card animate-in delay-2">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <div style="font-size:16px; font-weight:700;">NAV 曲线</div>
-          <div style="font-size:13px; color:#8c8c8c;">所有时间</div>
+          <div style="font-size:16px; font-weight:700;" data-i18n="nav_curve_title">NAV 曲线</div>
+          <div style="font-size:13px; color:#8c8c8c;" data-i18n="all_time">所有时间</div>
         </div>
         <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;">
-          <span class="label-sm">最新费后NAV (03-07 公布)</span>
+          <span class="label-sm" data-i18n="latest_nav">最新费后NAV (03-07 公布)</span>
           <span style="font-size:20px; font-weight:700; color:#00b578;">1.0012</span>
         </div>
         <div class="nav-chart-placeholder">
@@ -358,76 +358,76 @@
           </svg>
         </div>
         <div style="text-align:center; margin-top:8px;">
-          <span style="font-size:13px; color:#1677ff; cursor:pointer;" onclick="showToast('查看更多指标')">查看更多指标 ›</span>
+          <span style="font-size:13px; color:#1677ff; cursor:pointer;" onclick="showToast('查看更多指标')" data-i18n="more_metrics">查看更多指标 ›</span>
         </div>
       </div>
 
       <!-- Trading Rules -->
       <div class="section-card animate-in delay-3">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-          <div style="font-size:16px; font-weight:700;">交易规则</div>
-          <span style="font-size:13px; color:#1677ff; cursor:pointer;" onclick="showToast('查看详细规则')">查看设置 ›</span>
+          <div style="font-size:16px; font-weight:700;" data-i18n="trading_rules_title">交易规则</div>
+          <span style="font-size:13px; color:#1677ff; cursor:pointer;" onclick="showToast('查看详细规则')" data-i18n="view_settings">查看设置 ›</span>
         </div>
         <div style="display:flex; margin-bottom:4px;">
-          <div style="flex:1; font-size:13px; font-weight:600; color:#1a1a1a; text-align:center;">申购</div>
-          <div style="flex:1; font-size:13px; font-weight:600; color:#1a1a1a; text-align:center;">赎回</div>
+          <div style="flex:1; font-size:13px; font-weight:600; color:#1a1a1a; text-align:center;" data-i18n="col_subscribe">申购</div>
+          <div style="flex:1; font-size:13px; font-weight:600; color:#1a1a1a; text-align:center;" data-i18n="col_redeem">赎回</div>
         </div>
         <div class="divider" style="margin:8px 0;"></div>
         <div style="display:flex; margin-bottom:16px;">
           <div style="flex:1; text-align:center; padding:8px;">
-            <div style="font-size:13px; color:#8c8c8c;">不支持手动申购</div>
-            <div style="font-size:12px; color:#b0b0b0; margin-top:4px;">仅接收回款资金自动配置</div>
+            <div style="font-size:13px; color:#8c8c8c;" data-i18n="no_manual_sub">不支持手动申购</div>
+            <div style="font-size:12px; color:#b0b0b0; margin-top:4px;" data-i18n="auto_config_only">仅接收回款资金自动配置</div>
           </div>
           <div style="width:0.5px; background:#f0f0f0;"></div>
           <div style="flex:1; text-align:center; padding:8px;">
-            <div style="font-size:13px; color:#1a1a1a; font-weight:500;">支持随时赎回</div>
-            <div style="font-size:12px; color:#b0b0b0; margin-top:4px;">T+5 工作日内到账</div>
+            <div style="font-size:13px; color:#1a1a1a; font-weight:500;" data-i18n="redeem_anytime">支持随时赎回</div>
+            <div style="font-size:12px; color:#b0b0b0; margin-top:4px;" data-i18n="t5_settlement">T+5 工作日内到账</div>
           </div>
         </div>
         <div style="background:#f9fafb; border-radius:12px; padding:16px 12px; margin-bottom:12px;">
-          <div style="font-size:13px; font-weight:600; color:#1a1a1a; margin-bottom:14px;">赎回流程示意</div>
+          <div style="font-size:13px; font-weight:600; color:#1a1a1a; margin-bottom:14px;" data-i18n="redeem_flow_title">赎回流程示意</div>
           <div class="redeem-timeline">
-            <div class="redeem-step"><div class="redeem-step-dot"></div><div class="redeem-line"></div><div class="redeem-step-label">预约赎回</div><div class="redeem-step-date">04-06 08:00 前</div></div>
-            <div class="redeem-step"><div class="redeem-step-dot pending"></div><div class="redeem-line"></div><div class="redeem-step-label">确认净值</div><div class="redeem-step-date">预计 04-06</div></div>
-            <div class="redeem-step"><div class="redeem-step-dot pending"></div><div class="redeem-step-label">赎回到账</div><div class="redeem-step-date">预计 04-13 前</div></div>
+            <div class="redeem-step"><div class="redeem-step-dot"></div><div class="redeem-line"></div><div class="redeem-step-label" data-i18n="step_reserve_redeem">预约赎回</div><div class="redeem-step-date">04-06 08:00 前</div></div>
+            <div class="redeem-step"><div class="redeem-step-dot pending"></div><div class="redeem-line"></div><div class="redeem-step-label" data-i18n="step_confirm_nav">确认净值</div><div class="redeem-step-date">预计 04-06</div></div>
+            <div class="redeem-step"><div class="redeem-step-dot pending"></div><div class="redeem-step-label" data-i18n="step_redeem_arrive">赎回到账</div><div class="redeem-step-date">预计 04-13 前</div></div>
           </div>
         </div>
         <div class="divider" style="margin:12px 0;"></div>
-        <div style="font-size:14px; font-weight:600; margin-bottom:12px;">费用结构</div>
-        <div class="info-row info-row-border"><span class="label">申购费</span><span class="value">0.00%</span></div>
-        <div class="info-row info-row-border"><span class="label">赎回费</span><span class="value">0.00%</span></div>
-        <div class="info-row info-row-border"><span class="label">管理费</span><span class="value">0.00%</span></div>
-        <div class="info-row"><span class="label">业绩报酬</span><span class="value">0.00%</span></div>
+        <div style="font-size:14px; font-weight:600; margin-bottom:12px;" data-i18n="fee_structure">费用结构</div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="sub_fee">申购费</span><span class="value">0.00%</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="redeem_fee">赎回费</span><span class="value">0.00%</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="mgmt_fee">管理费</span><span class="value">0.00%</span></div>
+        <div class="info-row"><span class="label" data-i18n="perf_fee">业绩报酬</span><span class="value">0.00%</span></div>
       </div>
 
       <!-- 投资细则 -->
       <div class="section-card animate-in delay-4">
-        <div style="font-size:16px; font-weight:700; margin-bottom:16px;">投资细则</div>
-        <div class="info-row info-row-border"><span class="label">产品类型</span><span class="value">VIP 专属计划</span></div>
-        <div class="info-row info-row-border"><span class="label">计价货币</span><span class="value">USDC</span></div>
-        <div class="info-row info-row-border"><span class="label">锁定期</span><span class="value">无锁定期</span></div>
-        <div class="info-row info-row-border"><span class="label">净值公布日</span><span class="value">每月 10 号前最后一个工作日</span></div>
-        <div class="info-row info-row-border"><span class="label">派息方式</span><span class="value">按月派息，自动复投</span></div>
-        <div class="info-row info-row-border"><span class="label">申购方式</span><span class="value">仅限回款资金自动配置</span></div>
-        <div class="info-row info-row-border"><span class="label">赎回方式</span><span class="value">随时申请，T+5 工作日到账</span></div>
-        <div class="info-row info-row-border"><span class="label">最低赎回金额</span><span class="value">1,000,000 USDC</span></div>
-        <div class="info-row"><span class="label">赎回到账币种</span><span class="value">USDC</span></div>
-        <div style="font-size:12px; color:#b0b0b0; line-height:1.6; margin-top:8px; padding-top:8px; border-top:0.5px solid #f0f0f0;">
+        <div style="font-size:16px; font-weight:700; margin-bottom:16px;" data-i18n="invest_details_title">投资细则</div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="label_product_type">产品类型</span><span class="value" data-i18n="val_vip_plan">VIP 专属计划</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="label_base_ccy">计价货币</span><span class="value">USDC</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="label_lock_period">锁定期</span><span class="value" data-i18n="val_no_lock">无锁定期</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="label_nav_pub_date">净值公布日</span><span class="value" data-i18n="val_nav_pub_date">每月 10 号前最后一个工作日</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="label_dividend">派息方式</span><span class="value" data-i18n="val_dividend">按月派息，自动复投</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="label_sub_method">申购方式</span><span class="value" data-i18n="val_sub_method">仅限回款资金自动配置</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="label_redeem_method">赎回方式</span><span class="value" data-i18n="val_redeem_method">随时申请，T+5 工作日到账</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="label_min_redeem">最低赎回金额</span><span class="value">1,000,000 USDC</span></div>
+        <div class="info-row"><span class="label" data-i18n="label_redeem_ccy">赎回到账币种</span><span class="value">USDC</span></div>
+        <div style="font-size:12px; color:#b0b0b0; line-height:1.6; margin-top:8px; padding-top:8px; border-top:0.5px solid #f0f0f0;" data-i18n="footnote_min_redeem">
           * 单笔赎回不足 1,000,000 USDC 需一次性全部赎回
         </div>
-        <div style="font-size:13px; color:#8c8c8c; line-height:1.7; margin-top:12px; padding-top:12px; border-top:0.5px solid #f0f0f0;">
+        <div style="font-size:13px; color:#8c8c8c; line-height:1.7; margin-top:12px; padding-top:12px; border-top:0.5px solid #f0f0f0;" data-i18n="nav_calc_note">
           有新资金转入后按认购日净值确认份额。赎回时，将按照赎回确认日的资产净值计算赎回金额，赎回金额 = 赎回份额 × 赎回确认日净值。
         </div>
       </div>
 
-      <div class="disclaimer">
+      <div class="disclaimer" data-i18n="disclaimer">
         ⚠️ 风险提示：本产品不保证本金及收益。过往业绩不代表未来表现。投资有风险，请根据自身情况审慎决策。如需帮助，请联系您的专属客户经理。
       </div>
 
       <div class="bottom-action">
         <div style="display:flex; gap:12px;">
-          <button class="btn-secondary" style="flex:1;" onclick="navigateTo('screen-redeem')">赎回</button>
-          <button class="btn-primary disabled" style="flex:1;">申购</button>
+          <button class="btn-secondary" style="flex:1;" onclick="navigateTo('screen-redeem')" data-i18n="btn_redeem">赎回</button>
+          <button class="btn-primary disabled" style="flex:1;" data-i18n="btn_subscribe">申购</button>
         </div>
         <div style="text-align:center; margin-top:8px;"><span class="label-sm">UID 88888</span></div>
       </div>
@@ -438,82 +438,82 @@
     <div id="screen-compensation" class="screen page-bg-warm">
       <div class="nav-bar" style="background:transparent;">
         <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
-        <div class="title">回款详情</div>
+        <div class="title" data-i18n="nav_comp_detail">回款详情</div>
         <div></div>
       </div>
       <div class="comp-header animate-in">
-        <div class="comp-round-badge">第 4 轮回款</div>
-        <div style="font-size:14px; color:#8c8c8c; margin-bottom:8px;">本轮回款金额</div>
+        <div class="comp-round-badge" data-i18n="round_4_badge">第 4 轮回款</div>
+        <div style="font-size:14px; color:#8c8c8c; margin-bottom:8px;" data-i18n="current_round_amount">本轮回款金额</div>
         <div style="font-size:34px; font-weight:700; color:#1a1a1a; margin-bottom:4px;">15,430.20 USDC</div>
         <div style="font-size:15px; color:#8c8c8c;">≈ 0.1834 BTC · 参考价 $84,140</div>
       </div>
 
       <div class="section-card animate-in delay-1">
         <div class="info-row info-row-border">
-          <span class="label clickable-label" onclick="toggleBtcBreakdown()">受影响 BTC 总额 <span class="q-icon" id="btcExpandIcon">▸</span></span>
+          <span class="label clickable-label" onclick="toggleBtcBreakdown()" data-i18n="label_affected_btc">受影响 BTC 总额 <span class="q-icon" id="btcExpandIcon">▸</span></span>
           <span class="value">1.8888 BTC</span>
         </div>
         <div id="btcBreakdown" style="display:none; padding:0 0 8px 16px; border-bottom:0.5px solid #f0f0f0;">
-          <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:13px;"><span style="color:#8c8c8c;">固收</span><span style="color:#1a1a1a; font-weight:500;">1.0000 BTC</span></div>
-          <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:13px;"><span style="color:#8c8c8c;">基金</span><span style="color:#1a1a1a; font-weight:500;">0.8888 BTC</span></div>
+          <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:13px;"><span style="color:#8c8c8c;" data-i18n="fixed_income">固收</span><span style="color:#1a1a1a; font-weight:500;">1.0000 BTC</span></div>
+          <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:13px;"><span style="color:#8c8c8c;" data-i18n="fund">基金</span><span style="color:#1a1a1a; font-weight:500;">0.8888 BTC</span></div>
         </div>
         <div class="info-row">
-          <span class="label clickable-label" onclick="openCalcModal()">累计回款金额 <span class="q-icon">?</span></span>
+          <span class="label clickable-label" onclick="openCalcModal()" data-i18n="label_total_comp">累计回款金额 <span class="q-icon">?</span></span>
           <span class="value text-green">1.3658 BTC</span>
         </div>
       </div>
 
       <!-- 场景选择器 -->
       <div class="scenario-bar">
-        <div class="scenario-pill active" onclick="switchScenario('default')">默认状态</div>
-        <div class="scenario-pill" onclick="switchScenario('partial')">部分提前赎回</div>
-        <div class="scenario-pill" onclick="switchScenario('full')">全部提前赎回</div>
-        <div class="scenario-pill scenario-green" onclick="switchScenario('btc')">买回 BTC 兑付</div>
+        <div class="scenario-pill active" onclick="switchScenario('default')" data-i18n="scenario_default">默认状态</div>
+        <div class="scenario-pill" onclick="switchScenario('partial')" data-i18n="scenario_partial">部分提前赎回</div>
+        <div class="scenario-pill" onclick="switchScenario('full')" data-i18n="scenario_full">全部提前赎回</div>
+        <div class="scenario-pill scenario-green" onclick="switchScenario('btc')" data-i18n="scenario_btc">买回 BTC 兑付</div>
       </div>
 
       <!-- ===== 场景 A: 默认状态 ===== -->
       <div id="scenario-default" class="scenario-content active">
         <div class="section-card animate-in delay-2">
-          <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;">📋 回款记录</div>
+          <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;" data-i18n="comp_record_title">📋 回款记录</div>
           <div class="timeline">
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot gold active"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 4 轮 <span style="font-size:12px; color:#c49b5e; font-weight:500; background:#c49b5e15; padding:2px 8px; border-radius:6px; margin-left:6px;">最新</span></div>
-                <div class="timeline-desc">2026-03-28 · 已转入管理计划</div>
+                <div class="timeline-title"><span data-i18n="round_4">第 4 轮</span> <span style="font-size:12px; color:#c49b5e; font-weight:500; background:#c49b5e15; padding:2px 8px; border-radius:6px; margin-left:6px;" data-i18n="badge_latest">最新</span></div>
+                <div class="timeline-desc">2026-03-28 · <span data-i18n="desc_transferred">已转入管理计划</span></div>
                 <div class="timeline-amount" style="color:#c49b5e;">+15,430.20 USDC</div>
                 <div class="timeline-desc">≈ 0.1834 BTC · 参考价 $84,140</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link" onclick="showToast('查看备注详情')">备注 ∨</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link" onclick="showToast('查看备注详情')" data-i18n="note_link">备注 ∨</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 3 轮</div>
-                <div class="timeline-desc">2023-05-02 · 已结算至钱包</div>
+                <div class="timeline-title" data-i18n="round_3">第 3 轮</div>
+                <div class="timeline-desc">2023-05-02 · <span data-i18n="desc_settled_wallet">已结算至钱包</span></div>
                 <div class="timeline-amount">+18,560.00 USDC</div>
                 <div class="timeline-desc">≈ 0.2703 BTC · 参考价 $68,669.86</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')" data-i18n="agreement_link">协议</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 2 轮</div>
-                <div class="timeline-desc">2022-12-02 · 已结算至钱包</div>
+                <div class="timeline-title" data-i18n="round_2">第 2 轮</div>
+                <div class="timeline-desc">2022-12-02 · <span data-i18n="desc_settled_wallet">已结算至钱包</span></div>
                 <div class="timeline-amount">+22,200.00 USDC</div>
                 <div class="timeline-desc">≈ 1.2988 BTC · 参考价 $17,092.74</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')" data-i18n="agreement_link">协议</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot active"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 1 轮</div>
-                <div class="timeline-desc">2022-11-22 · 已结算至钱包</div>
+                <div class="timeline-title" data-i18n="round_1">第 1 轮</div>
+                <div class="timeline-desc">2022-11-22 · <span data-i18n="desc_settled_wallet">已结算至钱包</span></div>
                 <div class="timeline-amount">+1.0000 BTC</div>
                 <div class="timeline-desc">≈ 16,092.74 USDC · 参考价 $16,092.74</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')" data-i18n="agreement_link">协议</span></div>
               </div>
             </div>
           </div>
@@ -523,56 +523,56 @@
       <!-- ===== 场景 B: 部分提前赎回 ===== -->
       <div id="scenario-partial" class="scenario-content">
         <div class="section-card">
-          <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;">📋 回款记录</div>
+          <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;" data-i18n="comp_record_title">📋 回款记录</div>
           <div class="timeline">
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot" style="border-color:#1677ff; background:#1677ff;"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">部分赎回结算 <span style="font-size:12px; color:#1677ff; font-weight:500; background:#1677ff15; padding:2px 8px; border-radius:6px; margin-left:6px;">最新</span></div>
-                <div class="timeline-desc">2026-04-18 · 已从管理计划结算至钱包</div>
+                <div class="timeline-title" data-i18n="partial_redeem_settlement">部分赎回结算 <span style="font-size:12px; color:#1677ff; font-weight:500; background:#1677ff15; padding:2px 8px; border-radius:6px; margin-left:6px;" data-i18n="badge_latest">最新</span></div>
+                <div class="timeline-desc">2026-04-18 · <span data-i18n="desc_settled_from_fund">已从管理计划结算至钱包</span></div>
                 <div class="timeline-amount" style="color:#1677ff;">+5,000.00 USDC</div>
                 <div class="timeline-desc">≈ 0.0588 BTC · 参考价 $85,034</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link" onclick="showToast('用户主动赎回部分持仓，已结算到账')">备注 ∨</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link" onclick="showToast('用户主动赎回部分持仓，已结算到账')" data-i18n="note_link">备注 ∨</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot gold active"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 4 轮</div>
-                <div class="timeline-desc">2026-03-28 · 已转入管理计划</div>
+                <div class="timeline-title" data-i18n="round_4">第 4 轮</div>
+                <div class="timeline-desc">2026-03-28 · <span data-i18n="desc_transferred">已转入管理计划</span></div>
                 <div class="timeline-amount" style="color:#c49b5e;">+15,430.20 USDC</div>
                 <div class="timeline-desc">≈ 0.1834 BTC · 参考价 $84,140</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 3 轮</div>
-                <div class="timeline-desc">2023-05-02 · 已结算至钱包</div>
+                <div class="timeline-title" data-i18n="round_3">第 3 轮</div>
+                <div class="timeline-desc">2023-05-02 · <span data-i18n="desc_settled_wallet">已结算至钱包</span></div>
                 <div class="timeline-amount">+18,560.00 USDC</div>
                 <div class="timeline-desc">≈ 0.2703 BTC · 参考价 $68,669.86</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')" data-i18n="agreement_link">协议</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 2 轮</div>
-                <div class="timeline-desc">2022-12-02 · 已结算至钱包</div>
+                <div class="timeline-title" data-i18n="round_2">第 2 轮</div>
+                <div class="timeline-desc">2022-12-02 · <span data-i18n="desc_settled_wallet">已结算至钱包</span></div>
                 <div class="timeline-amount">+22,200.00 USDC</div>
                 <div class="timeline-desc">≈ 1.2988 BTC · 参考价 $17,092.74</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')" data-i18n="agreement_link">协议</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot active"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 1 轮</div>
-                <div class="timeline-desc">2022-11-22 · 已结算至钱包</div>
+                <div class="timeline-title" data-i18n="round_1">第 1 轮</div>
+                <div class="timeline-desc">2022-11-22 · <span data-i18n="desc_settled_wallet">已结算至钱包</span></div>
                 <div class="timeline-amount">+1.0000 BTC</div>
                 <div class="timeline-desc">≈ 16,092.74 USDC · 参考价 $16,092.74</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')" data-i18n="agreement_link">协议</span></div>
               </div>
             </div>
           </div>
@@ -582,56 +582,56 @@
       <!-- ===== 场景 C: 全部提前赎回 ===== -->
       <div id="scenario-full" class="scenario-content">
         <div class="section-card">
-          <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;">📋 回款记录</div>
+          <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;" data-i18n="comp_record_title">📋 回款记录</div>
           <div class="timeline">
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot" style="border-color:#f0883a; background:#f0883a;"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">全部赎回结算 <span style="font-size:12px; color:#f0883a; font-weight:500; background:#f0883a15; padding:2px 8px; border-radius:6px; margin-left:6px;">最新</span></div>
-                <div class="timeline-desc">2026-04-18 · 已从管理计划结算至钱包</div>
+                <div class="timeline-title" data-i18n="full_redeem_settlement">全部赎回结算 <span style="font-size:12px; color:#f0883a; font-weight:500; background:#f0883a15; padding:2px 8px; border-radius:6px; margin-left:6px;" data-i18n="badge_latest">最新</span></div>
+                <div class="timeline-desc">2026-04-18 · <span data-i18n="desc_settled_from_fund">已从管理计划结算至钱包</span></div>
                 <div class="timeline-amount" style="color:#f0883a;">+15,486.50 USDC</div>
                 <div class="timeline-desc">≈ 0.1821 BTC · 参考价 $85,034</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link" onclick="showToast('用户全部赎回持仓，已结算到账，管理计划已清零')">备注 ∨</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link" onclick="showToast('用户全部赎回持仓，已结算到账，管理计划已清零')" data-i18n="note_link">备注 ∨</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot gold active"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 4 轮</div>
-                <div class="timeline-desc">2026-03-28 · 已转入管理计划</div>
+                <div class="timeline-title" data-i18n="round_4">第 4 轮</div>
+                <div class="timeline-desc">2026-03-28 · <span data-i18n="desc_transferred">已转入管理计划</span></div>
                 <div class="timeline-amount" style="color:#c49b5e;">+15,430.20 USDC</div>
                 <div class="timeline-desc">≈ 0.1834 BTC · 参考价 $84,140</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 3 轮</div>
-                <div class="timeline-desc">2023-05-02 · 已结算至钱包</div>
+                <div class="timeline-title" data-i18n="round_3">第 3 轮</div>
+                <div class="timeline-desc">2023-05-02 · <span data-i18n="desc_settled_wallet">已结算至钱包</span></div>
                 <div class="timeline-amount">+18,560.00 USDC</div>
                 <div class="timeline-desc">≈ 0.2703 BTC · 参考价 $68,669.86</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')" data-i18n="agreement_link">协议</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 2 轮</div>
-                <div class="timeline-desc">2022-12-02 · 已结算至钱包</div>
+                <div class="timeline-title" data-i18n="round_2">第 2 轮</div>
+                <div class="timeline-desc">2022-12-02 · <span data-i18n="desc_settled_wallet">已结算至钱包</span></div>
                 <div class="timeline-amount">+22,200.00 USDC</div>
                 <div class="timeline-desc">≈ 1.2988 BTC · 参考价 $17,092.74</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')" data-i18n="agreement_link">协议</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot active"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 1 轮</div>
-                <div class="timeline-desc">2022-11-22 · 已结算至钱包</div>
+                <div class="timeline-title" data-i18n="round_1">第 1 轮</div>
+                <div class="timeline-desc">2022-11-22 · <span data-i18n="desc_settled_wallet">已结算至钱包</span></div>
                 <div class="timeline-amount">+1.0000 BTC</div>
                 <div class="timeline-desc">≈ 16,092.74 USDC · 参考价 $16,092.74</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')" data-i18n="agreement_link">协议</span></div>
               </div>
             </div>
           </div>
@@ -641,56 +641,56 @@
       <!-- ===== 场景 D: 买回 BTC 兑付 ===== -->
       <div id="scenario-btc" class="scenario-content">
         <div class="section-card">
-          <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;">📋 回款记录</div>
+          <div style="font-size:16px; font-weight:700; color:#1a1a1a; margin-bottom:20px;" data-i18n="comp_record_title">📋 回款记录</div>
           <div class="timeline">
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot" style="border-color:#00b578; background:#00b578;"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">回款结清 <span style="font-size:12px; color:#00b578; font-weight:500; background:#00b57815; padding:2px 8px; border-radius:6px; margin-left:6px;">已结清</span></div>
-                <div class="timeline-desc">2026-06-15 · 已完成全部回款</div>
+                <div class="timeline-title" data-i18n="comp_cleared">回款结清 <span style="font-size:12px; color:#00b578; font-weight:500; background:#00b57815; padding:2px 8px; border-radius:6px; margin-left:6px;" data-i18n="badge_cleared">已结清</span></div>
+                <div class="timeline-desc">2026-06-15 · <span data-i18n="desc_all_comp_done">已完成全部回款</span></div>
                 <div class="timeline-amount" style="color:#00b578;">+0.5230 BTC</div>
                 <div class="timeline-desc">≈ 39,225.00 USDC · 参考价 $75,000</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link" onclick="showToast('公司以市场价购回 BTC 并完成全部剩余回款，回款事项已全部结清')">备注 ∨</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link" onclick="showToast('公司以市场价购回 BTC 并完成全部剩余回款，回款事项已全部结清')" data-i18n="note_link">备注 ∨</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot gold active"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 4 轮</div>
-                <div class="timeline-desc">2026-03-28 · 已转入管理计划</div>
+                <div class="timeline-title" data-i18n="round_4">第 4 轮</div>
+                <div class="timeline-desc">2026-03-28 · <span data-i18n="desc_transferred">已转入管理计划</span></div>
                 <div class="timeline-amount" style="color:#c49b5e;">+15,430.20 USDC</div>
                 <div class="timeline-desc">≈ 0.1834 BTC · 参考价 $84,140</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 3 轮</div>
-                <div class="timeline-desc">2023-05-02 · 已结算至钱包</div>
+                <div class="timeline-title" data-i18n="round_3">第 3 轮</div>
+                <div class="timeline-desc">2023-05-02 · <span data-i18n="desc_settled_wallet">已结算至钱包</span></div>
                 <div class="timeline-amount">+18,560.00 USDC</div>
                 <div class="timeline-desc">≈ 0.2703 BTC · 参考价 $68,669.86</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')" data-i18n="agreement_link">协议</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot active"></div><div class="timeline-line"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 2 轮</div>
-                <div class="timeline-desc">2022-12-02 · 已结算至钱包</div>
+                <div class="timeline-title" data-i18n="round_2">第 2 轮</div>
+                <div class="timeline-desc">2022-12-02 · <span data-i18n="desc_settled_wallet">已结算至钱包</span></div>
                 <div class="timeline-amount">+22,200.00 USDC</div>
                 <div class="timeline-desc">≈ 1.2988 BTC · 参考价 $17,092.74</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')" data-i18n="agreement_link">协议</span></div>
               </div>
             </div>
             <div class="timeline-item">
               <div class="timeline-dot-col"><div class="timeline-dot active"></div></div>
               <div class="timeline-content">
-                <div class="timeline-title">第 1 轮</div>
-                <div class="timeline-desc">2022-11-22 · 已结算至钱包</div>
+                <div class="timeline-title" data-i18n="round_1">第 1 轮</div>
+                <div class="timeline-desc">2022-11-22 · <span data-i18n="desc_settled_wallet">已结算至钱包</span></div>
                 <div class="timeline-amount">+1.0000 BTC</div>
                 <div class="timeline-desc">≈ 16,092.74 USDC · 参考价 $16,092.74</div>
-                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')">协议</span></div>
+                <div style="margin-top:6px;"><span class="timeline-note-link muted" onclick="showToast('查看备注')" data-i18n="note_link">备注 ∨</span><span class="timeline-note-link muted" style="margin-left:12px;" onclick="showToast('查看协议')" data-i18n="agreement_link">协议</span></div>
               </div>
             </div>
           </div>
@@ -698,7 +698,7 @@
       </div>
 
       <div class="bottom-action">
-        <button class="btn-primary gold" onclick="navigateTo('screen-strategy-detail')">查看资产</button>
+        <button class="btn-primary gold" onclick="navigateTo('screen-strategy-detail')" data-i18n="btn_view_assets">查看资产</button>
       </div>
       <div style="height:20px;"></div>
     </div>
@@ -707,48 +707,48 @@
     <div id="screen-trade-records" class="screen page-bg">
       <div class="nav-bar">
         <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
-        <div class="title">记录</div>
+        <div class="title" data-i18n="nav_records_title">记录</div>
         <div></div>
       </div>
       <div class="tabs" style="top:52px;">
-        <button class="tab active" id="tab-trade" onclick="switchRecordTab('trade')">交易</button>
-        <button class="tab" id="tab-income-rec" onclick="switchRecordTab('income-rec')">收益</button>
+        <button class="tab active" id="tab-trade" onclick="switchRecordTab('trade')" data-i18n="tab_trade">交易</button>
+        <button class="tab" id="tab-income-rec" onclick="switchRecordTab('income-rec')" data-i18n="tab_income">收益</button>
       </div>
       <div id="tab-content-trade" style="padding:0 16px;">
         <div style="display:flex; justify-content:space-between; padding:16px 0 8px;">
-          <span class="label-sm">全部 ▾</span><span class="label-sm">全部 ▾</span>
+          <span class="label-sm" data-i18n="filter_all">全部 ▾</span><span class="label-sm" data-i18n="filter_all">全部 ▾</span>
         </div>
         <div style="background:#fff; border-radius:16px; padding:16px; margin-bottom:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div><div style="font-size:15px; font-weight:600;">赎回</div><div class="label-sm">2026-04-13 10:00:00</div></div>
-            <div style="text-align:right;"><div style="font-size:16px; font-weight:600; color:#00b578;">5,000.00 USDC</div><div class="label-sm">已赎回</div></div>
+            <div><div style="font-size:15px; font-weight:600;" data-i18n="trade_redeem">赎回</div><div class="label-sm">2026-04-13 10:00:00</div></div>
+            <div style="text-align:right;"><div style="font-size:16px; font-weight:600; color:#00b578;">5,000.00 USDC</div><div class="label-sm" data-i18n="status_redeemed">已赎回</div></div>
           </div>
           <div class="record-detail-box">
-            <div class="record-detail-row"><span>确认净值</span><span class="val">1.0050</span></div>
-            <div class="record-detail-row"><span>已确认份额</span><span class="val">4,975.12</span></div>
-            <div class="record-detail-row"><span>赎回费</span><span class="val">0.00 USDC (0.00%)</span></div>
+            <div class="record-detail-row"><span data-i18n="confirm_nav">确认净值</span><span class="val">1.0050</span></div>
+            <div class="record-detail-row"><span data-i18n="confirmed_shares">已确认份额</span><span class="val">4,975.12</span></div>
+            <div class="record-detail-row"><span data-i18n="redeem_fee_label">赎回费</span><span class="val">0.00 USDC (0.00%)</span></div>
           </div>
-          <div style="display:flex; justify-content:flex-end; margin-top:10px;"><span class="timeline-note-link" onclick="showToast('查看协议')">协议 ›</span></div>
+          <div style="display:flex; justify-content:flex-end; margin-top:10px;"><span class="timeline-note-link" onclick="showToast('查看协议')" data-i18n="agreement_link_arrow">协议 ›</span></div>
         </div>
         <div style="background:#fff; border-radius:16px; padding:16px; margin-bottom:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div><div style="font-size:15px; font-weight:600;">申购</div><div class="label-sm">2026-03-28 00:00:12</div></div>
-            <div style="text-align:right;"><div style="font-size:16px; font-weight:600; color:#00b578;">15,430.20 USDC</div><div class="label-sm">已确认</div></div>
+            <div><div style="font-size:15px; font-weight:600;" data-i18n="trade_subscribe">申购</div><div class="label-sm">2026-03-28 00:00:12</div></div>
+            <div style="text-align:right;"><div style="font-size:16px; font-weight:600; color:#00b578;">15,430.20 USDC</div><div class="label-sm" data-i18n="status_confirmed">已确认</div></div>
           </div>
           <div class="record-detail-box">
-            <div class="record-detail-row"><span>确认净值</span><span class="val">1.0000</span></div>
-            <div class="record-detail-row"><span>已确认份额</span><span class="val">15,430.20</span></div>
-            <div class="record-detail-row"><span>支付金额</span><span class="val">15,430.20 USDC</span></div>
+            <div class="record-detail-row"><span data-i18n="confirm_nav">确认净值</span><span class="val">1.0000</span></div>
+            <div class="record-detail-row"><span data-i18n="confirmed_shares">已确认份额</span><span class="val">15,430.20</span></div>
+            <div class="record-detail-row"><span data-i18n="payment_amount">支付金额</span><span class="val">15,430.20 USDC</span></div>
           </div>
-          <div style="display:flex; justify-content:flex-end; margin-top:10px;"><span class="timeline-note-link" onclick="showToast('查看协议')">协议 ›</span></div>
+          <div style="display:flex; justify-content:flex-end; margin-top:10px;"><span class="timeline-note-link" onclick="showToast('查看协议')" data-i18n="agreement_link_arrow">协议 ›</span></div>
         </div>
       </div>
       <div id="tab-content-income-rec" style="display:none; padding:0 16px;">
         <div style="padding:16px 0;">
           <div style="background:#fff; border-radius:16px; padding:16px;">
             <div style="display:flex; justify-content:space-between; margin-bottom:16px;">
-              <div><div class="label-sm">累计收益 (USDC)</div><div style="font-size:24px; font-weight:700; color:#00b578; margin-top:4px;">+18.62</div></div>
-              <div style="text-align:right;"><div class="label-sm">持有天数</div><div style="font-size:16px; font-weight:600; margin-top:4px;">3 天</div></div>
+              <div><div class="label-sm" data-i18n="total_income_usdc">累计收益 (USDC)</div><div style="font-size:24px; font-weight:700; color:#00b578; margin-top:4px;">+18.62</div></div>
+              <div style="text-align:right;"><div class="label-sm" data-i18n="holding_days">持有天数</div><div style="font-size:16px; font-weight:600; margin-top:4px;">3 天</div></div>
             </div>
             <div class="record-item"><div class="record-left"><div class="record-title">2026-03-31</div><div class="record-date">NAV: 1.0012</div></div><div><div class="record-amount text-green">+6.48 USDC</div></div></div>
             <div class="record-item"><div class="record-left"><div class="record-title">2026-03-30</div><div class="record-date">NAV: 1.0008</div></div><div><div class="record-amount text-green">+6.17 USDC</div></div></div>
@@ -762,37 +762,37 @@
     <div id="screen-redeem" class="screen page-bg">
       <div class="nav-bar">
         <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
-        <div class="title">赎回</div>
+        <div class="title" data-i18n="nav_redeem">赎回</div>
         <div></div>
       </div>
       <div style="background:#fff; padding:20px;">
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
           <span style="font-size:20px;">🏛️</span>
-          <div><div style="font-size:16px; font-weight:600;">专项回款管理计划</div><div class="label-sm">可赎回: 15,448.82 USDC</div></div>
+          <div><div style="font-size:16px; font-weight:600;" data-i18n="product_special_plan">专项回款管理计划</div><div class="label-sm" data-i18n="redeem_available">可赎回: 15,448.82 USDC</div></div>
         </div>
         <div class="amount-input-wrapper">
-          <div class="label-sm" style="margin-bottom:8px;">赎回金额 (USDC)</div>
+          <div class="label-sm" style="margin-bottom:8px;" data-i18n="redeem_amount_label">赎回金额 (USDC)</div>
           <input class="amount-input" type="text" placeholder="0.00" id="redeemInput" oninput="updateRedeemBtn()">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-            <span class="label-sm">可用: 15,448.82 USDC</span>
-            <span class="amount-max" onclick="document.getElementById('redeemInput').value='15,448.82'; updateRedeemBtn();">全部</span>
+            <span class="label-sm" data-i18n="redeem_balance">可用: 15,448.82 USDC</span>
+            <span class="amount-max" data-i18n="redeem_all" onclick="document.getElementById('redeemInput').value='15,448.82'; updateRedeemBtn();">全部</span>
           </div>
         </div>
         <div class="divider"></div>
-        <div class="info-row"><span class="label">赎回费率</span><span class="value">0.00%</span></div>
-        <div class="info-row"><span class="label">最低赎回金额</span><span class="value">1,000,000 USDC</span></div>
-        <div class="info-row"><span class="label">预计到账</span><span class="value">T+5 工作日</span></div>
-        <div class="info-row"><span class="label">到账方式</span><span class="value">USDC 至钱包</span></div>
+        <div class="info-row"><span class="label" data-i18n="redeem_fee_rate">赎回费率</span><span class="value">0.00%</span></div>
+        <div class="info-row"><span class="label" data-i18n="min_redeem_amount">最低赎回金额</span><span class="value">1,000,000 USDC</span></div>
+        <div class="info-row"><span class="label" data-i18n="estimated_arrival">预计到账</span><span class="value">T+5 工作日</span></div>
+        <div class="info-row"><span class="label" data-i18n="arrival_method">到账方式</span><span class="value">USDC 至钱包</span></div>
       </div>
       <div style="background:#fff4e6; margin:12px 16px; border-radius:12px; padding:14px 16px;">
-        <div style="font-size:13px; color:#9a7b4a; line-height:1.6;">📌 单笔赎回不足 1,000,000 USDC 需一次性全部赎回</div>
+        <div style="font-size:13px; color:#9a7b4a; line-height:1.6;" data-i18n="redeem_note_1">📌 单笔赎回不足 1,000,000 USDC 需一次性全部赎回</div>
       </div>
       <div style="background:#fefaf3; margin:12px 16px; border-radius:12px; padding:16px;">
-        <div style="font-size:14px; color:#9a7b4a; line-height:1.7;">🤝 温馨提示：赎回后资金将转入您的钱包，您可自由支配。如暂时无使用计划，保留在管理计划中可持续获得收益。一旦赎回，后续无法再重新买入。</div>
+        <div style="font-size:14px; color:#9a7b4a; line-height:1.7;" data-i18n="redeem_note_2">🤝 温馨提示：赎回后资金将转入您的钱包，您可自由支配。如暂时无使用计划，保留在管理计划中可持续获得收益。一旦赎回，后续无法再重新买入。</div>
       </div>
-      <div class="disclaimer">赎回申请提交后，预计 T+5 个工作日内到账。赎回过程中，您的资金仍将按照策略净值享受收益。赎回期间不收取任何费用。</div>
+      <div class="disclaimer" data-i18n="redeem_disclaimer">赎回申请提交后，预计 T+5 个工作日内到账。赎回过程中，您的资金仍将按照策略净值享受收益。赎回期间不收取任何费用。</div>
       <div class="bottom-action">
-        <button class="btn-primary" id="redeemBtn" style="opacity:0.4;" onclick="openRedeemConfirm()">确认赎回</button>
+        <button class="btn-primary" id="redeemBtn" style="opacity:0.4;" onclick="openRedeemConfirm()" data-i18n="confirm_redeem">确认赎回</button>
       </div>
     </div>
 
@@ -804,23 +804,23 @@
       </div>
       <div style="text-align:center; padding:20px;">
         <div class="success-icon animate-in"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-        <div class="animate-in delay-1" style="font-size:22px; font-weight:700; color:#1a1a1a;">赎回申请已提交</div>
-        <div class="animate-in delay-2" style="font-size:15px; color:#8c8c8c; margin-top:8px;">预计 5 个工作日内到账您的钱包</div>
+        <div class="animate-in delay-1" style="font-size:22px; font-weight:700; color:#1a1a1a;" data-i18n="redeem_success_title">赎回申请已提交</div>
+        <div class="animate-in delay-2" style="font-size:15px; color:#8c8c8c; margin-top:8px;" data-i18n="redeem_success_desc">预计 5 个工作日内到账您的钱包</div>
       </div>
       <div class="section-card animate-in delay-2">
-        <div class="info-row info-row-border"><span class="label">赎回产品</span><span class="value">专项回款管理计划</span></div>
-        <div class="info-row info-row-border"><span class="label">赎回金额</span><span class="value" style="font-weight:600;">15,448.82 USDC</span></div>
-        <div class="info-row info-row-border"><span class="label">赎回费用</span><span class="value">0.00 USDC</span></div>
-        <div class="info-row info-row-border"><span class="label">预计到账</span><span class="value">2026-04-07</span></div>
-        <div class="info-row"><span class="label">到账方式</span><span class="value">USDC → 钱包</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="redeem_product">赎回产品</span><span class="value" data-i18n="product_special_plan">专项回款管理计划</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="redeem_amount">赎回金额</span><span class="value" style="font-weight:600;">15,448.82 USDC</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="redeem_fee">赎回费用</span><span class="value">0.00 USDC</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="expected_arrival_time">预计到账</span><span class="value">2026-04-07</span></div>
+        <div class="info-row"><span class="label" data-i18n="arrival_method">到账方式</span><span class="value">USDC → 钱包</span></div>
       </div>
       <div style="background:#f0fdf4; margin:12px 16px; border-radius:12px; padding:16px;">
-        <div style="font-size:14px; color:#15803d; line-height:1.7;">✅ 赎回期间您的资金仍按策略净值享受收益。到账后将自动转入您的钱包。</div>
+        <div style="font-size:14px; color:#15803d; line-height:1.7;" data-i18n="redeem_success_note">✅ 赎回期间您的资金仍按策略净值享受收益。到账后将自动转入您的钱包。</div>
       </div>
       <div style="padding:24px 16px;">
-        <button class="btn-primary" onclick="navigateTo('screen-home')">返回投资组合</button>
+        <button class="btn-primary" onclick="navigateTo('screen-home')" data-i18n="return_portfolio">返回投资组合</button>
         <div style="height:12px;"></div>
-        <button class="btn-secondary" onclick="navigateTo('screen-trade-records')">查看交易记录</button>
+        <button class="btn-secondary" onclick="navigateTo('screen-trade-records')" data-i18n="view_trade_records">查看交易记录</button>
       </div>
     </div>
 
@@ -830,8 +830,11 @@
 <!-- Side links (outside phone frame) -->
 <div class="side-links">
   <a class="side-link" href="FTX_Compensation_Flowchart.html" target="_blank">
-    <span class="link-icon">📋</span> 查看执行流程
+    <span class="link-icon">📋</span> <span data-i18n="side_flowchart">查看执行流程</span>
   </a>
+  <button class="side-link" onclick="toggleLang()" id="langToggle" style="border:none;">
+    <span class="link-icon">🌐</span> <span id="langLabel">English</span>
+  </button>
 </div>
 
 </div><!-- /prototype-wrapper -->
@@ -840,15 +843,15 @@
 <div id="redeemConfirmModal" class="modal-overlay">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div style="text-align:center; margin-bottom:20px;"><div style="font-size:18px; font-weight:700;">确认赎回</div></div>
-    <div class="info-row info-row-border"><span class="label">赎回产品</span><span class="value">专项回款管理计划</span></div>
-    <div class="info-row info-row-border"><span class="label">赎回金额</span><span class="value" id="confirmAmount" style="font-size:18px; font-weight:700;">--</span></div>
-    <div class="info-row info-row-border"><span class="label">赎回费用</span><span class="value">0.00 USDC</span></div>
-    <div class="info-row"><span class="label">预计到账时间</span><span class="value">T+5 工作日</span></div>
+    <div style="text-align:center; margin-bottom:20px;"><div style="font-size:18px; font-weight:700;" data-i18n="confirm_redeem_modal">确认赎回</div></div>
+    <div class="info-row info-row-border"><span class="label" data-i18n="redeem_product">赎回产品</span><span class="value" data-i18n="product_special_plan">专项回款管理计划</span></div>
+    <div class="info-row info-row-border"><span class="label" data-i18n="redeem_amount">赎回金额</span><span class="value" id="confirmAmount" style="font-size:18px; font-weight:700;">--</span></div>
+    <div class="info-row info-row-border"><span class="label" data-i18n="redeem_fee">赎回费用</span><span class="value">0.00 USDC</span></div>
+    <div class="info-row"><span class="label" data-i18n="expected_arrival_time">预计到账时间</span><span class="value">T+5 工作日</span></div>
     <div style="margin-top:20px;">
-      <button class="btn-primary" onclick="confirmRedeem()">确认赎回</button>
+      <button class="btn-primary" onclick="confirmRedeem()" data-i18n="confirm_redeem">确认赎回</button>
       <div style="height:12px;"></div>
-      <button class="btn-secondary" onclick="closeRedeemConfirm()">取消</button>
+      <button class="btn-secondary" onclick="closeRedeemConfirm()" data-i18n="cancel">取消</button>
     </div>
   </div>
 </div>
@@ -857,8 +860,8 @@
 <div id="calcModal" class="modal-overlay">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div style="font-size:18px; font-weight:700; text-align:center; margin-bottom:16px;">计算口径说明</div>
-    <div style="font-size:14px; color:#555; line-height:1.9; margin-bottom:16px;">
+    <div style="font-size:18px; font-weight:700; text-align:center; margin-bottom:16px;" data-i18n="calc_method_title">计算口径说明</div>
+    <div style="font-size:14px; color:#555; line-height:1.9; margin-bottom:16px;" data-i18n="calc_method_content">
       <strong>受影响 BTC 总额：</strong>以清算时认定的 BTC 债权数量为准，包含固收和基金两部分。<br><br>
       <strong>累计回款金额 (折合 BTC)：</strong><br>
       · 第 1 轮为 BTC 直接发放，按实际到账 BTC 数量计入<br>
@@ -866,7 +869,7 @@
       <strong>折合示例：</strong><br>
       第 4 轮到账 15,430.20 USDC，到账日 BTC 价格为 $84,140，折合 15,430.20 ÷ 84,140 ≈ 0.1834 BTC
     </div>
-    <button class="btn-secondary" onclick="closeCalcModal()">我知道了</button>
+    <button class="btn-secondary" onclick="closeCalcModal()" data-i18n="got_it">我知道了</button>
   </div>
 </div>
 
@@ -874,13 +877,13 @@
 
 <button class="flow-toggle" onclick="toggleFlowMap()" title="页面导航">☰</button>
 <div id="flowMap" class="flow-map">
-  <h4>📱 页面导航</h4>
-  <div class="flow-map-item" onclick="navigateTo('screen-home')">① 投资组合首页</div>
-  <div class="flow-map-item" onclick="navigateTo('screen-strategy-detail')">② 在持策略详情</div>
-  <div class="flow-map-item" onclick="navigateTo('screen-compensation')">③ 回款详情</div>
-  <div class="flow-map-item" onclick="navigateTo('screen-trade-records')">④ 交易/收益记录</div>
-  <div class="flow-map-item" onclick="navigateTo('screen-redeem')">⑤ 赎回流程</div>
-  <div class="flow-map-item" onclick="navigateTo('screen-redeem-success')">⑥ 赎回成功</div>
+  <h4 data-i18n="flow_map_title">📱 页面导航</h4>
+  <div class="flow-map-item" onclick="navigateTo('screen-home')" data-i18n="flow_screen_home">① 投资组合首页</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-strategy-detail')" data-i18n="flow_screen_strategy">② 在持策略详情</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-compensation')" data-i18n="flow_screen_compensation">③ 回款详情</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-trade-records')" data-i18n="flow_screen_trades">④ 交易/收益记录</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-redeem')" data-i18n="flow_screen_redeem">⑤ 赎回流程</div>
+  <div class="flow-map-item" onclick="navigateTo('screen-redeem-success')" data-i18n="flow_screen_success">⑥ 赎回成功</div>
 </div>
 
 <script>
@@ -917,7 +920,7 @@
   }
   function openRedeemConfirm() {
     const val = document.getElementById('redeemInput').value || '0.00';
-    if (!val || val === '0' || val === '0.00') { showToast('请输入赎回金额'); return; }
+    if (!val || val === '0' || val === '0.00') { showToast(i18n.toast_enter_amount || {zh:'请输入赎回金额',en:'Please enter redemption amount'}); return; }
     document.getElementById('confirmAmount').textContent = val + ' USDC';
     document.getElementById('redeemConfirmModal').classList.add('show');
   }
@@ -933,7 +936,10 @@
   function closeCalcModal() { document.getElementById('calcModal').classList.remove('show'); }
   function showToast(msg) {
     const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
+    // If msg is an i18n key object {zh, en}, use current language
+    if (typeof msg === 'object' && msg.zh) { t.textContent = msg[currentLang || 'zh']; }
+    else { t.textContent = msg; }
+    t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2000);
   }
   function switchScenario(id) {
@@ -954,7 +960,7 @@
       document.getElementById('mainContent').style.display = '';
     } else {
       input.classList.add('error');
-      err.textContent = '密码错误，请重试';
+      err.textContent = (typeof i18n !== 'undefined' && i18n.lock_error) ? i18n.lock_error[currentLang || 'zh'] : '密码错误，请重试';
       setTimeout(() => { input.classList.remove('error'); }, 500);
       input.value = '';
       input.focus();
@@ -962,6 +968,271 @@
   }
   // Auto focus password input on load
   window.addEventListener('load', () => { document.getElementById('pwdInput').focus(); });
+
+  /* ── i18n Language Toggle ── */
+  let currentLang = 'zh';
+  const i18n = {
+    // Lock screen
+    lock_title: { zh: '原型访问验证', en: 'Prototype Access' },
+    lock_sub: { zh: '请输入访问密码以查看产品原型', en: 'Enter password to view the prototype' },
+    lock_btn: { zh: '进 入', en: 'Enter' },
+    lock_error: { zh: '密码错误，请重试', en: 'Incorrect password. Please try again.' },
+
+    // Navigation
+    nav_portfolio: { zh: '我的投资组合', en: 'My Portfolio' },
+    nav_records: { zh: '记录', en: 'Records' },
+    nav_strategy_detail: { zh: '在持策略详情', en: 'Position Details' },
+    nav_comp_detail: { zh: '回款详情', en: 'Compensation Details' },
+    nav_records_title: { zh: '记录', en: 'Records' },
+    nav_redeem: { zh: '赎回', en: 'Redeem' },
+
+    // Home screen
+    home_total_assets: { zh: '预估总资产($)', en: 'Est. Total Assets ($)' },
+    home_holding_pnl: { zh: '持有收益(%)', en: 'Unrealized P&L (%)' },
+    home_total_pnl: { zh: '累计收益(%)', en: 'Total Return (%)' },
+    tab_holding: { zh: '持有中', en: 'Active' },
+    tab_reserved: { zh: '预约中', en: 'Pending' },
+    tab_all_redeemed: { zh: '全部赎回', en: 'Redeemed' },
+    product_name_icon: { zh: '🏛️ 专项回款管理计划', en: '🏛️ Compensation Fund' },
+    product_name: { zh: '专项回款管理计划', en: 'Compensation Fund' },
+    badge_holding: { zh: '持有中', en: 'Active' },
+    label_holding_amount: { zh: '持有金额', en: 'Position Value' },
+    label_holding_pnl: { zh: '持有收益(%)', en: 'Unrealized P&L (%)' },
+    label_total_pnl: { zh: '累计收益(%)', en: 'Total Return (%)' },
+    empty_reserved: { zh: '暂无预约中的产品', en: 'No pending subscriptions' },
+    empty_redeemed: { zh: '暂无已赎回的产品', en: 'No redeemed products' },
+
+    // Strategy Detail
+    risk_low: { zh: '低风险', en: 'Low Risk' },
+    detail_link: { zh: '详情 ›', en: 'Details ›' },
+    label_holding_usdc: { zh: '持有金额 (USDC)', en: 'Position Value (USDC)' },
+    label_total_pnl_pct: { zh: '累计收益(%)', en: 'Total Return (%)' },
+    action_income: { zh: '收益', en: 'Income' },
+    action_reserve: { zh: '预约', en: 'Reserve' },
+    action_records: { zh: '记录', en: 'Records' },
+    notice_title: { zh: '专项回款管理计划说明', en: 'About the Compensation Fund' },
+    notice_body: { zh: '本专项回款管理计划仅支持以接收回款现金流的方式认购份额，并持续产生有吸引力的收益，底层资产目前是安全稳健的美国短期国债，未来在您同意的情况下也可能配置固收资产以提升收益。份额确认后可以随时赎回（最晚 T+5 工作日到账），赎回后无法再重新买入。', en: 'This fund is exclusively subscribed via incoming compensation proceeds and generates attractive yields. The underlying assets currently consist of secure U.S. short-term Treasuries; with your consent, fixed-income instruments may also be allocated to enhance returns. Shares may be redeemed at any time (settled within T+5 business days). Please note that once redeemed, re-subscription is not available.' },
+    notice_link: { zh: '查看回款详情 ›', en: 'View Compensation Details ›' },
+    label_holding_profit: { zh: '持有收益', en: 'Unrealized P&L' },
+    label_holding_return: { zh: '持有收益率', en: 'Holding Return' },
+    label_holding_shares: { zh: '持有份额', en: 'Shares Held' },
+    unit_shares: { zh: '份', en: 'shares' },
+    label_holding_cost: { zh: '持有成本', en: 'Cost Basis' },
+    label_unrealized_pnl: { zh: '浮动盈亏', en: 'Unrealized P&L' },
+
+    // NAV Chart
+    nav_curve_title: { zh: 'NAV 曲线', en: 'NAV Curve' },
+    all_time: { zh: '所有时间', en: 'All Time' },
+    latest_nav: { zh: '最新费后NAV (03-07 公布)', en: 'Latest Post-Fee NAV (Published 03-07)' },
+    more_metrics: { zh: '查看更多指标 ›', en: 'View More Metrics ›' },
+
+    // Trading Rules
+    trading_rules_title: { zh: '交易规则', en: 'Trading Rules' },
+    view_settings: { zh: '查看设置 ›', en: 'View Settings ›' },
+    col_subscribe: { zh: '申购', en: 'Subscribe' },
+    col_redeem: { zh: '赎回', en: 'Redeem' },
+    no_manual_sub: { zh: '不支持手动申购', en: 'Manual subscription unavailable' },
+    auto_config_only: { zh: '仅接收回款资金自动配置', en: 'Auto-allocated from compensation only' },
+    redeem_anytime: { zh: '支持随时赎回', en: 'Redeemable at any time' },
+    t5_settlement: { zh: 'T+5 工作日内到账', en: 'Settlement within T+5 business days' },
+    redeem_flow_title: { zh: '赎回流程示意', en: 'Redemption Process' },
+    step_reserve_redeem: { zh: '预约赎回', en: 'Submit Request' },
+    step_confirm_nav: { zh: '确认净值', en: 'NAV Confirmed' },
+    step_redeem_arrive: { zh: '赎回到账', en: 'Funds Settled' },
+    fee_structure: { zh: '费用结构', en: 'Fee Structure' },
+    sub_fee: { zh: '申购费', en: 'Subscription Fee' },
+    redeem_fee: { zh: '赎回费', en: 'Redemption Fee' },
+    mgmt_fee: { zh: '管理费', en: 'Management Fee' },
+    perf_fee: { zh: '业绩报酬', en: 'Performance Fee' },
+
+    // Investment details
+    invest_details_title: { zh: '投资细则', en: 'Investment Terms' },
+    label_product_type: { zh: '产品类型', en: 'Product Type' },
+    val_vip_plan: { zh: 'VIP 专属计划', en: 'VIP Exclusive Plan' },
+    label_base_ccy: { zh: '计价货币', en: 'Base Currency' },
+    label_lock_period: { zh: '锁定期', en: 'Lock-up Period' },
+    val_no_lock: { zh: '无锁定期', en: 'None' },
+    label_nav_pub_date: { zh: '净值公布日', en: 'NAV Publication' },
+    val_nav_pub_date: { zh: '每月 10 号前最后一个工作日', en: 'Last business day before the 10th of each month' },
+    label_dividend: { zh: '派息方式', en: 'Dividend Policy' },
+    val_dividend: { zh: '按月派息，自动复投', en: 'Monthly distribution, auto-reinvested' },
+    label_sub_method: { zh: '申购方式', en: 'Subscription' },
+    val_sub_method: { zh: '仅限回款资金自动配置', en: 'Auto-allocated from compensation only' },
+    label_redeem_method: { zh: '赎回方式', en: 'Redemption' },
+    val_redeem_method: { zh: '随时申请，T+5 工作日到账', en: 'Anytime; settled T+5 business days' },
+    label_min_redeem: { zh: '最低赎回金额', en: 'Min. Redemption' },
+    label_redeem_ccy: { zh: '赎回到账币种', en: 'Settlement Currency' },
+    footnote_min_redeem: { zh: '* 单笔赎回不足 1,000,000 USDC 需一次性全部赎回', en: '* Redemptions below 1,000,000 USDC must be redeemed in full' },
+    nav_calc_note: { zh: '有新资金转入后按认购日净值确认份额。赎回时，将按照赎回确认日的资产净值计算赎回金额，赎回金额 = 赎回份额 × 赎回确认日净值。', en: 'New funds are allocated at the NAV on the subscription date. Upon redemption, the payout is calculated at the NAV on the confirmation date: Redemption Amount = Shares × NAV on Confirmation Date.' },
+    disclaimer: { zh: '⚠️ 风险提示：本产品不保证本金及收益。过往业绩不代表未来表现。投资有风险，请根据自身情况审慎决策。如需帮助，请联系您的专属客户经理。', en: '⚠️ Risk Disclosure: This product does not guarantee principal or returns. Past performance is not indicative of future results. Investment involves risk — please make informed decisions based on your own circumstances. For assistance, contact your dedicated account manager.' },
+    btn_redeem: { zh: '赎回', en: 'Redeem' },
+    btn_subscribe: { zh: '申购', en: 'Subscribe' },
+
+    // Compensation screen
+    round_4_badge: { zh: '第 4 轮回款', en: 'Round 4 Compensation' },
+    current_round_amount: { zh: '本轮回款金额', en: 'Current Round Amount' },
+    label_affected_btc: { zh: '受影响 BTC 总额', en: 'Total Affected BTC' },
+    label_total_comp: { zh: '累计回款金额', en: 'Total Compensated' },
+    fixed_income: { zh: '固收', en: 'Fixed Income' },
+    fund: { zh: '基金', en: 'Fund' },
+    scenario_default: { zh: '默认状态', en: 'Default' },
+    scenario_partial: { zh: '部分提前赎回', en: 'Partial Redemption' },
+    scenario_full: { zh: '全部提前赎回', en: 'Full Redemption' },
+    scenario_btc: { zh: '买回 BTC 兑付', en: 'BTC Buyback Settlement' },
+    comp_record_title: { zh: '📋 回款记录', en: '📋 Compensation History' },
+    round_4: { zh: '第 4 轮', en: 'Round 4' },
+    round_3: { zh: '第 3 轮', en: 'Round 3' },
+    round_2: { zh: '第 2 轮', en: 'Round 2' },
+    round_1: { zh: '第 1 轮', en: 'Round 1' },
+    badge_latest: { zh: '最新', en: 'Latest' },
+    partial_redeem_settlement: { zh: '部分赎回结算', en: 'Partial Redemption Settled' },
+    full_redeem_settlement: { zh: '全部赎回结算', en: 'Full Redemption Settled' },
+    comp_cleared: { zh: '回款结清', en: 'Compensation Settled in Full' },
+    badge_cleared: { zh: '已结清', en: 'Cleared' },
+    desc_transferred: { zh: '已转入管理计划', en: 'Deposited into fund' },
+    desc_settled_wallet: { zh: '已结算至钱包', en: 'Settled to wallet' },
+    desc_all_comp_done: { zh: '已完成全部回款', en: 'All compensation completed' },
+    desc_settled_from_fund: { zh: '已从管理计划结算至钱包', en: 'Redeemed from fund to wallet' },
+    note_link: { zh: '备注', en: 'Note' },
+    agreement_link: { zh: '协议', en: 'Agreement' },
+    btn_view_assets: { zh: '查看资产', en: 'View Assets' },
+
+    // Trade records
+    tab_trade: { zh: '交易', en: 'Transactions' },
+    tab_income: { zh: '收益', en: 'Income' },
+    filter_all: { zh: '全部 ▾', en: 'All ▾' },
+    trade_redeem: { zh: '赎回', en: 'Redemption' },
+    trade_subscribe: { zh: '申购', en: 'Subscription' },
+    status_redeemed: { zh: '已赎回', en: 'Redeemed' },
+    status_confirmed: { zh: '已确认', en: 'Confirmed' },
+    confirm_nav: { zh: '确认净值', en: 'Confirmed NAV' },
+    confirmed_shares: { zh: '已确认份额', en: 'Confirmed Shares' },
+    redeem_fee_label: { zh: '赎回费', en: 'Redemption Fee' },
+    payment_amount: { zh: '支付金额', en: 'Payment Amount' },
+    agreement_link_arrow: { zh: '协议 ›', en: 'Agreement ›' },
+    total_income_usdc: { zh: '累计收益 (USDC)', en: 'Total Income (USDC)' },
+    holding_days: { zh: '持有天数', en: 'Days Held' },
+
+    // Redeem screen
+    redeemable_label: { zh: '可赎回: 15,448.82 USDC', en: 'Redeemable: 15,448.82 USDC' },
+    redeem_amount_label: { zh: '赎回金额 (USDC)', en: 'Redemption Amount (USDC)' },
+    available_label: { zh: '可用: 15,448.82 USDC', en: 'Available: 15,448.82 USDC' },
+    max_btn: { zh: '全部', en: 'Max' },
+    redeem_rate: { zh: '赎回费率', en: 'Redemption Fee Rate' },
+    min_redeem_label: { zh: '最低赎回金额', en: 'Min. Redemption' },
+    est_arrival: { zh: '预计到账', en: 'Est. Settlement' },
+    arrival_method: { zh: '到账方式', en: 'Settlement Method' },
+    val_usdc_to_wallet: { zh: 'USDC 至钱包', en: 'USDC to Wallet' },
+    redeem_warning: { zh: '📌 单笔赎回不足 1,000,000 USDC 需一次性全部赎回', en: '📌 Redemptions below 1,000,000 USDC must be redeemed in full' },
+    redeem_tip: { zh: '🤝 温馨提示：赎回后资金将转入您的钱包，您可自由支配。如暂时无使用计划，保留在管理计划中可持续获得收益。一旦赎回，后续无法再重新买入。', en: '🤝 Reminder: Redeemed funds will be transferred to your wallet for unrestricted use. If you have no immediate plans, keeping funds in the plan allows continued yield generation. Once redeemed, re-subscription is not available.' },
+    redeem_disclaimer: { zh: '赎回申请提交后，预计 T+5 个工作日内到账。赎回过程中，您的资金仍将按照策略净值享受收益。赎回期间不收取任何费用。', en: 'After submitting a redemption request, funds are expected to settle within T+5 business days. During the redemption period, your funds will continue to accrue returns based on the strategy NAV. No fees are charged during redemption.' },
+    btn_confirm_redeem: { zh: '确认赎回', en: 'Confirm Redemption' },
+
+    // Redeem success
+    redeem_submitted: { zh: '赎回申请已提交', en: 'Redemption Request Submitted' },
+    redeem_eta: { zh: '预计 5 个工作日内到账您的钱包', en: 'Expected to settle in your wallet within 5 business days' },
+    redeem_product_label: { zh: '赎回产品', en: 'Product' },
+    redeem_amount_confirm: { zh: '赎回金额', en: 'Redemption Amount' },
+    redeem_fee_confirm: { zh: '赎回费用', en: 'Redemption Fee' },
+    est_arrival_date: { zh: '预计到账', en: 'Est. Settlement Date' },
+    val_usdc_wallet: { zh: 'USDC → 钱包', en: 'USDC → Wallet' },
+    redeem_success_tip: { zh: '✅ 赎回期间您的资金仍按策略净值享受收益。到账后将自动转入您的钱包。', en: '✅ Your funds will continue to earn returns at the strategy NAV during the settlement period. Proceeds will be automatically transferred to your wallet upon settlement.' },
+    btn_back_portfolio: { zh: '返回投资组合', en: 'Back to Portfolio' },
+    btn_view_records: { zh: '查看交易记录', en: 'View Transaction History' },
+
+    // Modals
+    modal_confirm_redeem: { zh: '确认赎回', en: 'Confirm Redemption' },
+    est_arrival_time: { zh: '预计到账时间', en: 'Est. Settlement Time' },
+    val_t5: { zh: 'T+5 工作日', en: 'T+5 Business Days' },
+    btn_cancel: { zh: '取消', en: 'Cancel' },
+    calc_modal_title: { zh: '计算口径说明', en: 'Calculation Methodology' },
+    calc_modal_body: { zh: '<strong>受影响 BTC 总额：</strong>以清算时认定的 BTC 债权数量为准，包含固收和基金两部分。<br><br><strong>累计回款金额 (折合 BTC)：</strong><br>· 第 1 轮为 BTC 直接发放，按实际到账 BTC 数量计入<br>· 第 2~4 轮为 USDC 发放，按到账日的 BTC 市场价格折合为 BTC 数量计入<br><br><strong>折合示例：</strong><br>第 4 轮到账 15,430.20 USDC，到账日 BTC 价格为 $84,140，折合 15,430.20 ÷ 84,140 ≈ 0.1834 BTC', en: '<strong>Total Affected BTC:</strong> Based on the BTC claim amount recognized at the time of liquidation, comprising both Fixed Income and Fund portions.<br><br><strong>Total Compensated (in BTC equivalent):</strong><br>· Round 1 was distributed directly in BTC, counted by actual BTC received<br>· Rounds 2–4 were distributed in USDC, converted to BTC equivalent at the market price on the settlement date<br><br><strong>Conversion Example:</strong><br>Round 4 received 15,430.20 USDC; BTC price on settlement date was $84,140; equivalent = 15,430.20 ÷ 84,140 ≈ 0.1834 BTC' },
+    btn_got_it: { zh: '我知道了', en: 'Got It' },
+
+    // Flow map
+    flow_map_title: { zh: '📱 页面导航', en: '📱 Page Navigation' },
+    flow_1: { zh: '① 投资组合首页', en: '① Portfolio Home' },
+    flow_2: { zh: '② 在持策略详情', en: '② Position Details' },
+    flow_3: { zh: '③ 回款详情', en: '③ Compensation Details' },
+    flow_4: { zh: '④ 交易/收益记录', en: '④ Transactions / Income' },
+    flow_5: { zh: '⑤ 赎回流程', en: '⑤ Redemption' },
+    flow_6: { zh: '⑥ 赎回成功', en: '⑥ Redemption Success' },
+
+    // Side link
+    side_flowchart: { zh: '查看执行流程', en: 'View Execution Flow' },
+
+    // Toasts
+    toast_enter_amount: { zh: '请输入赎回金额', en: 'Please enter redemption amount' },
+    toast_no_reserve: { zh: '暂无预约', en: 'No reservations' },
+    toast_view_strategy: { zh: '跳转本策略的策略详情页...', en: 'Navigating to strategy details...' },
+    toast_view_rules: { zh: '查看详细规则', en: 'View detailed rules' },
+    toast_view_metrics: { zh: '查看更多指标', en: 'View more metrics' },
+    toast_view_note: { zh: '查看备注详情', en: 'View note details' },
+    toast_view_note_short: { zh: '查看备注', en: 'View note' },
+    toast_view_agreement: { zh: '查看协议', en: 'View agreement' },
+    toast_partial_note: { zh: '用户主动赎回部分持仓，已结算到账', en: 'Partial position redeemed by user; settled to wallet' },
+    toast_full_note: { zh: '用户全部赎回持仓，已结算到账，管理计划已清零', en: 'Full position redeemed; settled to wallet; fund balance cleared' },
+    toast_btc_note: { zh: '公司以市场价购回 BTC 并完成全部剩余回款，回款事项已全部结清', en: 'Company repurchased BTC at market price and completed all remaining compensation. Compensation fully settled.' },
+    // New redeem screen entries
+    nav_redeem: { zh: '赎回', en: 'Redemption' },
+    product_special_plan: { zh: '专项回款管理计划', en: 'Special Compensation Plan' },
+    redeem_available: { zh: '可赎回: 15,448.82 USDC', en: 'Redeemable: 15,448.82 USDC' },
+    redeem_balance: { zh: '可用: 15,448.82 USDC', en: 'Available: 15,448.82 USDC' },
+    redeem_all: { zh: '全部', en: 'Max' },
+    redeem_fee_rate: { zh: '赎回费率', en: 'Redemption Fee Rate' },
+    min_redeem_amount: { zh: '最低赎回金额', en: 'Min. Redemption' },
+    estimated_arrival: { zh: '预计到账', en: 'Est. Settlement' },
+    arrival_method: { zh: '到账方式', en: 'Settlement Method' },
+    redeem_note_1: { zh: '📌 单笔赎回不足 1,000,000 USDC 需一次性全部赎回', en: '📌 Redemptions below 1,000,000 USDC must be redeemed in full' },
+    redeem_note_2: { zh: '🤝 温馨提示：赎回后资金将转入您的钱包，您可自由支配。如暂时无使用计划，保留在管理计划中可持续获得收益。一旦赎回，后续无法再重新买入。', en: '🤝 Reminder: Redeemed funds will be transferred to your wallet for unrestricted use. If you have no immediate plans, keeping funds in the plan allows continued yield generation. Once redeemed, re-subscription is not available.' },
+    redeem_disclaimer: { zh: '赎回申请提交后，预计 T+5 个工作日内到账。赎回过程中，您的资金仍将按照策略净值享受收益。赎回期间不收取任何费用。', en: 'After submitting a redemption request, funds are expected to settle within T+5 business days. During the redemption period, your funds will continue to accrue returns based on the strategy NAV. No fees are charged during redemption.' },
+    confirm_redeem: { zh: '确认赎回', en: 'Confirm Redemption' },
+    
+    // Screen 6 (Redeem Success) entries
+    redeem_success_title: { zh: '赎回申请已提交', en: 'Redemption Request Submitted' },
+    redeem_success_desc: { zh: '预计 5 个工作日内到账您的钱包', en: 'Expected to settle in your wallet within 5 business days' },
+    redeem_product: { zh: '赎回产品', en: 'Product' },
+    redeem_amount: { zh: '赎回金额', en: 'Redemption Amount' },
+    redeem_fee: { zh: '赎回费用', en: 'Redemption Fee' },
+    expected_arrival_time: { zh: '预计到账时间', en: 'Est. Settlement Time' },
+    redeem_success_note: { zh: '✅ 赎回期间您的资金仍按策略净值享受收益。到账后将自动转入您的钱包。', en: '✅ Your funds will continue to earn returns at the strategy NAV during the settlement period. Proceeds will be automatically transferred to your wallet upon settlement.' },
+    return_portfolio: { zh: '返回投资组合', en: 'Back to Portfolio' },
+    view_trade_records: { zh: '查看交易记录', en: 'View Transaction History' },
+    
+    // Modal entries
+    confirm_redeem_modal: { zh: '确认赎回', en: 'Confirm Redemption' },
+    cancel: { zh: '取消', en: 'Cancel' },
+    calc_method_title: { zh: '计算口径说明', en: 'Calculation Methodology' },
+    calc_method_content: { zh: '<strong>受影响 BTC 总额：</strong>以清算时认定的 BTC 债权数量为准，包含固收和基金两部分。<br><br><strong>累计回款金额 (折合 BTC)：</strong><br>· 第 1 轮为 BTC 直接发放，按实际到账 BTC 数量计入<br>· 第 2~4 轮为 USDC 发放，按到账日的 BTC 市场价格折合为 BTC 数量计入<br><br><strong>折合示例：</strong><br>第 4 轮到账 15,430.20 USDC，到账日 BTC 价格为 $84,140，折合 15,430.20 ÷ 84,140 ≈ 0.1834 BTC', en: '<strong>Total Affected BTC:</strong> Based on the BTC claim amount recognized at the time of liquidation, comprising both Fixed Income and Fund portions.<br><br><strong>Total Compensated (in BTC equivalent):</strong><br>· Round 1 was distributed directly in BTC, counted by actual BTC received<br>· Rounds 2–4 were distributed in USDC, converted to BTC equivalent at the market price on the settlement date<br><br><strong>Conversion Example:</strong><br>Round 4 received 15,430.20 USDC; BTC price on settlement date was $84,140; equivalent = 15,430.20 ÷ 84,140 ≈ 0.1834 BTC' },
+    got_it: { zh: '我知道了', en: 'Got It' },
+    
+    // Flow map entries
+    flow_map_title: { zh: '📱 页面导航', en: '📱 Page Navigation' },
+    flow_screen_home: { zh: '① 投资组合首页', en: '① Portfolio Home' },
+    flow_screen_strategy: { zh: '② 在持策略详情', en: '② Position Details' },
+    flow_screen_compensation: { zh: '③ 回款详情', en: '③ Compensation Details' },
+    flow_screen_trades: { zh: '④ 交易/收益记录', en: '④ Transactions / Income' },
+    flow_screen_redeem: { zh: '⑤ 赎回流程', en: '⑤ Redemption' },
+    flow_screen_success: { zh: '⑥ 赎回成功', en: '⑥ Redemption Success' },
+
+
+  };
+
+  function toggleLang() {
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    document.getElementById('langLabel').textContent = currentLang === 'zh' ? 'English' : '中文';
+    document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (i18n[key] && i18n[key][currentLang]) {
+        if (el.getAttribute('data-i18n-html') === 'true') {
+          el.innerHTML = i18n[key][currentLang];
+        } else {
+          el.textContent = i18n[key][currentLang];
+        }
+      }
+    });
+  }
 </script>
 </body>
 </html>
