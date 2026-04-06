@@ -450,7 +450,7 @@
 
       <div class="section-card animate-in delay-1">
         <div class="info-row info-row-border">
-          <span class="label clickable-label" onclick="toggleBtcBreakdown()" data-i18n="label_affected_btc">受影响 BTC 总额 <span class="q-icon" id="btcExpandIcon">▸</span></span>
+          <span class="label clickable-label" onclick="toggleBtcBreakdown()"><span data-i18n="label_affected_btc">受影响 BTC 总额</span> <span class="q-icon" id="btcExpandIcon">▸</span></span>
           <span class="value">1.8888 BTC</span>
         </div>
         <div id="btcBreakdown" style="display:none; padding:0 0 8px 16px; border-bottom:0.5px solid #f0f0f0;">
@@ -458,8 +458,11 @@
           <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:13px;"><span style="color:#8c8c8c;" data-i18n="fund">基金</span><span style="color:#1a1a1a; font-weight:500;">0.8888 BTC</span></div>
         </div>
         <div class="info-row">
-          <span class="label clickable-label" onclick="openCalcModal()" data-i18n="label_total_comp">累计回款金额 <span class="q-icon">?</span></span>
-          <span class="value text-green">1.3658 BTC</span>
+          <span class="label clickable-label" onclick="openCalcModal()"><span data-i18n="label_total_comp">累计回款金额</span> <span class="q-icon">?</span></span>
+          <div style="text-align:right;">
+            <span class="value text-green">≈ 1.3658 BTC</span>
+            <div style="font-size:12px; color:#b0b0b0; margin-top:2px;" data-i18n="comp_btc_breakdown">1.0000 BTC + 56,190.20 USDC</div>
+          </div>
         </div>
       </div>
 
@@ -1073,6 +1076,7 @@
     current_round_amount: { zh: '本轮回款金额', en: 'Current Round Amount' },
     label_affected_btc: { zh: '受影响 BTC 总额', en: 'Total Affected BTC' },
     label_total_comp: { zh: '累计回款金额', en: 'Total Recovered' },
+    comp_btc_breakdown: { zh: '1.0000 BTC + 56,190.20 USDC', en: '1.0000 BTC + 56,190.20 USDC' },
     fixed_income: { zh: '固收', en: 'Fixed Income' },
     fund: { zh: '基金', en: 'Fund' },
     scenario_default: { zh: '默认状态', en: 'Default' },
