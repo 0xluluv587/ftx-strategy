@@ -766,36 +766,71 @@
       <div class="nav-bar">
         <button class="back-btn" onclick="navigateTo('screen-strategy-detail')">‹</button>
         <div class="title" data-i18n="nav_redeem">赎回</div>
-        <div></div>
+        <button class="right-btn" onclick="showToast({zh:'查看赎回规则',en:'View redemption rules'})" data-i18n="rd_rules">规则</button>
       </div>
+
+      <!-- 输入区域 -->
       <div style="background:#fff; padding:20px;">
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
-          <span style="font-size:20px;">🏛️</span>
-          <div><div style="font-size:16px; font-weight:600;" data-i18n="product_special_plan">专项回款管理计划</div><div class="label-sm" data-i18n="redeem_available">可赎回: 15,448.82 USDC</div></div>
-        </div>
-        <div class="amount-input-wrapper">
-          <div class="label-sm" style="margin-bottom:8px;" data-i18n="redeem_amount_label">赎回金额 (USDC)</div>
-          <input class="amount-input" type="text" placeholder="0.00" id="redeemInput" oninput="updateRedeemBtn()">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-            <span class="label-sm" data-i18n="redeem_balance">可用: 15,448.82 USDC</span>
-            <span class="amount-max" data-i18n="redeem_all" onclick="document.getElementById('redeemInput').value='15,448.82'; updateRedeemBtn();">全部</span>
+        <div class="amount-input-wrapper" style="margin:0;">
+          <div style="display:flex; align-items:center;">
+            <input class="amount-input" type="text" id="redeemInput" oninput="updateRedeemBtn()" style="flex:1; font-size:28px;" placeholder="1.00 ~ 15,430.20">
+            <span style="font-size:16px; font-weight:600; color:#1a1a1a; flex-shrink:0;" data-i18n="rd_unit">份</span>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:12px;">
+            <span class="tab-pill" onclick="fillRedeemPct(10)">10%</span>
+            <span class="tab-pill" onclick="fillRedeemPct(20)">20%</span>
+            <span class="tab-pill" onclick="fillRedeemPct(50)">50%</span>
+            <span class="tab-pill" onclick="fillRedeemPct(100)" data-i18n="rd_all">全部</span>
           </div>
         </div>
-        <div class="divider"></div>
-        <div class="info-row"><span class="label" data-i18n="redeem_fee_rate">赎回费率</span><span class="value">0.00%</span></div>
-        <div class="info-row"><span class="label" data-i18n="min_redeem_amount">最低赎回金额</span><span class="value">1,000,000 USDC</span></div>
-        <div class="info-row"><span class="label" data-i18n="estimated_arrival">预计到账</span><span class="value">T+5 工作日</span></div>
-        <div class="info-row"><span class="label" data-i18n="arrival_method">到账方式</span><span class="value">USDC 至钱包</span></div>
+        <div style="font-size:13px; color:#8c8c8c; margin-top:14px;"><span data-i18n="rd_redeemable">可赎回份额</span>: <span style="color:#1a1a1a; font-weight:600;">15,430.20</span></div>
       </div>
-      <div style="background:#fff4e6; margin:12px 16px; border-radius:12px; padding:14px 16px;">
-        <div style="font-size:13px; color:#9a7b4a; line-height:1.6;" data-i18n="redeem_note_1">📌 单笔赎回不足 1,000,000 USDC 需一次性全部赎回</div>
+
+      <!-- 信息区域 -->
+      <div style="background:#fff; margin-top:10px; padding:4px 20px;">
+        <div class="info-row info-row-border"><span class="label" data-i18n="rd_est_proceeds">预计回款</span><span class="value" id="rdEstProceeds">--</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="rd_ref_nav">参考费后净值</span><span class="value">1.0012 (2026-04-07)</span></div>
+        <div class="info-row info-row-border"><span class="label" data-i18n="rd_avg_days">平均持仓天数</span><span class="value">10 <span data-i18n="rd_days">天</span></span></div>
+        <div class="info-row"><span class="label" data-i18n="rd_fee">赎回费</span><span class="value">-- (0.00%)</span></div>
       </div>
-      <div style="background:#fefaf3; margin:12px 16px; border-radius:12px; padding:16px;">
-        <div style="font-size:14px; color:#9a7b4a; line-height:1.7;" data-i18n="redeem_note_2">🤝 温馨提示：赎回后资金将转入您的钱包，您可自由支配。如暂时无使用计划，保留在管理计划中可持续获得收益。一旦赎回，后续无法再重新买入。</div>
+
+      <!-- 说明文字 -->
+      <div style="padding:16px 20px;">
+        <div style="font-size:12px; color:#8c8c8c; line-height:1.8;" data-i18n="rd_calc_note">此计算仅用于参考。实际结算金额将取决于 2026-04-13 更新的 NAV 和实际平均持仓期限(如涉及阶梯赎回费率），并于 2026-04-13 前结算到账。赎回费率：0.00%</div>
+        <div style="margin-top:8px;"><span style="font-size:13px; color:#1677ff; cursor:pointer;" onclick="openCalcModal()" data-i18n="rd_check_formula">检查计算公式</span></div>
       </div>
-      <div class="disclaimer" data-i18n="redeem_disclaimer">赎回申请提交后，预计 T+5 个工作日内到账。赎回过程中，您的资金仍将按照策略净值享受收益。赎回期间不收取任何费用。</div>
+
+      <!-- 流程 -->
+      <div style="background:#fff; padding:20px;">
+        <div style="font-size:16px; font-weight:700; margin-bottom:20px;" data-i18n="rd_flow_title">流程</div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot-col"><div class="timeline-dot" style="border-color:#1677ff; background:#1677ff;"></div><div class="timeline-line"></div></div>
+            <div class="timeline-content">
+              <div class="timeline-title" data-i18n="rd_step1_title">预约赎回</div>
+              <div class="timeline-desc" data-i18n="rd_step1_desc">提交赎回订单后可以取消</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot-col"><div class="timeline-dot" style="border-color:#1677ff; background:#1677ff;"></div><div class="timeline-line"></div></div>
+            <div class="timeline-content">
+              <div class="timeline-title" data-i18n="rd_step2_title">确认净值</div>
+              <div class="timeline-desc"><span data-i18n="rd_step2_desc">预计</span> 2026-04-13</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot-col"><div class="timeline-dot" style="border-color:#1677ff; background:#1677ff;"></div></div>
+            <div class="timeline-content">
+              <div class="timeline-title" data-i18n="rd_step3_title">赎回到账</div>
+              <div class="timeline-desc" data-i18n="rd_step3_desc">预计 2026-04-13 前，以 2026-04-13 的 NAV 赎回到账</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:100px;"></div>
       <div class="bottom-action">
-        <button class="btn-primary" id="redeemBtn" style="opacity:0.4;" onclick="openRedeemConfirm()" data-i18n="confirm_redeem">确认赎回</button>
+        <button class="btn-primary" id="redeemBtn" style="opacity:0.4;" onclick="openRedeemConfirm()" data-i18n="rd_confirm">确认</button>
       </div>
     </div>
 
@@ -848,9 +883,10 @@
     <div class="modal-handle"></div>
     <div style="text-align:center; margin-bottom:20px;"><div style="font-size:18px; font-weight:700;" data-i18n="confirm_redeem_modal">确认赎回</div></div>
     <div class="info-row info-row-border"><span class="label" data-i18n="redeem_product">赎回产品</span><span class="value" data-i18n="product_special_plan">专项回款管理计划</span></div>
-    <div class="info-row info-row-border"><span class="label" data-i18n="redeem_amount">赎回金额</span><span class="value" id="confirmAmount" style="font-size:18px; font-weight:700;">--</span></div>
-    <div class="info-row info-row-border"><span class="label" data-i18n="redeem_fee">赎回费用</span><span class="value">0.00 USDC</span></div>
-    <div class="info-row"><span class="label" data-i18n="expected_arrival_time">预计到账时间</span><span class="value">T+5 工作日</span></div>
+    <div class="info-row info-row-border"><span class="label" data-i18n="modal_redeem_shares">赎回份额</span><span class="value" id="confirmAmount" style="font-size:18px; font-weight:700;">--</span></div>
+    <div class="info-row info-row-border"><span class="label" data-i18n="rd_est_proceeds">预计回款</span><span class="value" id="confirmProceeds">--</span></div>
+    <div class="info-row info-row-border"><span class="label" data-i18n="rd_fee">赎回费</span><span class="value">0.00 USDC (0.00%)</span></div>
+    <div class="info-row"><span class="label" data-i18n="expected_arrival_time">预计到账时间</span><span class="value" data-i18n="val_t5_biz">T+5 工作日</span></div>
     <div style="margin-top:20px;">
       <button class="btn-primary" onclick="confirmRedeem()" data-i18n="confirm_redeem">确认赎回</button>
       <div style="height:12px;"></div>
@@ -920,11 +956,30 @@
   function updateRedeemBtn() {
     const val = document.getElementById('redeemInput').value;
     document.getElementById('redeemBtn').style.opacity = val.length > 0 ? '1' : '0.4';
+    // Update estimated proceeds
+    const shares = parseFloat(val) || 0;
+    const nav = 1.0012;
+    const est = shares > 0 ? (shares * nav).toFixed(2) + ' USDC' : '--';
+    const el = document.getElementById('rdEstProceeds');
+    if (el) el.textContent = est;
+  }
+  function fillRedeemPct(pct) {
+    const total = 15430.20;
+    const val = pct === 100 ? total : Math.floor(total * pct / 100 * 100) / 100;
+    document.getElementById('redeemInput').value = val.toFixed(2);
+    updateRedeemBtn();
+    // Highlight active pill
+    document.querySelectorAll('#screen-redeem .tab-pill').forEach(p => p.classList.remove('active'));
+    event.target.classList.add('active');
   }
   function openRedeemConfirm() {
-    const val = document.getElementById('redeemInput').value || '0.00';
-    if (!val || val === '0' || val === '0.00') { showToast(i18n.toast_enter_amount || {zh:'请输入赎回金额',en:'Please enter redemption amount'}); return; }
-    document.getElementById('confirmAmount').textContent = val + ' USDC';
+    const val = document.getElementById('redeemInput').value || '0';
+    if (!val || val === '0' || val === '0.00') { showToast(i18n.toast_enter_amount || {zh:'请输入赎回份额',en:'Please enter redemption shares'}); return; }
+    const shares = parseFloat(val) || 0;
+    const nav = 1.0012;
+    const unitLabel = currentLang === 'en' ? ' shares' : ' 份';
+    document.getElementById('confirmAmount').textContent = val + unitLabel;
+    document.getElementById('confirmProceeds').textContent = (shares * nav).toFixed(2) + ' USDC';
     document.getElementById('redeemConfirmModal').classList.add('show');
   }
   function closeRedeemConfirm() { document.getElementById('redeemConfirmModal').classList.remove('show'); }
@@ -1177,20 +1232,30 @@
     toast_partial_note: { zh: '用户主动赎回部分持仓，已结算到账', en: 'Partial position redeemed by user; settled to wallet' },
     toast_full_note: { zh: '用户全部赎回持仓，已结算到账，管理计划已清零', en: 'Full position redeemed; settled to wallet; fund balance cleared' },
     toast_btc_note: { zh: '公司以市场价购回 BTC 并完成全部剩余回款，回款事项已全部结清', en: 'Company repurchased BTC at market price and completed all remaining recovery. Recovery fully settled.' },
-    // New redeem screen entries
-    nav_redeem: { zh: '赎回', en: 'Redemption' },
+    // Redeem screen (redesigned)
+    nav_redeem: { zh: '赎回', en: 'Redeem' },
+    rd_rules: { zh: '规则', en: 'Rules' },
+    rd_unit: { zh: '份', en: 'Shares' },
+    rd_all: { zh: '全部', en: 'All' },
+    rd_redeemable: { zh: '可赎回份额', en: 'Redeemable shares' },
+    rd_est_proceeds: { zh: '预计回款', en: 'Est. Proceeds' },
+    rd_ref_nav: { zh: '参考费后净值', en: 'Ref. Post-Fee NAV' },
+    rd_avg_days: { zh: '平均持仓天数', en: 'Avg. Holding Period' },
+    rd_days: { zh: '天', en: 'days' },
+    rd_fee: { zh: '赎回费', en: 'Redemption Fee' },
+    rd_calc_note: { zh: '此计算仅用于参考。实际结算金额将取决于 2026-04-13 更新的 NAV 和实际平均持仓期限(如涉及阶梯赎回费率），并于 2026-04-13 前结算到账。赎回费率：0.00%', en: 'This calculation is for reference only. The actual settlement amount will depend on the NAV updated on 2026-04-13 and the actual average holding period (if a tiered redemption fee schedule applies), with settlement expected by 2026-04-13. Redemption fee rate: 0.00%' },
+    rd_check_formula: { zh: '检查计算公式', en: 'Review calculation formula' },
+    rd_flow_title: { zh: '流程', en: 'Process' },
+    rd_step1_title: { zh: '预约赎回', en: 'Submit Redemption' },
+    rd_step1_desc: { zh: '提交赎回订单后可以取消', en: 'Cancellable after submission' },
+    rd_step2_title: { zh: '确认净值', en: 'NAV Confirmed' },
+    rd_step2_desc: { zh: '预计', en: 'Est.' },
+    rd_step3_title: { zh: '赎回到账', en: 'Funds Settled' },
+    rd_step3_desc: { zh: '预计 2026-04-13 前，以 2026-04-13 的 NAV 赎回到账', en: 'Est. by 2026-04-13, settled at NAV of 2026-04-13' },
+    rd_confirm: { zh: '确认', en: 'Confirm' },
+    modal_redeem_shares: { zh: '赎回份额', en: 'Redemption Shares' },
+    val_t5_biz: { zh: 'T+5 工作日', en: 'T+5 Business Days' },
     product_special_plan: { zh: '专项回款管理计划', en: 'Dedicated Recovery Plan' },
-    redeem_available: { zh: '可赎回: 15,448.82 USDC', en: 'Redeemable: 15,448.82 USDC' },
-    redeem_balance: { zh: '可用: 15,448.82 USDC', en: 'Available: 15,448.82 USDC' },
-    redeem_all: { zh: '全部', en: 'Max' },
-    redeem_fee_rate: { zh: '赎回费率', en: 'Redemption Fee Rate' },
-    min_redeem_amount: { zh: '最低赎回金额', en: 'Min. Redemption' },
-    estimated_arrival: { zh: '预计到账', en: 'Est. Settlement' },
-    arrival_method: { zh: '到账方式', en: 'Settlement Method' },
-    redeem_note_1: { zh: '📌 单笔赎回不足 1,000,000 USDC 需一次性全部赎回', en: '📌 Redemptions below 1,000,000 USDC must be redeemed in full' },
-    redeem_note_2: { zh: '🤝 温馨提示：赎回后资金将转入您的钱包，您可自由支配。如暂时无使用计划，保留在管理计划中可持续获得收益。一旦赎回，后续无法再重新买入。', en: '🤝 Reminder: Redeemed funds will be transferred to your wallet for unrestricted use. If you have no immediate plans, keeping funds in the plan allows continued yield generation. Once redeemed, re-subscription is not available.' },
-    redeem_disclaimer: { zh: '赎回申请提交后，预计 T+5 个工作日内到账。赎回过程中，您的资金仍将按照策略净值享受收益。赎回期间不收取任何费用。', en: 'After submitting a redemption request, funds are expected to settle within T+5 business days. During the redemption period, your funds will continue to accrue returns based on the strategy NAV. No fees are charged during redemption.' },
-    confirm_redeem: { zh: '确认赎回', en: 'Confirm Redemption' },
     
     // Screen 6 (Redeem Success) entries
     redeem_success_title: { zh: '赎回申请已提交', en: 'Redemption Request Submitted' },
